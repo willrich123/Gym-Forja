@@ -1,0 +1,2462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FORJA — Academia & Treino</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --accent: #ff3d00;
+    --accent2: #ffb300;
+    --text: #f0f0f0;
+    --muted: #666;
+    --border: #222;
+    --green: #00e676;
+    --card-radius: 16px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ===== SCROLLBAR ===== */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+  /* ===== HEADER ===== */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 16px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(10,10,10,0.92);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-decoration: none;
+    text-shadow: 0 0 30px rgba(255,61,0,0.4);
+  }
+
+  nav {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  nav button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 18px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+
+  nav button:hover, nav button.active {
+    background: var(--surface2);
+    color: var(--text);
+  }
+
+  nav button.active {
+    color: var(--accent);
+    border: 1px solid rgba(255,61,0,0.3);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(255,61,0,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 20% 80%, rgba(255,179,0,0.05) 0%, transparent 60%);
+  }
+
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,61,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,61,0,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    max-width: 700px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    background: rgba(255,61,0,0.15);
+    border: 1px solid rgba(255,61,0,0.4);
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    padding: 6px 14px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 10vw, 8rem);
+    line-height: 0.9;
+    letter-spacing: 2px;
+    margin-bottom: 24px;
+    animation: slideUp 0.8s ease both;
+  }
+
+  .hero h1 span {
+    color: var(--accent);
+    display: block;
+    text-shadow: 0 0 60px rgba(255,61,0,0.3);
+  }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    max-width: 480px;
+    margin-bottom: 36px;
+    animation: slideUp 0.8s ease 0.1s both;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    animation: slideUp 0.8s ease 0.2s both;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.25s;
+    text-transform: uppercase;
+  }
+
+  .btn-primary:hover {
+    background: #ff5722;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(255,61,0,0.4);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .hero-stats {
+    position: absolute;
+    right: 40px;
+    bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    animation: slideUp 0.8s ease 0.3s both;
+  }
+
+  .stat {
+    text-align: right;
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem;
+    color: var(--accent);
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(255,61,0,0.3);
+  }
+
+  .stat-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ===== SECTIONS ===== */
+  section {
+    padding: 100px 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    line-height: 1;
+  }
+
+  .section-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 56px;
+  }
+
+  /* ===== PAGE SYSTEM ===== */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ===== MUSCLE FILTER ===== */
+  .filter-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 48px;
+  }
+
+  .filter-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  /* ===== EXERCISE GRID ===== */
+  .exercise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+  }
+
+  .exercise-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+  }
+
+  .exercise-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(255,61,0,0.15);
+  }
+
+  .exercise-visual {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .exercise-card:hover .exercise-visual .exercise-emoji {
+    transform: scale(1.15);
+    transition: transform 0.3s ease;
+  }
+
+  .exercise-emoji {
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 4px 20px rgba(0,0,0,0.5));
+    z-index: 1;
+  }
+
+  .exercise-bg-text {
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 7rem;
+    color: rgba(255,255,255,0.03);
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    user-select: none;
+  }
+
+  .diff-badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+
+  .diff-iniciante { background: rgba(0,230,118,0.15); color: var(--green); border: 1px solid rgba(0,230,118,0.3); }
+  .diff-intermediario { background: rgba(255,179,0,0.15); color: var(--accent2); border: 1px solid rgba(255,179,0,0.3); }
+  .diff-avancado { background: rgba(255,61,0,0.15); color: var(--accent); border: 1px solid rgba(255,61,0,0.3); }
+
+  .exercise-info {
+    padding: 20px 22px;
+  }
+
+  .exercise-muscle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .exercise-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+
+  .exercise-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .exercise-meta {
+    display: flex;
+    gap: 16px;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.open {
+    display: flex;
+  }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    animation: modalIn 0.3s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.94) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 10;
+  }
+
+  .modal-close:hover { background: var(--accent); border-color: var(--accent); }
+
+  .modal-hero {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .modal-body {
+    padding: 28px;
+  }
+
+  .modal-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .modal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  .modal-desc {
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 28px;
+    font-size: 0.95rem;
+  }
+
+  .tips-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 16px;
+  }
+
+  .tips-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .tips-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #ccc;
+  }
+
+  .tip-num {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    background: rgba(255,61,0,0.15);
+    border: 1px solid rgba(255,61,0,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    font-weight: 700;
+    margin-top: 1px;
+  }
+
+  .modal-sets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    padding: 20px;
+    background: var(--surface2);
+    border-radius: 12px;
+    margin-bottom: 0;
+  }
+
+  .set-item {
+    text-align: center;
+  }
+
+  .set-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .set-label {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ===== DIET PAGE ===== */
+  .diet-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+    margin-bottom: 56px;
+  }
+
+  .diet-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    padding: 28px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .diet-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .diet-card.proteina::before { background: var(--accent); }
+  .diet-card.carbo::before { background: var(--accent2); }
+  .diet-card.gordura::before { background: var(--green); }
+  .diet-card.hidratacao::before { background: #40c4ff; }
+
+  .diet-card:hover {
+    border-color: rgba(255,255,255,0.1);
+    transform: translateY(-3px);
+  }
+
+  .diet-icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+  }
+
+  .diet-category {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .diet-card.proteina .diet-category { color: var(--accent); }
+  .diet-card.carbo .diet-category { color: var(--accent2); }
+  .diet-card.gordura .diet-category { color: var(--green); }
+  .diet-card.hidratacao .diet-category { color: #40c4ff; }
+
+  .diet-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .diet-text {
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .diet-foods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .food-tag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 4px 12px;
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+
+  /* ===== MEAL PLAN ===== */
+  .meal-plan {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+  }
+
+  .meal-plan-header {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .meal-plan-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+
+  .meal-rows {
+    padding: 8px 0;
+  }
+
+  .meal-row {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding: 20px 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.2s;
+  }
+
+  .meal-row:hover { background: var(--surface2); }
+  .meal-row:last-child { border-bottom: none; }
+
+  .meal-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    min-width: 70px;
+    padding-top: 2px;
+    letter-spacing: 1px;
+  }
+
+  .meal-details { flex: 1; }
+
+  .meal-name {
+    font-weight: 700;
+    margin-bottom: 4px;
+    font-size: 0.95rem;
+  }
+
+  .meal-items {
+    font-size: 0.83rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .meal-cal {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent2);
+    white-space: nowrap;
+    padding-top: 2px;
+  }
+
+  /* ===== MACROS SECTION ===== */
+  .macro-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .macro-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .macro-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    margin: 0 auto 12px;
+    border: 3px solid;
+  }
+
+  .macro-card:nth-child(1) .macro-circle { border-color: var(--accent); color: var(--accent); }
+  .macro-card:nth-child(2) .macro-circle { border-color: var(--accent2); color: var(--accent2); }
+  .macro-card:nth-child(3) .macro-circle { border-color: var(--green); color: var(--green); }
+  .macro-card:nth-child(4) .macro-circle { border-color: #40c4ff; color: #40c4ff; }
+
+  .macro-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+  }
+
+  .macro-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== MUSCLE MAP VISUAL ===== */
+  .muscles-overview {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+
+  .muscle-chip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .muscle-chip:hover {
+    border-color: var(--accent);
+    background: rgba(255,61,0,0.06);
+  }
+
+  .muscle-chip-icon { font-size: 2rem; margin-bottom: 8px; }
+  .muscle-chip-name { font-size: 0.85rem; font-weight: 600; }
+
+  /* ===== HERO decorative element ===== */
+  .hero-deco {
+    position: absolute;
+    right: -60px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 500px;
+    height: 500px;
+    pointer-events: none;
+  }
+
+  .hero-deco-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(255,61,0,0.1);
+  }
+
+  /* Footer divider */
+  .page-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0 40px;
+  }
+
+  /* ===== EQUIPMENT PAGE ===== */
+  .equipment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-bottom: 64px;
+  }
+
+  .equipment-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: default;
+  }
+
+  .equipment-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(255,61,0,0.15);
+  }
+
+  .equipment-img-wrap {
+    height: 220px;
+    overflow: hidden;
+    background: #161616;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .equipment-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    filter: brightness(0.88);
+  }
+
+  .equipment-card:hover .equipment-img-wrap img {
+    transform: scale(1.06);
+    filter: brightness(1);
+  }
+
+  .equipment-img-fallback {
+    font-size: 4rem;
+    opacity: 0.4;
+  }
+
+  .equip-tag-overlay {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    background: rgba(0,0,0,0.75);
+    border: 1px solid rgba(255,61,0,0.35);
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 1.5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+  }
+
+  .equipment-info {
+    padding: 20px 22px;
+  }
+
+  .equipment-category {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .equipment-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+  }
+
+  .equipment-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+
+  .equipment-exercises {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .equip-ex-tag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 3px 11px;
+    font-size: 0.77rem;
+    color: #bbb;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .equip-ex-tag:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .equip-level-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .equip-level-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .equip-dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .equip-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .equip-dot.on { background: var(--accent); }
+
+  .equip-price {
+    margin-left: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent2);
+  }
+
+  /* ===== CATEGORY FILTER ===== */
+  .equip-category-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  .equip-cat-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+    color: var(--text);
+  }
+
+  .equip-cat-btn:hover, .equip-cat-btn.active {
+    border-color: var(--accent);
+    background: rgba(255,61,0,0.07);
+  }
+
+  .equip-cat-icon { font-size: 1.6rem; margin-bottom: 6px; }
+  .equip-cat-name { font-size: 0.82rem; font-weight: 600; }
+  .equip-cat-count { font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    header { padding: 14px 20px; }
+    .logo { font-size: 1.6rem; }
+    nav button { padding: 6px 12px; font-size: 0.8rem; }
+    section { padding: 80px 20px; }
+    .hero { padding: 100px 20px 60px; }
+    .hero-stats { display: none; }
+    .hero-cta { flex-direction: column; }
+    .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+    .modal-sets { grid-template-columns: repeat(3,1fr); gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#" onclick="showPage('home')">FORJA</a>
+  <nav>
+    <button class="active" onclick="showPage('home')">Início</button>
+    <button onclick="showPage('exercises')">Exercícios</button>
+    <button onclick="showPage('diet')">Dieta</button>
+    <button onclick="showPage('equipment')">Equipamentos</button>
+  </nav>
+</header>
+
+<!-- ============================
+     PAGE: HOME
+============================= -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+
+    <div class="hero-deco">
+      <div class="hero-deco-ring" style="inset:0;"></div>
+      <div class="hero-deco-ring" style="inset:40px;"></div>
+      <div class="hero-deco-ring" style="inset:100px; border-color: rgba(255,179,0,0.08);"></div>
+      <div class="hero-deco-ring" style="inset:160px; border-color: rgba(255,61,0,0.15);"></div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-tag">// Seu guia completo de treino</div>
+      <h1>
+        MOLDE
+        <span>SEU CORPO.</span>
+      </h1>
+      <p>Exercícios com técnica certa, dicas de alimentação e planos de treino para todos os níveis. Comece sua transformação hoje.</p>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="showPage('exercises')">Ver Exercícios</button>
+        <button class="btn-secondary" onclick="showPage('diet')">Plano de Dieta</button>
+      </div>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">12</div>
+        <div class="stat-label">Equipamentos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">86+</div>
+        <div class="stat-label">Exercícios</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">11</div>
+        <div class="stat-label">Grupos Musculares</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Níveis</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MUSCLE GROUPS -->
+  <section>
+    <div class="section-label">// Grupos musculares</div>
+    <div class="section-title">ONDE VOCÊ QUER FOCAR?</div>
+    <div class="section-sub">Selecione um grupo muscular para ver os melhores exercícios e dicas de execução.</div>
+    <div class="muscles-overview" id="muscle-overview">
+      <div class="muscle-chip" onclick="filterAndGo('Peito')"><div class="muscle-chip-icon">🫀</div><div class="muscle-chip-name">Peito</div></div>
+      <div class="muscle-chip" onclick="filterAndGo('Costas')"><div class="muscle-chip-icon">🏋️</div><div class="muscle-chip-name">Costas</div></div>
+      <div class="muscle-chip" onclick="filterAndGo('Ombros')"><div class="muscle-chip-icon">💪</div><div class="muscle-chip-name">Ombros</div></div>
+      <div class="muscle-chip" onclick="filterAndGo('Bíceps')"><div class="muscle-chip-icon">💪</div><div class="muscle-chip-name">Bíceps</div></div>
+      <div class="muscle-chip" onclick="filterAndGo('Tríceps')"><div class="muscle-chip-icon">💪</div><div class="muscle-chip-name">Tríceps</div></div>
+      <div class="muscle-chip" onclick="filterAndGo('Pernas')"><div class="muscle-chip-icon">🦵</div><div class="muscle-chip-name">Pernas</div></div>
+      <div class="muscle-chip" onclick="filterAndGo('Glúteos')"><div class="muscle-chip-icon">🍑</div><div class="muscle-chip-name">Glúteos</div></div>
+      <div class="muscle-chip" onclick="filterAndGo('Abdômen')"><div class="muscle-chip-icon">🔥</div><div class="muscle-chip-name">Abdômen</div></div>
+      <div class="muscle-chip" onclick="filterAndGo('Antebraço')"><div class="muscle-chip-icon">🤜</div><div class="muscle-chip-name">Antebraço</div></div>
+      <div class="muscle-chip" onclick="filterAndGo('Funcional')"><div class="muscle-chip-icon">⚡</div><div class="muscle-chip-name">Funcional</div></div>
+      <div class="muscle-chip" onclick="showPage('equipment')"><div class="muscle-chip-icon">⚙️</div><div class="muscle-chip-name">Equipamentos</div></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================
+     PAGE: EXERCISES
+============================= -->
+<div id="page-exercises" class="page">
+  <section style="padding-top: 130px;">
+    <div class="section-label">// Biblioteca de treinos</div>
+    <div class="section-title">EXERCÍCIOS</div>
+    <div class="section-sub">Técnica correta e dicas de execução para maximizar seus resultados e evitar lesões.</div>
+
+    <div class="filter-bar" id="filter-bar">
+      <button class="filter-btn active" onclick="filterExercises('todos', this)">Todos</button>
+      <button class="filter-btn" onclick="filterExercises('Peito', this)">Peito</button>
+      <button class="filter-btn" onclick="filterExercises('Costas', this)">Costas</button>
+      <button class="filter-btn" onclick="filterExercises('Ombros', this)">Ombros</button>
+      <button class="filter-btn" onclick="filterExercises('Bíceps', this)">Bíceps</button>
+      <button class="filter-btn" onclick="filterExercises('Tríceps', this)">Tríceps</button>
+      <button class="filter-btn" onclick="filterExercises('Pernas', this)">Pernas</button>
+      <button class="filter-btn" onclick="filterExercises('Glúteos', this)">Glúteos</button>
+      <button class="filter-btn" onclick="filterExercises('Abdômen', this)">Abdômen</button>
+      <button class="filter-btn" onclick="filterExercises('Antebraço', this)">Antebraço</button>
+      <button class="filter-btn" onclick="filterExercises('Funcional', this)">Funcional</button>
+    </div>
+
+    <div class="exercise-grid" id="exercise-grid"></div>
+  </section>
+</div>
+
+<!-- ============================
+     PAGE: DIET
+============================= -->
+<div id="page-diet" class="page">
+  <section style="padding-top: 130px;">
+    <div class="section-label">// Nutrição & alimentação</div>
+    <div class="section-title">DIETA E NUTRIÇÃO</div>
+    <div class="section-sub">Alimentação inteligente para potencializar seus treinos e acelerar sua recuperação muscular.</div>
+
+    <!-- MACROS -->
+    <div class="section-label" style="margin-bottom: 24px;">// Macronutrientes</div>
+    <div class="macro-cards">
+      <div class="macro-card">
+        <div class="macro-circle">30%</div>
+        <div class="macro-name">Proteínas</div>
+        <div class="macro-desc">Construção e recuperação muscular</div>
+      </div>
+      <div class="macro-card">
+        <div class="macro-circle">45%</div>
+        <div class="macro-name">Carboidratos</div>
+        <div class="macro-desc">Principal fonte de energia para treinos</div>
+      </div>
+      <div class="macro-card">
+        <div class="macro-circle">25%</div>
+        <div class="macro-name">Gorduras</div>
+        <div class="macro-desc">Hormônios e absorção de vitaminas</div>
+      </div>
+      <div class="macro-card">
+        <div class="macro-circle">2L+</div>
+        <div class="macro-name">Água</div>
+        <div class="macro-desc">Hidratação ideal para performance</div>
+      </div>
+    </div>
+
+    <!-- DIET CARDS -->
+    <div class="section-label" style="margin-bottom: 24px;">// Guia nutricional</div>
+    <div class="diet-grid">
+      <div class="diet-card proteina">
+        <div class="diet-icon">🥩</div>
+        <div class="diet-category">Proteínas</div>
+        <div class="diet-title">CONSTRUÇÃO MUSCULAR</div>
+        <div class="diet-text">Consuma 1,6 a 2,2g de proteína por kg de peso corporal. Distribua a ingestão ao longo do dia em 4–6 refeições para maximizar a síntese proteica muscular.</div>
+        <div class="diet-foods">
+          <span class="food-tag">🥚 Ovos</span>
+          <span class="food-tag">🍗 Frango</span>
+          <span class="food-tag">🐟 Atum</span>
+          <span class="food-tag">🐄 Carne magra</span>
+          <span class="food-tag">🫘 Whey</span>
+          <span class="food-tag">🫘 Grão-de-bico</span>
+        </div>
+      </div>
+
+      <div class="diet-card carbo">
+        <div class="diet-icon">🍚</div>
+        <div class="diet-category">Carboidratos</div>
+        <div class="diet-title">ENERGIA PARA TREINAR</div>
+        <div class="diet-text">Priorize carboidratos complexos de baixo índice glicêmico. Consuma carboidratos antes do treino para ter energia e após o treino para repor o glicogênio muscular.</div>
+        <div class="diet-foods">
+          <span class="food-tag">🍠 Batata-doce</span>
+          <span class="food-tag">🍚 Arroz integral</span>
+          <span class="food-tag">🫐 Aveia</span>
+          <span class="food-tag">🍌 Banana</span>
+          <span class="food-tag">🍞 Pão integral</span>
+          <span class="food-tag">🌽 Mandioca</span>
+        </div>
+      </div>
+
+      <div class="diet-card gordura">
+        <div class="diet-icon">🥑</div>
+        <div class="diet-category">Gorduras Boas</div>
+        <div class="diet-title">ESSENCIAIS AO CORPO</div>
+        <div class="diet-text">Gorduras saudáveis são fundamentais para a produção de testosterona e absorção de vitaminas. Não elimine as gorduras — escolha as certas!</div>
+        <div class="diet-foods">
+          <span class="food-tag">🥑 Abacate</span>
+          <span class="food-tag">🫒 Azeite</span>
+          <span class="food-tag">🥜 Amendoim</span>
+          <span class="food-tag">🐟 Salmão</span>
+          <span class="food-tag">🌰 Castanhas</span>
+          <span class="food-tag">🥥 Coco</span>
+        </div>
+      </div>
+
+      <div class="diet-card hidratacao">
+        <div class="diet-icon">💧</div>
+        <div class="diet-category">Hidratação</div>
+        <div class="diet-title">PERFORMANCE MÁXIMA</div>
+        <div class="diet-text">Desidratação de apenas 2% prejudica performance em até 25%. Beba 35–40ml de água por kg corporal por dia. Antes, durante e após o treino.</div>
+        <div class="diet-foods">
+          <span class="food-tag">💧 Água</span>
+          <span class="food-tag">🍋 Água com limão</span>
+          <span class="food-tag">🫖 Chá verde</span>
+          <span class="food-tag">🥥 Água de coco</span>
+          <span class="food-tag">🍉 Melancia</span>
+          <span class="food-tag">🥒 Pepino</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEAL PLAN -->
+    <div class="section-label" style="margin-bottom: 24px;">// Plano alimentar exemplo</div>
+    <div class="meal-plan">
+      <div class="meal-plan-header">
+        <div class="meal-plan-title">DIA DE TREINO — 2.400 KCAL</div>
+        <div style="font-size:0.8rem; color: var(--muted); font-family: 'Space Mono', monospace;">Proteína: 180g · Carbo: 260g · Gordura: 65g</div>
+      </div>
+      <div class="meal-rows">
+        <div class="meal-row">
+          <div class="meal-time">07:00</div>
+          <div class="meal-details">
+            <div class="meal-name">☀️ Café da manhã</div>
+            <div class="meal-items">4 ovos mexidos + 2 fatias pão integral + 1 banana + café sem açúcar</div>
+          </div>
+          <div class="meal-cal">~480 kcal</div>
+        </div>
+        <div class="meal-row">
+          <div class="meal-time">10:00</div>
+          <div class="meal-details">
+            <div class="meal-name">🍎 Lanche matinal</div>
+            <div class="meal-items">Iogurte grego (200g) + granola (30g) + frutas vermelhas</div>
+          </div>
+          <div class="meal-cal">~320 kcal</div>
+        </div>
+        <div class="meal-row">
+          <div class="meal-time">12:30</div>
+          <div class="meal-details">
+            <div class="meal-name">🍗 Almoço</div>
+            <div class="meal-items">Frango grelhado (200g) + arroz integral (150g) + batata-doce (100g) + salada à vontade</div>
+          </div>
+          <div class="meal-cal">~650 kcal</div>
+        </div>
+        <div class="meal-row">
+          <div class="meal-time">15:30</div>
+          <div class="meal-details">
+            <div class="meal-name">⚡ Pré-treino</div>
+            <div class="meal-items">Banana + pasta de amendoim (1 col) + café preto</div>
+          </div>
+          <div class="meal-cal">~250 kcal</div>
+        </div>
+        <div class="meal-row">
+          <div class="meal-time">17:00</div>
+          <div class="meal-details">
+            <div class="meal-name">🏋️ TREINO</div>
+            <div class="meal-items">Beba 500–700ml de água durante o treino</div>
+          </div>
+          <div class="meal-cal">—</div>
+        </div>
+        <div class="meal-row">
+          <div class="meal-time">18:30</div>
+          <div class="meal-details">
+            <div class="meal-name">💪 Pós-treino</div>
+            <div class="meal-items">Whey protein (40g) + água ou leite desnatado — consumir até 30 min após treino</div>
+          </div>
+          <div class="meal-cal">~160 kcal</div>
+        </div>
+        <div class="meal-row">
+          <div class="meal-time">20:00</div>
+          <div class="meal-details">
+            <div class="meal-name">🌙 Jantar</div>
+            <div class="meal-items">Salmão (180g) + quinoa (120g) + legumes assados (abobrinha, brócolis, cenoura)</div>
+          </div>
+          <div class="meal-cal">~540 kcal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIPS -->
+    <div style="margin-top: 48px;">
+      <div class="section-label" style="margin-bottom: 16px;">// Dicas gerais de nutrição</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+          <div style="font-size: 1.5rem; margin-bottom: 12px;">⏰</div>
+          <div style="font-weight: 700; margin-bottom: 8px;">Timing é tudo</div>
+          <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">Consuma proteína dentro de 30 a 60 minutos após o treino. Isso maximiza a janela anabólica e acelera a recuperação muscular.</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+          <div style="font-size: 1.5rem; margin-bottom: 12px;">🍽️</div>
+          <div style="font-weight: 700; margin-bottom: 8px;">Mastigar devagar</div>
+          <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">Comer devagar melhora a digestão e a absorção de nutrientes. Leva ~20 min para o cérebro registrar a saciedade — não se apresse!</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+          <div style="font-size: 1.5rem; margin-bottom: 12px;">🚫</div>
+          <div style="font-weight: 700; margin-bottom: 8px;">Evite ultraprocessados</div>
+          <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">Alimentos ultraprocessados causam inflamação, prejudicam a recuperação e sabotam seus ganhos. Prefira sempre alimentos naturais e minimamente processados.</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+          <div style="font-size: 1.5rem; margin-bottom: 12px;">😴</div>
+          <div style="font-weight: 700; margin-bottom: 8px;">Sono e recuperação</div>
+          <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">O músculo cresce durante o descanso. Durma 7–9 horas por noite. Considere caseína ou cottage antes de dormir para alimentar os músculos durante a noite.</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+          <div style="font-size: 1.5rem; margin-bottom: 12px;">📊</div>
+          <div style="font-weight: 700; margin-bottom: 8px;">Superávit ou déficit</div>
+          <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">Para ganhar massa: coma 200–300 kcal a mais que seu gasto. Para perder gordura: déficit de 300–500 kcal. Nunca abaixo de 1.200 kcal por dia.</div>
+        </div>
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
+          <div style="font-size: 1.5rem; margin-bottom: 12px;">🥦</div>
+          <div style="font-weight: 700; margin-bottom: 8px;">Micronutrientes</div>
+          <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">Vitaminas e minerais são essenciais para performance. Inclua bastante vegetais coloridos, frutas e, se necessário, um multivitamínico de qualidade.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================
+     PAGE: EQUIPMENT
+============================= -->
+<div id="page-equipment" class="page">
+  <section style="padding-top: 130px;">
+    <div class="section-label">// Arsenal de treino</div>
+    <div class="section-title">EQUIPAMENTOS</div>
+    <div class="section-sub">Conheça cada equipamento, para que serve, quais exercícios permite e o nível de dificuldade de uso.</div>
+
+    <!-- Category nav -->
+    <div class="equip-category-nav" id="equip-cat-nav"></div>
+
+    <!-- Equipment grid -->
+    <div class="equipment-grid" id="equipment-grid"></div>
+  </section>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModalBtn()">✕</button>
+    <div class="modal-hero" id="modal-hero"></div>
+    <div class="modal-body">
+      <div class="modal-tag" id="modal-tag"></div>
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-desc" id="modal-desc"></div>
+      <div class="tips-title">// Dicas de execução</div>
+      <ul class="tips-list" id="modal-tips"></ul>
+      <div class="modal-sets" id="modal-sets"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ==============================
+// DATA
+// ==============================
+const exercises = [
+  // PEITO
+  {
+    id: 1, name: "Supino Reto", muscle: "Peito", emoji: "🏋️", difficulty: "iniciante",
+    desc: "O exercício mais clássico para desenvolvimento do peitoral. Trabalha peitoral maior, deltóide anterior e tríceps.",
+    longDesc: "O supino reto é considerado o rei dos exercícios de peito. Trabalha primariamente o peitoral maior, com ativação secundária do deltóide anterior e tríceps braquial. É o exercício base para desenvolvimento de força e massa na região peitoral.",
+    tips: [
+      "Mantenha os pés firmemente no chão durante todo o movimento",
+      "Retração escapular: aperte as escápulas para criar uma base estável",
+      "Desça a barra até tocar levemente o peito, sem quicar",
+      "Cotovelos a 45–75° do corpo, nunca totalmente abertos",
+      "Expire ao empurrar a barra para cima, inspire na descida"
+    ],
+    series: "4", reps: "8–12", descanso: "90s",
+    bg: "linear-gradient(135deg, #1a0a0a 0%, #2a0a0a 100%)"
+  },
+  {
+    id: 2, name: "Supino Inclinado", muscle: "Peito", emoji: "💪", difficulty: "intermediario",
+    desc: "Foca na parte superior do peitoral com o banco a 30–45°. Excelente para a clavicular do peitoral.",
+    longDesc: "O supino inclinado, realizado com o banco entre 30 e 45 graus, enfatiza a porção clavicular do peitoral maior. É fundamental para quem quer peito alto e bem desenvolvido. Também é realizado com halteres para maior amplitude.",
+    tips: [
+      "Ajuste o banco entre 30° e 45° — acima disso, vira exercício de ombro",
+      "Controle a descida dos halteres de 2 a 3 segundos",
+      "Esprema o peitoral no topo do movimento por 1 segundo",
+      "Halteres descem alinhados ao nível do peito superior",
+      "Não trave os cotovelos no topo — mantenha leve tensão"
+    ],
+    series: "3", reps: "10–12", descanso: "75s",
+    bg: "linear-gradient(135deg, #1a0a0a 0%, #1a1020 100%)"
+  },
+  {
+    id: 3, name: "Crucifixo", muscle: "Peito", emoji: "🦅", difficulty: "intermediario",
+    desc: "Isolamento do peitoral com grande amplitude de movimento. Perfeito para alongar e detalhar o peitoral.",
+    longDesc: "O crucifixo é um exercício de isolamento que maximiza o alongamento do peitoral. Realizado com halteres ou no peck deck, promove grande desenvolvimento da largura do peito e melhora a separação entre os músculos.",
+    tips: [
+      "Leve flexão nos cotovelos — nunca trave os braços",
+      "Desça os halteres em arco, sentindo o peitoral alongar",
+      "Não desça abaixo do nível do peito para proteger os ombros",
+      "A fase negativa deve ser lenta e controlada (2–3 segundos)",
+      "Imagine abraçar uma árvore grande ao subir os halteres"
+    ],
+    series: "3", reps: "12–15", descanso: "60s",
+    bg: "linear-gradient(135deg, #0a1010 0%, #0a1a1a 100%)"
+  },
+  {
+    id: 4, name: "Flexão de Braço", muscle: "Peito", emoji: "🤸", difficulty: "iniciante",
+    desc: "Exercício calistênico fundamental. Pode ser feito em qualquer lugar, sem equipamento.",
+    longDesc: "A flexão de braço é um dos exercícios mais completos do fitness. Além do peitoral, trabalha tríceps, ombros e core. Pode ser adaptada para iniciantes (joelhos) até avançados (declinada, com palmas fechadas, etc).",
+    tips: [
+      "Corpo em linha reta da cabeça aos calcanhares durante todo movimento",
+      "Mãos ligeiramente mais largas que a largura dos ombros",
+      "Core contraído — não deixe o quadril cair ou subir",
+      "Desça até o peito quase tocar o chão",
+      "Variações: inclinada (mais fácil), declinada (foca peito superior), diamante (tríceps)"
+    ],
+    series: "4", reps: "15–20", descanso: "60s",
+    bg: "linear-gradient(135deg, #0a0a1a 0%, #1a0a2a 100%)"
+  },
+
+  // COSTAS
+  {
+    id: 5, name: "Barra Fixa", muscle: "Costas", emoji: "🧗", difficulty: "intermediario",
+    desc: "O melhor exercício para largura de costas. Trabalha latíssimo do dorso intensamente.",
+    longDesc: "A barra fixa (pull-up) é frequentemente chamada de 'agachamento para costas'. Trabalha o latíssimo do dorso, bíceps, rombóides e trapézio. É um dos melhores indicadores de força relativa ao peso corporal.",
+    tips: [
+      "Pegada com mãos um pouco mais largas que os ombros",
+      "Inicie o movimento contraindo as escápulas para baixo e para trás",
+      "Cotovelos apontam para baixo e para fora durante a subida",
+      "Suba até o queixo passar a barra; desça de forma controlada",
+      "Se não consegue ainda, use elástico de assistência ou lat pulldown"
+    ],
+    series: "4", reps: "6–10", descanso: "120s",
+    bg: "linear-gradient(135deg, #0a1a0a 0%, #0a2a0a 100%)"
+  },
+  {
+    id: 6, name: "Remada Curvada", muscle: "Costas", emoji: "⛵", difficulty: "intermediario",
+    desc: "Desenvolvimento de espessura da costas. Trabalha toda a região central e inferior das costas.",
+    longDesc: "A remada curvada com barra é um dos melhores exercícios para espessura e massa da costas. Trabalha primariamente latíssimo, rombóides, trapézio médio e infraespinhal, com estímulo secundário no bíceps.",
+    tips: [
+      "Tronco inclinado entre 45° e 90°, coluna neutra — nunca curvada",
+      "Puxe a barra em direção ao umbigo, cotovelos próximos ao corpo",
+      "Contraia as escápulas no ponto de contração máxima",
+      "Não use os braços para puxar — pense em puxar pelos cotovelos",
+      "Fase excêntrica de 2–3 segundos para maximizar tempo sob tensão"
+    ],
+    series: "4", reps: "8–12", descanso: "90s",
+    bg: "linear-gradient(135deg, #1a0a10 0%, #2a0a1a 100%)"
+  },
+  {
+    id: 7, name: "Levantamento Terra", muscle: "Costas", emoji: "🏔️", difficulty: "avancado",
+    desc: "Rei dos exercícios compostos. Trabalha toda a cadeia posterior do corpo com carga máxima.",
+    longDesc: "O levantamento terra é talvez o exercício mais completo da musculação. Trabalha isquiotibiais, glúteos, eretores da espinha, trapézio, latíssimo, rombóides e muito mais. Exige técnica impecável para evitar lesões.",
+    tips: [
+      "Pés na largura dos quadris, barra sobre o meio do pé",
+      "Joelhos dobrados, quadril abaixado — costas NUNCA arredondadas",
+      "Empurre o chão com os pés ao subir (não puxe a barra)",
+      "Mantenha a barra raspando as pernas do início ao fim",
+      "Respire fundo antes de cada rep (manobra de Valsalva) para estabilizar"
+    ],
+    series: "5", reps: "3–6", descanso: "180s",
+    bg: "linear-gradient(135deg, #1a0a0a 0%, #2a1a0a 100%)"
+  },
+  {
+    id: 8, name: "Puxada Frontal", muscle: "Costas", emoji: "🎯", difficulty: "iniciante",
+    desc: "Excelente substituto da barra fixa para iniciantes. Foca no latíssimo do dorso.",
+    longDesc: "A puxada frontal (lat pulldown) é ideal para iniciantes que ainda não conseguem realizar a barra fixa. Trabalha diretamente o latíssimo do dorso e permite progressão de carga de forma segura e controlada.",
+    tips: [
+      "Puxe a barra até a altura do queixo ou do tórax superior",
+      "Não incline excessivamente o tronco para trás",
+      "Cotovelos apontando para o chão no ponto de contração",
+      "Volte lentamente — a fase excêntrica é muito importante",
+      "Varie a pegada: aberta (latíssimo), fechada (rombóides), supinada (bíceps)"
+    ],
+    series: "3", reps: "10–15", descanso: "75s",
+    bg: "linear-gradient(135deg, #0a0a1a 0%, #0a1020 100%)"
+  },
+
+  // OMBROS
+  {
+    id: 9, name: "Desenvolvimento", muscle: "Ombros", emoji: "🏗️", difficulty: "intermediario",
+    desc: "Exercício fundamental para ombros grandes e fortes. Trabalha os três feixes do deltóide.",
+    longDesc: "O desenvolvimento com barra ou halteres é o exercício base para ombros. Trabalha primariamente o deltóide anterior e médio, com ativação do trapézio e tríceps. É um dos melhores para ganho de massa nos ombros.",
+    tips: [
+      "Posição sentada com encosto para proteger a coluna lombar",
+      "Agarre a barra um pouco mais larga que os ombros",
+      "Desça a barra até a altura do queixo — não atrás da cabeça",
+      "Não trave totalmente os cotovelos no topo",
+      "Core ativado durante todo o movimento — não hiperestenha lombar"
+    ],
+    series: "4", reps: "8–12", descanso: "90s",
+    bg: "linear-gradient(135deg, #1a1a0a 0%, #2a2a0a 100%)"
+  },
+  {
+    id: 10, name: "Elevação Lateral", muscle: "Ombros", emoji: "🦜", difficulty: "iniciante",
+    desc: "Isolamento do deltóide médio. Essencial para ombros largos e bem definidos.",
+    longDesc: "A elevação lateral é o exercício mais específico para o deltóide médio, responsável pela largura dos ombros. Deve ser feita com cargas moderadas e foco na execução, não na carga.",
+    tips: [
+      "Leve flexão nos cotovelos (15–20°) durante todo o movimento",
+      "Eleve até a altura dos ombros — não acima",
+      "O polegar deve ficar ligeiramente abaixo do dedo mínimo (como verter água)",
+      "Movimento lento e controlado — sem balançar o corpo",
+      "Fase excêntrica de 3 segundos para máximo recrutamento do deltóide médio"
+    ],
+    series: "4", reps: "12–15", descanso: "60s",
+    bg: "linear-gradient(135deg, #100a1a 0%, #1a0a2a 100%)"
+  },
+  {
+    id: 11, name: "Encolhimento de Ombros", muscle: "Ombros", emoji: "🗻", difficulty: "iniciante",
+    desc: "Exercício específico para o trapézio superior. Melhora postura e força da região cervical.",
+    longDesc: "O encolhimento de ombros trabalha especificamente o trapézio superior e elevador da escápula. É importante para equilíbrio muscular e postura, especialmente para quem trabalha muito sentado.",
+    tips: [
+      "Eleve os ombros diretamente para cima — não gire",
+      "Segure no topo por 1–2 segundos para máxima contração",
+      "Desça completamente para alongar o trapézio",
+      "Mantenha os braços retos — apenas os ombros se movem",
+      "Não use cargas excessivas — priorize a execução"
+    ],
+    series: "3", reps: "15–20", descanso: "60s",
+    bg: "linear-gradient(135deg, #0a1a10 0%, #0a2a1a 100%)"
+  },
+
+  // BÍCEPS
+  {
+    id: 12, name: "Rosca Direta", muscle: "Bíceps", emoji: "💪", difficulty: "iniciante",
+    desc: "O clássico para bíceps. Exercício base para ganho de massa e força nos braços.",
+    longDesc: "A rosca direta com barra é o exercício mais conhecido para bíceps. Trabalha o bíceps braquial e braquial. É um exercício de isolamento que permite progressão de carga direta.",
+    tips: [
+      "Cotovelos fixos próximos ao corpo — não avance para frente",
+      "Pegada supinada (palmas para cima) para máximo recrutamento do bíceps",
+      "Não balance o corpo para levantar o peso — sinal de peso excessivo",
+      "Suba completamente e desça de forma controlada",
+      "Varie com halteres para maior amplitude e contração unilateral"
+    ],
+    series: "3", reps: "10–12", descanso: "60s",
+    bg: "linear-gradient(135deg, #0a0a1a 0%, #0a0a2a 100%)"
+  },
+  {
+    id: 13, name: "Rosca Alternada", muscle: "Bíceps", emoji: "🔄", difficulty: "iniciante",
+    desc: "Trabalha cada braço individualmente para corrigir assimetrias e maximizar a contração.",
+    longDesc: "A rosca alternada com halteres permite maior amplitude e contração do bíceps. O movimento de supinação do pulso durante a elevação maximiza a contração do bíceps braquial.",
+    tips: [
+      "Ao subir, gire o pulso de neutro para supinado (polegar para fora)",
+      "Mantenha o cotovelo estático — apenas o antebraço se move",
+      "Olhe para o bíceps durante a contração (foco neuromuscular)",
+      "Desça de forma controlada aproveitando a fase excêntrica",
+      "Mantenha a postura ereta — não incline o tronco para ajudar"
+    ],
+    series: "3", reps: "10–12 por lado", descanso: "60s",
+    bg: "linear-gradient(135deg, #1a0a10 0%, #2a0a20 100%)"
+  },
+  {
+    id: 14, name: "Rosca Concentrada", muscle: "Bíceps", emoji: "🎯", difficulty: "iniciante",
+    desc: "Máximo isolamento do bíceps. Excelente para pico muscular e definição.",
+    longDesc: "A rosca concentrada, realizada com o cotovelo apoiado na coxa, isola completamente o bíceps. É um exercício valioso para desenvolvimento de pico e forma do bíceps.",
+    tips: [
+      "Cotovelo apoiado na parte interna da coxa — totalmente fixo",
+      "Movimento puramente do antebraço — nada mais se move",
+      "Squeeze no topo: contraia o bíceps ao máximo por 1 segundo",
+      "Desça completamente para extensão total",
+      "Use carga moderada — foco total na contração, não na carga"
+    ],
+    series: "3", reps: "12–15 por lado", descanso: "45s",
+    bg: "linear-gradient(135deg, #0a1a0a 0%, #0a2010 100%)"
+  },
+
+  // TRÍCEPS
+  {
+    id: 15, name: "Tríceps Testa", muscle: "Tríceps", emoji: "🧠", difficulty: "intermediario",
+    desc: "Excelente isolamento para o tríceps, com foco na cabeça longa do músculo.",
+    longDesc: "O tríceps testa (skull crusher) é um dos exercícios mais eficazes para desenvolvimento do tríceps, especialmente a cabeça longa. Realizado deitado no banco, oferece grande amplitude de movimento.",
+    tips: [
+      "Desça a barra até a testa ou ligeiramente atrás da cabeça",
+      "Cotovelos apontando para cima — não abram para os lados",
+      "Extensão completa no topo sem travar completamente",
+      "Pegada com mãos na largura dos ombros ou ligeiramente mais fechada",
+      "Cuidado ao iniciar: use carga leve até dominar a execução"
+    ],
+    series: "3", reps: "10–12", descanso: "75s",
+    bg: "linear-gradient(135deg, #1a0a1a 0%, #2a0a2a 100%)"
+  },
+  {
+    id: 16, name: "Tríceps Pulley", muscle: "Tríceps", emoji: "⬇️", difficulty: "iniciante",
+    desc: "Isolamento clássico no cabo. Trabalha todas as cabeças do tríceps de forma constante.",
+    longDesc: "O tríceps no pulley (polia) oferece tensão constante durante todo o movimento. É excelente para isolamento e definição do tríceps, sendo ideal tanto para iniciantes quanto para avançados.",
+    tips: [
+      "Cotovelos fixos próximos ao corpo durante todo o movimento",
+      "Desça até a extensão completa — squeeze no final",
+      "Mantenha o tronco levemente inclinado para frente (10–15°)",
+      "Controle a subida — não deixe o peso subir sozinho",
+      "Varie: corda (ativa as 3 cabeças), barra reta, barra V"
+    ],
+    series: "3", reps: "12–15", descanso: "60s",
+    bg: "linear-gradient(135deg, #0a1010 0%, #0a1a20 100%)"
+  },
+  {
+    id: 17, name: "Mergulho (Dip)", muscle: "Tríceps", emoji: "🏊", difficulty: "intermediario",
+    desc: "Exercício composto e poderoso para tríceps. Excelente para ganho de massa e força.",
+    longDesc: "O mergulho nas paralelas é um exercício composto que trabalha tríceps, peitoral inferior e deltóide anterior. É um dos melhores movimentos para desenvolvimento do tríceps e da parte inferior do peito.",
+    tips: [
+      "Incline levemente o corpo para frente para focar o peitoral inferior",
+      "Corpo reto ao inclinar o tronco menos foca o tríceps",
+      "Desça até os cotovelos formarem 90° — não abaixo disso para iniciantes",
+      "Suba completamente sem travar os cotovelos",
+      "Adicione peso com cinto quando o próprio corpo ficar fácil"
+    ],
+    series: "4", reps: "8–12", descanso: "90s",
+    bg: "linear-gradient(135deg, #1a1a0a 0%, #2a2a10 100%)"
+  },
+
+  // PERNAS
+  {
+    id: 18, name: "Agachamento Livre", muscle: "Pernas", emoji: "🦁", difficulty: "intermediario",
+    desc: "Rei dos exercícios. Trabalha quadríceps, glúteos, isquiotibiais e muito mais.",
+    longDesc: "O agachamento livre é frequentemente chamado de rei dos exercícios por trabalhar quase todos os músculos do corpo. O foco é nos quadríceps, glúteos e isquiotibiais, mas também recruta core, eretores e mais.",
+    tips: [
+      "Pés na largura dos ombros, dedos ligeiramente virados para fora",
+      "Joelhos seguem a direção dos dedos — nunca entrem para dentro (valgo)",
+      "Desça até a dobra do quadril passar abaixo dos joelhos (full squat)",
+      "Coluna neutra — não arredonde a lombar ao descer",
+      "Distribua o peso em todo o pé, não apenas nas pontas ou calcanhar"
+    ],
+    series: "4", reps: "8–12", descanso: "120s",
+    bg: "linear-gradient(135deg, #1a0a0a 0%, #2a1010 100%)"
+  },
+  {
+    id: 19, name: "Leg Press", muscle: "Pernas", emoji: "🦵", difficulty: "iniciante",
+    desc: "Excelente para carga alta em quadríceps e glúteos. Menor risco que o agachamento livre.",
+    longDesc: "O leg press permite trabalhar quadríceps e glúteos com cargas muito elevadas, com menor demanda sobre a lombar em comparação ao agachamento livre. Ideal para hipertrofia de pernas.",
+    tips: [
+      "Pés posicionados mais alto ativa mais glúteo; mais baixo, quadríceps",
+      "Não deixe os joelhos ultrapassar muito as pontas dos pés",
+      "Não trave os joelhos completamente no topo — leve flexão",
+      "Nunca retire a lombar do encosto durante o movimento",
+      "Desça até 90° de flexão nos joelhos para amplitude adequada"
+    ],
+    series: "4", reps: "10–15", descanso: "90s",
+    bg: "linear-gradient(135deg, #0a1010 0%, #0a1a1a 100%)"
+  },
+  {
+    id: 20, name: "Avanço (Lunge)", muscle: "Pernas", emoji: "🚶", difficulty: "iniciante",
+    desc: "Excelente para glúteos e quadríceps. Melhora equilíbrio e corrige assimetrias.",
+    longDesc: "O avanço é um exercício funcional que trabalha quadríceps, glúteos e isquiotibiais unilateralmente. É excelente para corrigir desequilíbrios musculares entre os dois lados do corpo.",
+    tips: [
+      "Passo largo o suficiente para o joelho de trás não tocar o chão com força",
+      "Joelho da frente nunca passa a ponta do pé",
+      "Tronco ereto durante todo o movimento",
+      "Peso distribuído principalmente no calcanhar da perna da frente",
+      "Olhe para frente — não para baixo (ajuda no equilíbrio)"
+    ],
+    series: "3", reps: "12 por perna", descanso: "75s",
+    bg: "linear-gradient(135deg, #0a0a1a 0%, #1a0a2a 100%)"
+  },
+  {
+    id: 21, name: "Stiff", muscle: "Pernas", emoji: "🔧", difficulty: "intermediario",
+    desc: "Isolamento de isquiotibiais e glúteos. Fundamental para equilíbrio muscular das pernas.",
+    longDesc: "O stiff (levantamento terra com pernas semi-estendidas) é um dos melhores exercícios para isquiotibiais e glúteo máximo. Foca na cadeia posterior da perna.",
+    tips: [
+      "Joelhos levemente flexionados — não totalmente estendidos",
+      "Desça sentindo o alongamento dos isquiotibiais",
+      "Coluna neutra durante todo o movimento — não arredonde",
+      "Quadril empurra para trás ao descer (articulação do quadril, não a lombar)",
+      "Barra próxima às pernas durante todo o percurso"
+    ],
+    series: "3", reps: "10–12", descanso: "90s",
+    bg: "linear-gradient(135deg, #1a1a0a 0%, #2a2010 100%)"
+  },
+  {
+    id: 22, name: "Panturrilha", muscle: "Pernas", emoji: "🦶", difficulty: "iniciante",
+    desc: "Desenvolvimento das panturrilhas (gastrocnêmio e sóleo). Essencial para completar o visual das pernas.",
+    longDesc: "O treinamento de panturrilha é frequentemente negligenciado, mas é essencial para um físico equilibrado e para performance esportiva. O gastrocnêmio e o sóleo são músculos altamente resistentes e respondem bem a altas repetições.",
+    tips: [
+      "Amplitude máxima: desça completamente (calcanhar abaixo da plataforma)",
+      "Suba até a extensão completa na ponta do pé",
+      "Pause 1 segundo no topo para máxima contração",
+      "Use altas repetições (15–25) — panturrilha é muito resistente",
+      "Varie a posição dos pés: reto (gastrocnêmio), ponta para dentro/fora"
+    ],
+    series: "4", reps: "15–25", descanso: "45s",
+    bg: "linear-gradient(135deg, #0a1a0a 0%, #101a10 100%)"
+  },
+
+  // ── PEITO extra ──────────────────────────────────────────
+  {
+    id: 26, name: "Supino Declinado", muscle: "Peito", emoji: "⬇️", difficulty: "intermediario",
+    desc: "Trabalha a porção inferior do peitoral com o banco em -15° a -30°. Dá espessura na parte baixa do peito.",
+    longDesc: "O supino declinado foca na porção esternocostal inferior do peitoral maior. Por reduzir a ativação do deltóide anterior, permite cargas maiores que o supino reto. Exige banco declinado ajustável ou suporte para os pés.",
+    tips: ["Prenda os pés firmemente antes de iniciar o movimento","Amplitude completa: barra desce até a parte inferior do peito","Não hiperestenda a lombar — mantenha a coluna neutra","Descida controlada de 2–3 segundos","Evite travar totalmente os cotovelos no topo"],
+    series: "4", reps: "8–12", descanso: "90s", bg: "linear-gradient(135deg, #1a0a0a 0%, #250a15 100%)"
+  },
+  {
+    id: 27, name: "Crossover no Cabo", muscle: "Peito", emoji: "✂️", difficulty: "intermediario",
+    desc: "Isolamento de alta qualidade no peitoral com tensão constante durante toda a amplitude.",
+    longDesc: "O crossover no cabo é excelente para definição e separação do peitoral. A tensão constante do cabo ao longo de todo o arco do movimento garante estimulação contínua das fibras do peitoral maior.",
+    tips: ["Poias no alto: foca parte inferior; polias no baixo: foca parte superior","Leve flexão no cotovelo — mantenha durante todo o movimento","Traga as mãos em arco, como abraçar — não empurrar","Espremem as mãos no final por 1–2 s para máxima contração","Não traga os braços além da linha central do corpo"],
+    series: "3", reps: "12–15", descanso: "60s", bg: "linear-gradient(135deg, #0a0a1a 0%, #120a20 100%)"
+  },
+  {
+    id: 28, name: "Peck Deck (Voador)", muscle: "Peito", emoji: "🦅", difficulty: "iniciante",
+    desc: "Máquina de isolamento do peitoral. Ótima para finalizar o treino e maximizar a contração.",
+    longDesc: "O peck deck ou voador na máquina é um exercício de isolamento que trabalha o peitoral maior com baixo risco de lesão. Ideal para finalização de treino e para quem está aprendendo a sentir o peitoral durante o exercício.",
+    tips: ["Ajuste o assento para que os cotovelos fiquem na altura dos ombros","Empurre com os cotovelos, não com as mãos","Não abra além do nível dos ombros para proteger o ombro","Fase excêntrica lenta — sinta o alongamento do peitoral","Squeeze de 2 s no ponto de contração máxima"],
+    series: "3", reps: "12–15", descanso: "60s", bg: "linear-gradient(135deg, #0a1510 0%, #0a2018 100%)"
+  },
+  {
+    id: 29, name: "Supino com Halteres", muscle: "Peito", emoji: "🔁", difficulty: "iniciante",
+    desc: "Versão com halteres do supino reto. Maior amplitude e trabalho de estabilização.",
+    longDesc: "O supino com halteres permite maior amplitude de movimento do que com a barra e recruta mais músculos estabilizadores. Cada braço trabalha de forma independente, corrigindo assimetrias musculares.",
+    tips: ["Inicie com halteres nos ombros — leve impulsão do joelho para subir","Desça até sentir um bom alongamento no peito (halteres ao nível do tórax)","Leve rotação interna dos pulsos ao subir é natural","Não deixe os halteres se tocarem no topo — mantenha leve tensão","Core contraído durante todo o movimento"],
+    series: "4", reps: "10–12", descanso: "75s", bg: "linear-gradient(135deg, #1a0a1a 0%, #200a25 100%)"
+  },
+  {
+    id: 30, name: "Mergulho no Banco", muscle: "Peito", emoji: "🪑", difficulty: "iniciante",
+    desc: "Exercício de peso corporal que foca o peitoral inferior e o tríceps. Pode ser feito em qualquer banco.",
+    longDesc: "O mergulho no banco (bench dip) é uma excelente opção para treino em casa ou como exercício complementar em academia. Com os pés no chão, trabalha principalmente o tríceps; com os pés elevados, foca mais no peitoral inferior.",
+    tips: ["Mãos apoiadas no banco, dedos para frente","Pés no chão ou elevados em outro banco para maior dificuldade","Desça até os cotovelos formarem 90° no mínimo","Cotovelos próximos ao corpo — não deixe abrir lateralmente","Adicione anilha no colo para progressão de carga"],
+    series: "3", reps: "12–20", descanso: "60s", bg: "linear-gradient(135deg, #1a1a0a 0%, #252515 100%)"
+  },
+
+  // ── COSTAS extra ──────────────────────────────────────────
+  {
+    id: 31, name: "Remada Unilateral", muscle: "Costas", emoji: "🎣", difficulty: "iniciante",
+    desc: "Remada com halter apoiado no banco. Excelente para espessura e corrige assimetrias.",
+    longDesc: "A remada unilateral com halter é um dos exercícios mais eficazes para desenvolvimento do latíssimo dorso e rombóides. O apoio no banco protege a coluna e permite foco total no lado trabalhado.",
+    tips: ["Apoie joelho e mão ipsilateral no banco — coluna paralela ao chão","Puxe o halter em direção ao quadril, não à axila","No topo, contraia a escápula por 1 segundo","Desça completamente para alongar o latíssimo","Não gire o tronco para ajudar — movimento puro de costas"],
+    series: "4", reps: "10–12 por lado", descanso: "75s", bg: "linear-gradient(135deg, #0a1a0a 0%, #0a2510 100%)"
+  },
+  {
+    id: 32, name: "Remada Sentado (Cabo)", muscle: "Costas", emoji: "🚣", difficulty: "iniciante",
+    desc: "Remada na polia baixa, sentado. Ótima para espessura de costas com boa estabilização.",
+    longDesc: "A remada sentada no cabo (seated cable row) combina eficiência e segurança. Trabalha latíssimo do dorso, rombóides e trapézio médio com tensão constante, sendo ideal para iniciantes e avançados.",
+    tips: ["Sente ereto — não curve as costas para alcançar o cabo","Puxe o triangulo (ou barra) até o abdômen","Cotovelos passam próximos ao corpo na fase de puxada","Escápulas contraem no final do movimento — não apenas os braços","Controle a fase de retorno — não deixe o peso puxar"],
+    series: "4", reps: "10–12", descanso: "75s", bg: "linear-gradient(135deg, #100a1a 0%, #180a20 100%)"
+  },
+  {
+    id: 33, name: "Puxada Neutra (Triângulo)", muscle: "Costas", emoji: "🔺", difficulty: "iniciante",
+    desc: "Puxada com pegada neutra, foca no latíssimo e bíceps com menor esforço no ombro.",
+    longDesc: "A puxada com triângulo (pegada neutra) é mais confortável para os ombros e permite uma boa ativação do latíssimo dorso e do braquial. É uma excelente variação para quem tem desconforto nas pegadas prona ou supinada.",
+    tips: ["Puxe o triângulo até o peito — não abaixo do queixo","Cotovelos apontam diretamente para o chão no ponto de contração","Mantenha leve inclinação do tronco para trás (10–15°)","Desça de forma controlada até extensão quase completa","Aperte as escápulas juntas no ponto de contração máxima"],
+    series: "3", reps: "10–12", descanso: "75s", bg: "linear-gradient(135deg, #0a0a1a 0%, #120a18 100%)"
+  },
+  {
+    id: 34, name: "Pullover com Halter", muscle: "Costas", emoji: "🌀", difficulty: "intermediario",
+    desc: "Exercício único que trabalha latíssimo do dorso e serrátil anterior com grande amplitude.",
+    longDesc: "O pullover com halter é considerado um exercício 'caixa torácica' pela enorme amplitude que proporciona. Trabalha latíssimo do dorso, serrátil anterior, peitoral maior e tríceps cabeça longa. Recomendado ao final do treino de costas ou peito.",
+    tips: ["Deite perpendicular ao banco — apenas a parte superior das costas apoiada","Segure o halter com as duas mãos acima do peito","Desça em arco atrás da cabeça, sentindo o latíssimo alongar","Braços levemente flexionados durante todo o movimento","Não desça além do nível do banco para proteger os ombros"],
+    series: "3", reps: "12–15", descanso: "60s", bg: "linear-gradient(135deg, #1a1010 0%, #201515 100%)"
+  },
+  {
+    id: 35, name: "Face Pull", muscle: "Costas", emoji: "😤", difficulty: "iniciante",
+    desc: "Exercício para deltóide posterior e manguito rotador. Fundamental para saúde dos ombros.",
+    longDesc: "O face pull com corda no cabo é um dos exercícios mais importantes para saúde dos ombros e postura. Trabalha o deltóide posterior, rombóides e manguito rotador — músculos frequentemente negligenciados.",
+    tips: ["Polia na altura dos olhos ou ligeiramente acima","Puxe a corda em direção ao rosto, separando as pontas ao final","Cotovelos sobem até a altura dos ombros ou acima","Rotação externa dos ombros ao final — polegar aponta para trás","Use carga leve — foco total na execução e sensação muscular"],
+    series: "3", reps: "15–20", descanso: "45s", bg: "linear-gradient(135deg, #1a0a10 0%, #200a18 100%)"
+  },
+  {
+    id: 36, name: "Barra Supinada (Chin-up)", muscle: "Costas", emoji: "🔝", difficulty: "intermediario",
+    desc: "Barra fixa com pegada supinada — ativa mais o bíceps e o latíssimo inferior.",
+    longDesc: "O chin-up (barra supinada) diferencia-se do pull-up pela pegada com palmas voltadas para você. Essa posição permite maior ativação do bíceps e proporciona uma posição de ombro mais confortável para muitas pessoas.",
+    tips: ["Pegada com mãos na largura dos ombros, palmas para você","Inicie da posição morta — cotovelos estendidos","Suba até o queixo ultrapassar a barra","Movimento controlado — não balance o corpo","Fase de descida de 3 segundos para máximo estímulo"],
+    series: "4", reps: "6–10", descanso: "120s", bg: "linear-gradient(135deg, #0a1a10 0%, #102010 100%)"
+  },
+  {
+    id: 37, name: "Hiperextensão", muscle: "Costas", emoji: "🦴", difficulty: "iniciante",
+    desc: "Fortalece os eretores da espinha e glúteos. Essencial para saúde da coluna lombar.",
+    longDesc: "A hiperextensão na cadeira romana trabalha os eretores da espinha, glúteo máximo e isquiotibiais. É fundamental para equilíbrio muscular e prevenção de lesões lombares. Pode ser feita com ou sem carga adicional.",
+    tips: ["Quadril na borda do aparelho — tronco livre para movimentar","Desça até sentir alongamento nos isquiotibiais (90° aproximadamente)","Suba até ficar alinhado — não hiperestenha (não vá além do neutro)","Mãos cruzadas no peito ou atrás da cabeça para iniciantes","Adicione anilha no peito para aumentar a carga"],
+    series: "3", reps: "12–15", descanso: "60s", bg: "linear-gradient(135deg, #1a1a0a 0%, #252010 100%)"
+  },
+
+  // ── OMBROS extra ──────────────────────────────────────────
+  {
+    id: 38, name: "Elevação Frontal", muscle: "Ombros", emoji: "⬆️", difficulty: "iniciante",
+    desc: "Isolamento do deltóide anterior. Complementa o desenvolvimento para ombros completos.",
+    longDesc: "A elevação frontal com halteres ou barra trabalha especificamente o deltóide anterior (feixe da frente). É um exercício de isolamento importante para quem quer ombros completos e bem desenvolvidos em todos os feixes.",
+    tips: ["Eleve os braços à frente do corpo até a altura dos ombros","Leve flexão nos cotovelos — braços não totalmente estendidos","Movimento alternado (um braço de cada vez) ou simultâneo","Fase excêntrica de 2–3 segundos","Não balanceie o tronco para trás para auxiliar o movimento"],
+    series: "3", reps: "12–15", descanso: "60s", bg: "linear-gradient(135deg, #0a0a1a 0%, #100a20 100%)"
+  },
+  {
+    id: 39, name: "Desenvolvimento Arnold", muscle: "Ombros", emoji: "🏆", difficulty: "intermediario",
+    desc: "Criado por Arnold Schwarzenegger. Trabalha os três feixes do deltóide em um único movimento.",
+    longDesc: "O desenvolvimento Arnold combina uma rotação do pulso durante o movimento, ativando progressivamente os três feixes do deltóide (anterior, médio e posterior). É um dos exercícios mais completos para ombros.",
+    tips: ["Inicie com halteres na frente, palmas para você (como término de rosca)","Ao empurrar, gire os pulsos até palmas ficarem para frente no topo","Desça fazendo o movimento inverso — rotação de volta","Execução lenta e controlada — foco na amplitude completa","Não trave os cotovelos no topo"],
+    series: "3", reps: "10–12", descanso: "90s", bg: "linear-gradient(135deg, #1a0a0a 0%, #220a10 100%)"
+  },
+  {
+    id: 40, name: "Elevação Lateral Cabo", muscle: "Ombros", emoji: "🔌", difficulty: "iniciante",
+    desc: "Elevação lateral com cabo para tensão constante. Superior ao halter no deltóide médio.",
+    longDesc: "A elevação lateral com cabo oferece tensão constante ao longo de todo o arco do movimento, diferente dos halteres que têm tensão zero na posição inicial. Isso resulta em maior estímulo para o deltóide médio.",
+    tips: ["Polia na posição mais baixa possível","Cabo passa à frente do corpo (braço cruzado) para maior amplitude","Cotovelos ligeiramente flexionados durante todo o movimento","Eleve até a altura do ombro — não acima","Realize lentamente — o objetivo não é a carga, mas a sensação"],
+    series: "3", reps: "12–15", descanso: "60s", bg: "linear-gradient(135deg, #0a1a0a 0%, #102010 100%)"
+  },
+  {
+    id: 41, name: "Elevação Posterior", muscle: "Ombros", emoji: "🦢", difficulty: "iniciante",
+    desc: "Trabalha o deltóide posterior — o feixe mais negligenciado. Fundamental para postura.",
+    longDesc: "A elevação posterior (reverse fly) com halteres ou no banco inclina trabalha o deltóide posterior e os rombóides. É um exercício essencial para postura e saúde dos ombros, frequentemente ignorado nos treinos.",
+    tips: ["Tronco inclinado a quase 90° ou deitado no banco inclinado de frente","Leve flexão nos cotovelos durante todo o movimento","Movimento em arco — cotovelos saem para os lados e para cima","Squeeze nas escápulas no topo do movimento","Use carga leve — deltóide posterior é fraco em maioria das pessoas"],
+    series: "3", reps: "15–20", descanso: "45s", bg: "linear-gradient(135deg, #1a1a0a 0%, #201a10 100%)"
+  },
+  {
+    id: 42, name: "Desenvolvimento Militar", muscle: "Ombros", emoji: "🎖️", difficulty: "avancado",
+    desc: "Desenvolvimento em pé com barra. O mais desafiador para ombros — envolve core total.",
+    longDesc: "O desenvolvimento militar (standing overhead press) é realizado em pé, exigindo estabilização de todo o corpo. Recruta core, glúteos e pernas para estabilizar, além dos músculos primários (deltóides e tríceps). Excelente para força funcional.",
+    tips: ["Em pé, pés na largura dos ombros — posição estável","Core contraído — não hiperestenha a lombar para ajudar","Barra desce até a altura do queixo — não atrás da cabeça","Pressione ativamente através da barra ao subir","Olhe levemente para cima conforme a barra sobe"],
+    series: "4", reps: "6–10", descanso: "120s", bg: "linear-gradient(135deg, #100a1a 0%, #1a0a22 100%)"
+  },
+
+  // ── BÍCEPS extra ──────────────────────────────────────────
+  {
+    id: 43, name: "Rosca 21", muscle: "Bíceps", emoji: "2️⃣1️⃣", difficulty: "intermediario",
+    desc: "Técnica avançada: 7 meias reps baixas + 7 meias reps altas + 7 completas = 21 reps.",
+    longDesc: "A rosca 21 é uma técnica de intensidade que divide o movimento do bíceps em três partes. Cria enorme tensão e pump muscular ao trabalhar separadamente a parte inferior, superior e completa do movimento.",
+    tips: ["Use carga 30–40% menor que o normal na rosca direta","7 reps: somente da posição baixa até 90° (metade inferior)","7 reps: somente de 90° até o topo (metade superior)","7 reps: movimento completo de baixo a cima","Sem pausa entre as fases — continue fluindo"],
+    series: "3", reps: "21 (3×7)", descanso: "90s", bg: "linear-gradient(135deg, #0a0a1a 0%, #100a25 100%)"
+  },
+  {
+    id: 44, name: "Rosca Martelo", muscle: "Bíceps", emoji: "🔨", difficulty: "iniciante",
+    desc: "Pegada neutra que trabalha braquial e braquiorradial além do bíceps.",
+    longDesc: "A rosca martelo (hammer curl) usa pegada neutra (polegar para cima), ativando além do bíceps braquial o braquial e o braquiorradial. Desenvolve a espessura do braço e o músculo lateral do antebraço, dando volume total ao braço.",
+    tips: ["Pegada neutra — polegar aponta para cima durante todo o movimento","Cotovelos fixos ao lado do corpo","Movimento pode ser alternado ou simultâneo","Não gire o pulso — mantenha neutro do início ao fim","Excelente para finalizar treino de bíceps"],
+    series: "3", reps: "10–12", descanso: "60s", bg: "linear-gradient(135deg, #1a0a10 0%, #200a18 100%)"
+  },
+  {
+    id: 45, name: "Rosca Scott (Preacher)", muscle: "Bíceps", emoji: "📐", difficulty: "iniciante",
+    desc: "No banco Scott, isola completamente o bíceps. Ótima para pico e para eliminar trapaças.",
+    longDesc: "A rosca Scott no banco preacher é um exercício de isolamento que elimina qualquer possibilidade de movimento compensatório. O braço apoiado no banco força o bíceps a trabalhar sozinho, sendo excelente para desenvolvimento de pico muscular.",
+    tips: ["Cotovelos apoiados firmemente no banco — não levante","Não trave totalmente os cotovelos na descida — mantenha leve tensão","Amplitude total: desça quase completamente e suba até a contração","Velocidade controlada especialmente na fase excêntrica","Pode ser feito com barra reta, EZ ou halteres"],
+    series: "3", reps: "10–12", descanso: "60s", bg: "linear-gradient(135deg, #0a1010 0%, #0a1820 100%)"
+  },
+  {
+    id: 46, name: "Rosca Inversa", muscle: "Bíceps", emoji: "🔃", difficulty: "iniciante",
+    desc: "Pegada pronada que trabalha braquiorradial e antebraço extensores.",
+    longDesc: "A rosca inversa com pegada pronada (palmas para baixo) trabalha primariamente o braquiorradial e os extensores do antebraço, com ativação secundária do bíceps. Essencial para desenvolvimento completo e equilibrado dos braços.",
+    tips: ["Pegada pronada — palmas para baixo durante todo o movimento","Cotovelos próximos ao corpo e fixos","Use carga menor que na rosca direta — é exercício mais difícil","Amplitude completa do movimento","Ajuda a prevenir lesões de antebraço e cotovelo (epicondilite)"],
+    series: "3", reps: "12–15", descanso: "60s", bg: "linear-gradient(135deg, #1a1010 0%, #201818 100%)"
+  },
+  {
+    id: 47, name: "Rosca no Cabo", muscle: "Bíceps", emoji: "🔗", difficulty: "iniciante",
+    desc: "Rosca na polia baixa. Tensão constante superior ao halter — ótima para finalização.",
+    longDesc: "A rosca no cabo (cable curl) oferece tensão constante em todo o arco do movimento. Pode ser feita com barra reta, barra EZ ou com corda. Excelente opção para finalizar o treino de bíceps com alto volume e pump.",
+    tips: ["Polia na posição mais baixa","Segure a barra EZ ou corda e recue um passo","Cotovelos fixos ao lado do corpo","Supinação máxima ao chegar no topo se usar corda","Fase excêntrica de 3 s para máximo estímulo"],
+    series: "3", reps: "15–20", descanso: "45s", bg: "linear-gradient(135deg, #0a0a1a 0%, #0f0a1e 100%)"
+  },
+
+  // ── TRÍCEPS extra ──────────────────────────────────────────
+  {
+    id: 48, name: "Tríceps Francês", muscle: "Tríceps", emoji: "🗼", difficulty: "intermediario",
+    desc: "Exercício sentado ou em pé com halter atrás da cabeça. Foca a cabeça longa do tríceps.",
+    longDesc: "O tríceps francês (overhead triceps extension) coloca o tríceps em posição de maior pré-estiramento, especialmente a cabeça longa. Pode ser feito em pé, sentado, ou unilateral. Excelente para desenvolver espessura no tríceps.",
+    tips: ["Segure o halter com as duas mãos acima da cabeça","Desça atrás da cabeça — cotovelos apontam para cima","Cotovelos próximos à cabeça — não devem abrir","Extensão completa no topo sem travar","Alternativa: barra EZ ou cabo para conforto no pulso"],
+    series: "3", reps: "10–12", descanso: "75s", bg: "linear-gradient(135deg, #1a0a1a 0%, #220a22 100%)"
+  },
+  {
+    id: 49, name: "Tríceps Kickback", muscle: "Tríceps", emoji: "🦵", difficulty: "iniciante",
+    desc: "Extensão do cotovelo inclinado com halter. Excelente isolamento e definição do tríceps.",
+    longDesc: "O kickback com halter isola muito bem o tríceps, especialmente na extensão final. Realizado com o tronco inclinado e o braço paralelo ao chão, é ótimo para finalizar o treino de tríceps com alto grau de isolamento.",
+    tips: ["Tronco inclinado quase paralelo ao chão","Braço superior (úmero) paralelo ao chão e fixo durante todo o movimento","Estenda o cotovelo completamente no final","Sem balanço — apenas o antebraço se move","Carga leve a moderada: o isolamento é o objetivo"],
+    series: "3", reps: "12–15", descanso: "45s", bg: "linear-gradient(135deg, #0a1a0a 0%, #0f2010 100%)"
+  },
+  {
+    id: 50, name: "Pushdown com Corda", muscle: "Tríceps", emoji: "🪢", difficulty: "iniciante",
+    desc: "Variação do pulley com corda que permite maior supinação e ativação das três cabeças.",
+    longDesc: "O pushdown com corda no cabo permite separar as pontas da corda ao final do movimento, criando maior supinação e ativando as três cabeças do tríceps simultaneamente. É uma das variações mais populares de tríceps na polia.",
+    tips: ["Separe as pontas da corda ao final do movimento (pronação para baixo)","Cotovelos fixos próximos ao corpo","Extensão completa — sinta a contração das três cabeças","Não incline o tronco para usar peso maior","Fase excêntrica de 2 s controlando a corda ao subir"],
+    series: "3", reps: "12–15", descanso: "60s", bg: "linear-gradient(135deg, #0a0a10 0%, #0f0f18 100%)"
+  },
+  {
+    id: 51, name: "Tríceps no Banco (Paralelas)", muscle: "Tríceps", emoji: "🏗️", difficulty: "intermediario",
+    desc: "Mergulho nas paralelas com foco no tríceps. Excelente exercício composto de empurrar.",
+    longDesc: "O mergulho nas paralelas com tronco ereto foca o trabalho no tríceps, ao contrário da versão inclinada que prioriza o peitoral. É um exercício composto poderoso para ganho de massa e força no tríceps.",
+    tips: ["Tronco ereto durante o movimento para foco no tríceps","Cotovelos próximos ao corpo — não devem abrir","Desça até 90° de flexão nos cotovelos","Suba completamente sem travar","Adicione peso com cinto quando o próprio corpo se tornar fácil"],
+    series: "4", reps: "8–12", descanso: "90s", bg: "linear-gradient(135deg, #1a0a1a 0%, #220a20 100%)"
+  },
+  {
+    id: 52, name: "Tríceps Unilateral Cabo", muscle: "Tríceps", emoji: "1️⃣", difficulty: "iniciante",
+    desc: "Tríceps no cabo com um braço. Corrige assimetrias e maximiza a contração.",
+    longDesc: "O tríceps unilateral no cabo permite trabalhar cada braço de forma independente, corrigindo desequilíbrios musculares. A tensão constante do cabo garante estimulação ao longo de toda a amplitude do movimento.",
+    tips: ["Polia na altura dos ombros ou acima","Cotovelo fixo e próximo ao corpo — apenas o antebraço se move","Extensão completa — torça o pulso levemente ao final (supinação)","Realize sem espelhar o lado mais forte — o objetivo é equilíbrio","Carga levemente menor que no pulley com as duas mãos"],
+    series: "3", reps: "12–15 por braço", descanso: "45s", bg: "linear-gradient(135deg, #0a1010 0%, #101818 100%)"
+  },
+
+  // ── PERNAS extra ──────────────────────────────────────────
+  {
+    id: 53, name: "Agachamento Búlgaro", muscle: "Pernas", emoji: "🇧🇬", difficulty: "avancado",
+    desc: "Agachamento unilateral com pé traseiro elevado. Excelente para glúteo e quadríceps.",
+    longDesc: "O agachamento búlgaro (split squat búlgaro) é um dos exercícios unilaterais mais eficazes para pernas. Com o pé traseiro elevado em um banco, toda a carga cai sobre a perna da frente, criando enorme estímulo no quadríceps e glúteo.",
+    tips: ["Pé traseiro apoiado no banco — meia-sola ou peito do pé","Passo frontal longo o suficiente para joelho não ultrapassar muito o pé","Desça verticalmente — o joelho traseiro vai em direção ao chão","Tronco levemente inclinado para frente (15–20°)","Segure halteres dos lados ou barra nas costas para carga"],
+    series: "4", reps: "8–10 por perna", descanso: "90s", bg: "linear-gradient(135deg, #1a0a0a 0%, #200a0a 100%)"
+  },
+  {
+    id: 54, name: "Extensão de Perna", muscle: "Pernas", emoji: "🦿", difficulty: "iniciante",
+    desc: "Isolamento do quadríceps na cadeira extensora. Ótimo para finalização e definição.",
+    longDesc: "A extensão de perna na cadeira extensora isola os quatro músculos do quadríceps (reto femoral, vasto lateral, vasto medial, vasto intermédio). É frequentemente usada para finalização de treino e para reabilitação de joelho.",
+    tips: ["Ajuste o banco para que o joelho fique alinhado com o eixo da máquina","Não trave o joelho completamente no topo — leve flexão","Fase excêntrica lenta (3 s) para máximo recrutamento do quadríceps","Pause 1 s no topo para squeeze do vasto medial","Não use momentum — movimento limpo e controlado"],
+    series: "3", reps: "12–15", descanso: "60s", bg: "linear-gradient(135deg, #0a0a1a 0%, #100a20 100%)"
+  },
+  {
+    id: 55, name: "Flexão de Perna (Leg Curl)", muscle: "Pernas", emoji: "🦵", difficulty: "iniciante",
+    desc: "Isolamento dos isquiotibiais. Essencial para equilíbrio muscular e saúde do joelho.",
+    longDesc: "A flexão de perna na mesa ou cadeira isola os isquiotibiais (bíceps femoral, semitendíneo, semimembranoso). É fundamental para equilíbrio agonista-antagonista com o quadríceps e para prevenção de lesões.",
+    tips: ["Ajuste para que o joelho fique no eixo da máquina","Puxe o calcanhar em direção aos glúteos — amplitude máxima","Squeeze de 1 s no topo para máxima contração do isquiotibial","Fase excêntrica de 3 s — não deixe o peso cair","Mantenha os quadris no banco durante toda a execução"],
+    series: "3", reps: "12–15", descanso: "60s", bg: "linear-gradient(135deg, #0a1a0a 0%, #101a10 100%)"
+  },
+  {
+    id: 56, name: "Agachamento Sumô", muscle: "Pernas", emoji: "🏯", difficulty: "iniciante",
+    desc: "Agachamento com pés muito abertos. Foca glúteos e adutores além do quadríceps.",
+    longDesc: "O agachamento sumô tem base mais larga que o agachamento convencional, com dedos dos pés virados mais para fora. Essa posição recruta mais glúteos, adutores e isquiotibiais, além do quadríceps.",
+    tips: ["Pés 2–3x a largura dos ombros, dedos virados 45–60° para fora","Joelhos seguem a direção dos dedos durante a descida","Desça até as coxas ficarem paralelas ao chão","Tronco mais ereto que no agachamento convencional","Pode ser feito com barra, halteres ou kettlebell"],
+    series: "4", reps: "10–12", descanso: "90s", bg: "linear-gradient(135deg, #1a1a0a 0%, #201a0a 100%)"
+  },
+  {
+    id: 57, name: "Cadeira Adutora", muscle: "Pernas", emoji: "🦵", difficulty: "iniciante",
+    desc: "Isolamento dos adutores da coxa. Importante para estabilidade do joelho e quadril.",
+    longDesc: "A cadeira adutora isola os músculos adutores da coxa (pectíneo, adutor longo, adutor magno, grácil). Esses músculos são importantes para estabilidade do quadril e joelho, além de estética da região interna da coxa.",
+    tips: ["Ajuste o aparelho conforme a amplitude confortável","Mova as pernas de forma controlada — sem bater as almofadas","Fase excêntrica de 3 s resistindo à abertura das pernas","Squeeze de 2 s ao fechar as pernas completamente","Evite carga excessiva — foco na contração dos adutores"],
+    series: "3", reps: "15–20", descanso: "45s", bg: "linear-gradient(135deg, #1a0a1a 0%, #200a20 100%)"
+  },
+  {
+    id: 58, name: "Cadeira Abdutora", muscle: "Pernas", emoji: "🦶", difficulty: "iniciante",
+    desc: "Isolamento dos abdutores do quadril e glúteo médio. Essencial para estabilidade pélvica.",
+    longDesc: "A cadeira abdutora trabalha o glúteo médio, glúteo mínimo e tensor da fáscia lata. O glúteo médio é fundamental para estabilidade pélvica, prevenção de lesões e para estética glútea completa.",
+    tips: ["Ajuste o banco para que os joelhos fiquem a 90°","Abra as pernas de forma controlada — não jogue","Squeeze do glúteo médio no ponto de abertura máxima","Retorne lentamente — fase excêntrica de 2–3 s","Sentar levemente inclinado para frente aumenta ativação do glúteo médio"],
+    series: "3", reps: "15–20", descanso: "45s", bg: "linear-gradient(135deg, #0a0a1a 0%, #100a15 100%)"
+  },
+  {
+    id: 59, name: "Hip Thrust", muscle: "Pernas", emoji: "🍑", difficulty: "intermediario",
+    desc: "O melhor exercício para glúteo máximo. Ativação superior a qualquer agachamento.",
+    longDesc: "O hip thrust é considerado o exercício mais eficaz para o desenvolvimento do glúteo máximo, com estudos mostrando ativação muscular superior ao agachamento e ao levantamento terra. Realizado com a parte superior das costas apoiada em banco.",
+    tips: ["Parte superior das costas (escápulas) apoiada no banco","Pés na largura dos quadris, joelhos a 90° no topo","Empurre o quadril para cima até ficar paralelo ao chão","Squeeze máximo do glúteo no topo — pause 1–2 s","Não hiperestenha a lombar — movimento vem do quadril"],
+    series: "4", reps: "10–15", descanso: "75s", bg: "linear-gradient(135deg, #1a0a0a 0%, #220a12 100%)"
+  },
+  {
+    id: 60, name: "Step Up", muscle: "Pernas", emoji: "🪜", difficulty: "iniciante",
+    desc: "Exercício funcional com step ou banco. Trabalha quadríceps e glúteos unilateralmente.",
+    longDesc: "O step up é um exercício funcional que imita o movimento de subir escadas. Trabalha quadríceps, glúteos e isquiotibiais de forma unilateral, melhorando equilíbrio e corrigindo assimetrias entre os membros.",
+    tips: ["Use um step ou banco com altura de 40–60 cm","Suba completamente com uma perna — evite impulso do pé de baixo","Desça de forma controlada e lenta","Mantenha o tronco ereto durante todo o movimento","Segure halteres para progressão de carga"],
+    series: "3", reps: "12 por perna", descanso: "60s", bg: "linear-gradient(135deg, #0a1a10 0%, #102010 100%)"
+  },
+  {
+    id: 61, name: "Good Morning", muscle: "Pernas", emoji: "🌅", difficulty: "avancado",
+    desc: "Exercício com barra nas costas inclinando o tronco. Forte ativação de isquiotibiais e lombar.",
+    longDesc: "O good morning é um exercício de cadeia posterior que trabalha isquiotibiais, glúteos e eretores da espinha. Requer boa técnica e flexibilidade dos isquiotibiais. Excelente para atletas de força.",
+    tips: ["Barra apoiada nos trapézios (posição alta) — não no pescoço","Joelhos levemente flexionados durante todo o movimento","Incline o tronco para frente dobrando no quadril — não na lombar","Desça até sentir alongamento nos isquiotibiais (idealmente 90°)","Suba contraindo os glúteos e isquiotibiais"],
+    series: "3", reps: "8–12", descanso: "90s", bg: "linear-gradient(135deg, #1a1a0a 0%, #222010 100%)"
+  },
+  {
+    id: 62, name: "Passada Reversa", muscle: "Pernas", emoji: "↩️", difficulty: "iniciante",
+    desc: "Avanço para trás — mais seguro para joelhos que o avanço frontal.",
+    longDesc: "A passada reversa (reverse lunge) é considerada mais segura para os joelhos do que o avanço frontal tradicional, pois reduz a força de cisalhamento sobre o joelho da frente. Trabalha quadríceps, glúteos e isquiotibiais.",
+    tips: ["Dê um passo para trás — não para a frente","Joelho da frente não deve ultrapassar muito a ponta do pé","Desça até o joelho traseiro quase tocar o chão","Tronco ereto durante todo o movimento","Empurre pelo calcanhar da perna da frente ao subir"],
+    series: "3", reps: "12 por perna", descanso: "60s", bg: "linear-gradient(135deg, #0a0a1a 0%, #0f0f20 100%)"
+  },
+  {
+    id: 63, name: "Panturrilha no Leg Press", muscle: "Pernas", emoji: "🦵", difficulty: "iniciante",
+    desc: "Panturrilha realizada na máquina leg press. Permite carga alta com segurança.",
+    longDesc: "A panturrilha realizada no leg press permite trabalhar com cargas muito maiores do que em pé, sobrecarregando gastrocnêmio e sóleo de forma eficiente. A plataforma inclinada permite boa amplitude de movimento.",
+    tips: ["Posicione apenas as pontas dos pés na plataforma do leg press","Amplitude máxima: pés flexionados e extendidos completamente","Realize lentamente — 2 s subindo, 2 s descendo","Pause no topo por 1 s para squeeze do gastrocnêmio","Não trave o joelho — mantenha levemente flexionado"],
+    series: "4", reps: "15–20", descanso: "45s", bg: "linear-gradient(135deg, #0a1a1a 0%, #102020 100%)"
+  },
+
+  // ── ABDÔMEN extra ──────────────────────────────────────────
+  {
+    id: 64, name: "Abdominal Crunch", muscle: "Abdômen", emoji: "🔥", difficulty: "iniciante",
+    desc: "Exercício básico para abdômen. Trabalha o reto abdominal na parte superior.",
+    longDesc: "O crunch abdominal é o exercício mais básico para a musculatura do core. Trabalha principalmente o reto abdominal e pode ser variado de diversas formas para aumentar a dificuldade.",
+    tips: ["Mãos atrás da cabeça — não force o pescoço para frente","Olhe para o teto durante todo o movimento","Contraia o abdômen ao subir — não use o pescoço","Amplitude parcial é ok — o que importa é a contração do abdômen","Expire ao contrair, inspire ao descer"],
+    series: "3", reps: "20–25", descanso: "45s", bg: "linear-gradient(135deg, #1a0a0a 0%, #2a0808 100%)"
+  },
+  {
+    id: 65, name: "Prancha", muscle: "Abdômen", emoji: "🧱", difficulty: "iniciante",
+    desc: "Isométrico poderoso para core. Trabalha toda a faixa abdominal e estabilizadores.",
+    longDesc: "A prancha (plank) é um dos melhores exercícios isométricos para o core. Trabalha reto abdominal, transverso, oblíquos e estabilizadores da coluna. É fundamental para saúde lombar e performance esportiva.",
+    tips: ["Corpo em linha reta da cabeça aos calcanhares — sem afundar o quadril","Cotovelos abaixo dos ombros, antebraços no chão","Contraia o abdômen e glúteos durante todo o tempo","Respire normalmente — não prenda a respiração","Progrida: prancha lateral, com elevação de membros, prancha dinâmica"],
+    series: "3", reps: "30–60s", descanso: "30s", bg: "linear-gradient(135deg, #0a0a1a 0%, #10100a 100%)"
+  },
+  {
+    id: 66, name: "Elevação de Pernas", muscle: "Abdômen", emoji: "🦿", difficulty: "intermediario",
+    desc: "Foca na parte inferior do abdômen. Excelente para fortalecer o core inferior.",
+    longDesc: "A elevação de pernas trabalha intensamente a parte inferior do reto abdominal, psoas ilíaco e flexores do quadril. É um exercício mais avançado que o crunch e demanda maior força de core.",
+    tips: ["Realize deitado com as mãos abaixo do glúteo para suporte lombar","Pernas levemente flexionadas nos joelhos para reduzir a tensão lombar","Desça as pernas lentamente — não deixe cair","Lombar deve permanecer em contato com o chão","Progressão: joelhos dobrados → pernas semi-estendidas → pernas retas"],
+    series: "3", reps: "15–20", descanso: "45s", bg: "linear-gradient(135deg, #0a1a0a 0%, #081a08 100%)"
+  },
+  {
+    id: 67, name: "Abdominal Oblíquo", muscle: "Abdômen", emoji: "↗️", difficulty: "iniciante",
+    desc: "Rotação do tronco para trabalhar os oblíquos. Essencial para cintura definida.",
+    longDesc: "O crunch oblíquo trabalha os músculos oblíquos externos e internos, responsáveis pela rotação do tronco e pela definição lateral da cintura. É fundamental para um core equilibrado e funcional.",
+    tips: ["Deite com joelhos dobrados, pés no chão","Leve o cotovelo direito ao joelho esquerdo e vice-versa","Não puxe o pescoço — mãos levemente apoiadas atrás da orelha","Foque na rotação do tronco, não na aproximação do cotovelo","Expire na fase de contração, inspire ao descer"],
+    series: "3", reps: "20 por lado", descanso: "45s", bg: "linear-gradient(135deg, #1a1a0a 0%, #201810 100%)"
+  },
+  {
+    id: 68, name: "Russian Twist", muscle: "Abdômen", emoji: "🔄", difficulty: "intermediario",
+    desc: "Rotação do tronco sentado com ou sem peso. Foca nos oblíquos e core rotacional.",
+    longDesc: "O Russian Twist é um exercício dinâmico de rotação do core que trabalha oblíquos, reto abdominal e transverso. Pode ser feito com o peso do corpo, halter, medicine ball ou disco.",
+    tips: ["Sente com joelhos flexionados, pés ligeiramente elevados do chão","Tronco inclinado cerca de 45° para trás — não muito deitado","Gire o tronco levando as mãos de um lado ao outro","Movimento amplo — toque o chão ao lado do quadril","Segure um peso para maior intensidade"],
+    series: "3", reps: "20 (10 por lado)", descanso: "45s", bg: "linear-gradient(135deg, #0a0a1a 0%, #0f0f1a 100%)"
+  },
+  {
+    id: 69, name: "Mountain Climber", muscle: "Abdômen", emoji: "🧗", difficulty: "intermediario",
+    desc: "Exercício dinâmico que combina core e cardio. Queima gordura e fortalece o abdômen.",
+    longDesc: "O mountain climber é um exercício dinâmico que combina força de core com cardio. Trabalha reto abdominal, oblíquos, flexores do quadril e ombros. Por ser realizado em ritmo rápido, também tem bom componente aeróbico.",
+    tips: ["Posição de flexão — corpo em linha reta","Traga os joelhos alternadamente em direção ao peito rapidamente","Core fortemente contraído — não deixe o quadril subir","Mantenha a respiração durante todo o movimento","Pode ser feito em ritmo lento (força) ou rápido (cardio/HIIT)"],
+    series: "3", reps: "30s–60s", descanso: "30s", bg: "linear-gradient(135deg, #1a0a0a 0%, #1a0f0a 100%)"
+  },
+  {
+    id: 70, name: "Abdominal no Cabo", muscle: "Abdômen", emoji: "🔗", difficulty: "intermediario",
+    desc: "Crunch com resistência do cabo. Permite progressão de carga no abdômen como qualquer músculo.",
+    longDesc: "O crunch no cabo (cable crunch) é um dos raros exercícios abdominais que permitem progressão de carga sistematicamente. Realizado de joelhos com polia alta, é excelente para desenvolvimento de massa no reto abdominal.",
+    tips: ["Ajoelhe-se de frente para a polia alta — segure a corda atrás da cabeça","Incline o tronco para frente contraindo o abdômen — não o pescoço","Leve as costelas em direção ao quadril — não a cabeça","Faça uma pausa de 1 s na contração máxima","Suba de forma controlada — não deixe o peso te puxar"],
+    series: "3", reps: "15–20", descanso: "45s", bg: "linear-gradient(135deg, #0a1a0a 0%, #0f2010 100%)"
+  },
+  {
+    id: 71, name: "Dead Bug", muscle: "Abdômen", emoji: "🐛", difficulty: "iniciante",
+    desc: "Exercício de anti-extensão do core. Fundamental para estabilização e saúde lombar.",
+    longDesc: "O dead bug é um exercício de estabilização do core baseado em anti-extensão. Trabalha o transverso do abdômen, reto abdominal e multífidos. É frequentemente prescrito em reabilitação e como base para treino funcional.",
+    tips: ["Deite de costas, pernas e braços estendidos para cima (90°)","Baixe um braço e a perna oposta simultaneamente","Lombar deve permanecer em contato total com o chão","Expire ao abaixar o membro — expire ao retornar","Movimento lento e controlado — não é para ser rápido"],
+    series: "3", reps: "10 por lado", descanso: "30s", bg: "linear-gradient(135deg, #1a1a1a 0%, #222020 100%)"
+  },
+  {
+    id: 72, name: "Prancha Lateral", muscle: "Abdômen", emoji: "↔️", difficulty: "intermediario",
+    desc: "Variação da prancha que foca os oblíquos e o quadrado lombar.",
+    longDesc: "A prancha lateral (side plank) é um exercício isométrico que trabalha intensamente os oblíquos externos e internos, o quadrado lombar e o glúteo médio. É essencial para estabilidade lateral do core.",
+    tips: ["Apoie no antebraço — cotovelo diretamente abaixo do ombro","Quadril elevado — corpo em linha reta lateral","Não deixe o quadril afundar ou subir demais","Braço livre pode ficar no quadril ou estendido para o teto","Progressão: elevar o quadril dinamicamente (elevação de quadril lateral)"],
+    series: "3", reps: "30–45s por lado", descanso: "30s", bg: "linear-gradient(135deg, #0a0a1a 0%, #0f0f22 100%)"
+  },
+  {
+    id: 73, name: "Bicicleta (Bicycle Crunch)", muscle: "Abdômen", emoji: "🚴", difficulty: "iniciante",
+    desc: "Crunch com movimento de pedalada. Ativa reto abdominal e oblíquos simultaneamente.",
+    longDesc: "O crunch bicicleta combina o movimento de crunch com rotação, ativando reto abdominal e oblíquos ao mesmo tempo. Estudos do ACE o classificam como um dos exercícios abdominais mais eficazes.",
+    tips: ["Pernas em movimento de pedalada — joelhos alternativamente vêm ao peito","Cotovelo oposto vai em direção ao joelho que se aproxima","Não force o pescoço — foco na rotação do tronco","Pernas não tocam o chão — manter tensão contínua","Ritmo moderado — não tão rápido que perca a rotação"],
+    series: "3", reps: "30 (15 por lado)", descanso: "45s", bg: "linear-gradient(135deg, #1a0a1a 0%, #1a0f20 100%)"
+  },
+
+  // ── GLÚTEOS (grupo extra) ──────────────────────────────────
+  {
+    id: 74, name: "Glúteo na Polia", muscle: "Glúteos", emoji: "🍑", difficulty: "iniciante",
+    desc: "Extensão do quadril na polia baixa. Isolamento direto do glúteo máximo.",
+    longDesc: "O glúteo na polia (cable kickback) isola diretamente o glúteo máximo com tensão constante ao longo de todo o movimento. É excelente para desenvolvimento de forma e volume dos glúteos.",
+    tips: ["Polia na posição mais baixa — fixe a alça no tornozelo","Incline levemente o tronco para frente segurando no suporte","Empurre a perna para trás e para cima — foco no glúteo, não na lombar","Squeeze máximo do glúteo no ponto de extensão","Não use momentum — movimento lento e controlado"],
+    series: "3", reps: "15 por lado", descanso: "45s", bg: "linear-gradient(135deg, #1a0a10 0%, #220a18 100%)"
+  },
+  {
+    id: 75, name: "Agachamento Glúteo", muscle: "Glúteos", emoji: "🔻", difficulty: "iniciante",
+    desc: "Agachamento com foco nos glúteos. Posição larga e descida profunda.",
+    longDesc: "O agachamento com foco glúteo usa base larga, postura mais inclinada e descida além do paralelo para maximizar o recrutamento do glúteo máximo. Muito popular em treinos específicos para glúteos.",
+    tips: ["Base larga (ligeiramente mais ampla que sumô)","Desça abaixo do paralelo — ângulo de quadril aberto","Empurre os joelhos para fora durante a subida","Squeeze dos glúteos no topo do movimento","Pode ser feito com barra, halteres, kettlebell ou no Smith"],
+    series: "4", reps: "12–15", descanso: "75s", bg: "linear-gradient(135deg, #1a0a0a 0%, #201012 100%)"
+  },
+  {
+    id: 76, name: "Glúteo 4 apoios", muscle: "Glúteos", emoji: "🐾", difficulty: "iniciante",
+    desc: "Exercício no chão em 4 apoios. Excelente ativação do glúteo com ou sem carga.",
+    longDesc: "O exercício de glúteo nos 4 apoios (donkey kick) é um clássico de treino em casa e academia. Em posição de gato, a extensão do quadril recruta diretamente o glúteo máximo. Pode ser feito com elástico ou polia para progressão.",
+    tips: ["Joelhos e mãos no chão — coluna neutra","Empurre o calcanhar para cima e para trás mantendo o joelho a 90°","Não hiperestenha a lombar — movimento vem do quadril","Squeeze do glúteo no ponto mais alto","Use elástico no joelho ou polia para adicionar resistência"],
+    series: "3", reps: "15–20 por lado", descanso: "45s", bg: "linear-gradient(135deg, #1a1010 0%, #201818 100%)"
+  },
+  {
+    id: 77, name: "Ponte de Glúteos", muscle: "Glúteos", emoji: "🌉", difficulty: "iniciante",
+    desc: "Versão no chão do hip thrust. Ótima para iniciantes e aquecimento glúteo.",
+    longDesc: "A ponte de glúteos é a versão deitada no chão do hip thrust. É mais acessível para iniciantes e pode ser progressiva (duas pernas → uma perna). Trabalha glúteo máximo e isquiotibiais.",
+    tips: ["Deite de costas, joelhos dobrados, pés no chão perto dos glúteos","Empurre o quadril para cima contraindo os glúteos","Corpo forma uma linha reta do joelho aos ombros no topo","Squeeze máximo de 1–2 s no topo","Progressão: eleve um pé (ponte unilateral)"],
+    series: "3", reps: "15–20", descanso: "45s", bg: "linear-gradient(135deg, #0a1a10 0%, #102010 100%)"
+  },
+
+  // ── ANTEBRAÇO ─────────────────────────────────────────────
+  {
+    id: 78, name: "Rosca de Pulso (Wrist Curl)", muscle: "Antebraço", emoji: "🤜", difficulty: "iniciante",
+    desc: "Flexão do pulso para fortalecer os flexores do antebraço. Essencial para pegada forte.",
+    longDesc: "A rosca de pulso trabalha os músculos flexores do antebraço (flexor radial, flexor ulnar do carpo). Uma pegada forte é fundamental para todos os exercícios de puxada e para esportes de combate.",
+    tips: ["Sente com os antebraços apoiados nas coxas, pulsos além dos joelhos","Segure a barra com pegada supinada — palmas para cima","Flexione o pulso completamente para cima e desça completamente","Movimento apenas do pulso — antebraço fica estático","Use carga leve — foco na amplitude e contração"],
+    series: "3", reps: "15–20", descanso: "30s", bg: "linear-gradient(135deg, #0a0a1a 0%, #0f0f1a 100%)"
+  },
+  {
+    id: 79, name: "Rosca de Pulso Inversa", muscle: "Antebraço", emoji: "🤛", difficulty: "iniciante",
+    desc: "Extensão do pulso para os extensores do antebraço. Previne epicondilite.",
+    longDesc: "A rosca de pulso inversa trabalha os extensores do antebraço. O equilíbrio entre flexores e extensores do antebraço é fundamental para saúde do cotovelo e prevenção de epicondilite lateral (cotovelo de tenista).",
+    tips: ["Sente com antebraços apoiados nas coxas, pulsos além dos joelhos","Segure a barra com pegada pronada — palmas para baixo","Estenda o pulso para cima e desça completamente","Use carga muito leve — extensores são significativamente mais fracos","Pode ser feito com barra EZ para menor tensão no pulso"],
+    series: "3", reps: "15–20", descanso: "30s", bg: "linear-gradient(135deg, #1a1010 0%, #201818 100%)"
+  },
+  {
+    id: 80, name: "Farmer Walk", muscle: "Antebraço", emoji: "🌾", difficulty: "intermediario",
+    desc: "Caminhada segurando pesos pesados. Desenvolve a pegada e o core de forma funcional.",
+    longDesc: "O Farmer Walk (caminhada do fazendeiro) é um exercício funcional completo. Carregando pesos pesados bilateralmente, trabalha pegada, trapézio, core, quadríceps e panturrilhas. É um dos exercícios mais funcionais que existem.",
+    tips: ["Segure halteres, kettlebells ou barras pesadas ao lado do corpo","Mantenha postura ereta — ombros para trás e para baixo","Passos curtos e firmes — não arraste os pés","Core fortemente contraído durante toda a caminhada","Progressão: aumentar carga, distância ou tempo"],
+    series: "3", reps: "30–40m por série", descanso: "90s", bg: "linear-gradient(135deg, #1a1a0a 0%, #201a10 100%)"
+  },
+
+  // ── CARDIO / FUNCIONAL ────────────────────────────────────
+  {
+    id: 81, name: "Burpee", muscle: "Funcional", emoji: "💥", difficulty: "avancado",
+    desc: "O exercício mais completo do fitness. Trabalha todo o corpo com altíssimo gasto calórico.",
+    longDesc: "O burpee combina agachamento, flexão de braço, salto e elevação dos braços em um único movimento fluido. É considerado um dos exercícios mais eficientes para gasto calórico e condicionamento cardiovascular.",
+    tips: ["Sequência: agache → apoie as mãos → pule para posição de flexão → flexão → pule para perto das mãos → salte","Mantenha o core ativo durante todo o movimento","Flexão completa no meio — não faça meia flexão","No salto, eleve os braços completamente acima da cabeça","Comece lento para aprender o padrão antes de acelerar"],
+    series: "4", reps: "10–15", descanso: "60s", bg: "linear-gradient(135deg, #1a0a0a 0%, #201010 100%)"
+  },
+  {
+    id: 82, name: "Swing com Kettlebell", muscle: "Funcional", emoji: "🔔", difficulty: "intermediario",
+    desc: "Movimento explosivo de quadril com kettlebell. Treina cadeia posterior e potência.",
+    longDesc: "O kettlebell swing é um dos exercícios mais eficientes para desenvolvimento de potência da cadeia posterior. Trabalha glúteos, isquiotibiais, eretores e core de forma explosiva. Também tem componente aeróbico significativo.",
+    tips: ["Pés na largura dos ombros, kettlebell à frente","Quadril dobra (não a lombar!) ao levar o kettlebell para trás entre as pernas","Extensão explosiva do quadril para projetar o kettlebell para frente","O kettlebell vai até a altura dos ombros — não é um exercício de braços","Respire: expire na extensão do quadril, inspire ao descer"],
+    series: "4", reps: "15–20", descanso: "60s", bg: "linear-gradient(135deg, #0a1a0a 0%, #102010 100%)"
+  },
+  {
+    id: 83, name: "Box Jump", muscle: "Funcional", emoji: "📦", difficulty: "intermediario",
+    desc: "Salto em caixote. Desenvolve potência explosiva dos membros inferiores.",
+    longDesc: "O box jump é um exercício pliométrico que desenvolve potência explosiva nas pernas. Trabalha quadríceps, glúteos, isquiotibiais e panturrilhas de forma explosiva. É amplamente usado em treinos de atletismo e CrossFit.",
+    tips: ["Posicione-se próximo à caixa — pés na largura dos ombros","Agache parcialmente e salte com os dois pés simultaneamente","Use os braços para impulso — balanceie para frente no salto","Pouse suavemente na caixa — joelhos absorvem o impacto","Desça da caixa caminhando — não salte de volta para baixo"],
+    series: "4", reps: "8–10", descanso: "90s", bg: "linear-gradient(135deg, #1a1a0a 0%, #201a10 100%)"
+  },
+  {
+    id: 84, name: "Thruster", muscle: "Funcional", emoji: "🚀", difficulty: "avancado",
+    desc: "Combinação de agachamento frontal + desenvolvimento. Exercício total body de alta intensidade.",
+    longDesc: "O thruster combina agachamento frontal com desenvolvimento em um movimento contínuo e fluido. É um dos exercícios mais completos e exigentes do fitness, trabalhando quase todos os grupos musculares simultaneamente.",
+    tips: ["Barra na posição de limpeza (clean) sobre os ombros","Agache completamente — abaixo do paralelo","Ao subir do agachamento, use o momentum das pernas para empurrar a barra acima da cabeça","Barra deve atingir extensão completa dos braços no topo","Muito usado em WODs de CrossFit — comece com peso leve"],
+    series: "4", reps: "8–10", descanso: "120s", bg: "linear-gradient(135deg, #0a0a1a 0%, #101025 100%)"
+  },
+  {
+    id: 85, name: "Corda de Pular", muscle: "Funcional", emoji: "🪢", difficulty: "iniciante",
+    desc: "Cardio eficiente e melhora a coordenação motora. Queima até 700 kcal/h.",
+    longDesc: "A corda de pular é um dos exercícios cardiovasculares mais eficientes. Além do gasto calórico, melhora coordenação, ritmo, agilidade e força de panturrilha. Pode ser realizada de diversas formas (simples, dupla, alternada).",
+    tips: ["Ajuste o comprimento: pise na corda — pontas devem chegar às axilas","Salte apenas o suficiente para a corda passar — não precisa saltar alto","Pouso nas pontas dos pés — não no calcanhar","Cotovelos próximos ao corpo — gire apenas os pulsos","Progressão: simples → alternada → dupla girada → crossover"],
+    series: "3", reps: "1–3 minutos", descanso: "60s", bg: "linear-gradient(135deg, #1a0a1a 0%, #200f20 100%)"
+  },
+  {
+    id: 86, name: "Agachamento com Salto", muscle: "Funcional", emoji: "🦘", difficulty: "intermediario",
+    desc: "Variação explosiva do agachamento. Aumenta potência, gasto calórico e condicionamento.",
+    longDesc: "O jump squat (agachamento com salto) adiciona componente pliométrico ao agachamento tradicional. Desenvolve potência explosiva nos membros inferiores e aumenta o gasto calórico do treino. Excelente para treino HIIT.",
+    tips: ["Agache até paralelo (coxa paralela ao chão)","Salte explosivamente — tente maximizar a altura","Pouso com joelhos suavemente flexionados para absorver o impacto","Vá direto para o próximo agachamento ao pousar","Braços ajudam no impulso — balanceie para cima no salto"],
+    series: "4", reps: "10–15", descanso: "60s", bg: "linear-gradient(135deg, #0a1a10 0%, #102015 100%)"
+  }
+];
+
+// ==============================
+// RENDER
+// ==============================
+function renderExercises(filter = 'todos') {
+  const grid = document.getElementById('exercise-grid');
+  const filtered = filter === 'todos' ? exercises : exercises.filter(e => e.muscle === filter);
+
+  grid.innerHTML = filtered.map(e => `
+    <div class="exercise-card" onclick="openModal(${e.id})">
+      <div class="exercise-visual" style="background: ${e.bg}">
+        <div class="exercise-bg-text">${e.muscle}</div>
+        <div class="exercise-emoji">${e.emoji}</div>
+        <div class="diff-badge diff-${e.difficulty}">${e.difficulty}</div>
+      </div>
+      <div class="exercise-info">
+        <div class="exercise-muscle">${e.muscle}</div>
+        <div class="exercise-name">${e.name}</div>
+        <div class="exercise-desc">${e.desc}</div>
+        <div class="exercise-meta">
+          <span class="meta-item">📋 ${e.series} séries</span>
+          <span class="meta-item">🔁 ${e.reps} reps</span>
+          <span class="meta-item">⏱ ${e.descanso}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ==============================
+// MODAL
+// ==============================
+function openModal(id) {
+  const e = exercises.find(x => x.id === id);
+  if (!e) return;
+
+  document.getElementById('modal-hero').style.background = e.bg;
+  document.getElementById('modal-hero').innerHTML = `
+    <div class="exercise-bg-text">${e.muscle}</div>
+    <span style="font-size:5rem; filter: drop-shadow(0 4px 20px rgba(0,0,0,0.5));">${e.emoji}</span>
+  `;
+  document.getElementById('modal-tag').textContent = e.muscle;
+  document.getElementById('modal-title').textContent = e.name;
+  document.getElementById('modal-desc').textContent = e.longDesc;
+
+  document.getElementById('modal-tips').innerHTML = e.tips.map((t, i) => `
+    <li><span class="tip-num">${String(i+1).padStart(2,'0')}</span>${t}</li>
+  `).join('');
+
+  document.getElementById('modal-sets').innerHTML = `
+    <div class="set-item"><div class="set-val">${e.series}</div><div class="set-label">Séries</div></div>
+    <div class="set-item"><div class="set-val">${e.reps}</div><div class="set-label">Repetições</div></div>
+    <div class="set-item"><div class="set-val">${e.descanso}</div><div class="set-label">Descanso</div></div>
+  `;
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModalBtn();
+}
+
+function closeModalBtn() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ESC to close
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModalBtn();
+});
+
+// ==============================
+// NAVIGATION
+// ==============================
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+
+  document.getElementById('page-' + name).classList.add('active');
+
+  const idx = ['home','exercises','diet','equipment'].indexOf(name);
+  document.querySelectorAll('nav button')[idx]?.classList.add('active');
+
+  if (name === 'exercises') renderExercises();
+  if (name === 'equipment') { renderEquipCategories(); renderEquipment(currentEquipCat); }
+  window.scrollTo(0, 0);
+}
+
+function filterExercises(muscle, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderExercises(muscle);
+}
+
+function filterAndGo(muscle) {
+  showPage('exercises');
+  setTimeout(() => {
+    renderExercises(muscle);
+    // activate correct filter button
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('active');
+      if (b.textContent === muscle) b.classList.add('active');
+    });
+  }, 50);
+}
+
+// ==============================
+// EQUIPMENT DATA
+// ==============================
+const equipments = [
+  {
+    id: 'barbell',
+    name: 'Barra Olímpica',
+    category: 'Pesos Livres',
+    categoryIcon: '🏋️',
+    desc: 'A barra olímpica padrão mede 2,2m e suporta 300–700kg. É o equipamento fundamental de qualquer academia séria, usado nos principais exercícios compostos.',
+    exercises: ['Supino Reto', 'Levantamento Terra', 'Agachamento Livre', 'Remada Curvada', 'Desenvolvimento'],
+    level: 2, levelLabel: 'Intermediário', priceRange: 'R$ 400–1.500',
+    img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=700&q=80&fit=crop',
+    imgFallback: '🏋️'
+  },
+  {
+    id: 'dumbbell',
+    name: 'Halteres',
+    category: 'Pesos Livres',
+    categoryIcon: '🏋️',
+    desc: 'Halteres permitem maior liberdade de movimento que a barra, trabalham cada lado do corpo de forma independente e são perfeitos para corrigir assimetrias musculares.',
+    exercises: ['Rosca Alternada', 'Crucifixo', 'Elevação Lateral', 'Desenvolvimento', 'Supino Inclinado'],
+    level: 1, levelLabel: 'Iniciante', priceRange: 'R$ 80–800',
+    img: 'https://images.unsplash.com/photo-1517963879433-6ad2b056d712?w=700&q=80&fit=crop',
+    imgFallback: '💪'
+  },
+  {
+    id: 'bench',
+    name: 'Banco Regulável',
+    category: 'Estruturas',
+    categoryIcon: '🪑',
+    desc: 'O banco ajustável (FID) permite configurar o ângulo de 0° a 90°, viabilizando supino reto, inclinado, declinado e exercícios sentados. Essencial para treino completo.',
+    exercises: ['Supino Reto', 'Supino Inclinado', 'Crucifixo', 'Tríceps Testa', 'Rosca Concentrada'],
+    level: 1, levelLabel: 'Iniciante', priceRange: 'R$ 300–1.200',
+    img: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?w=700&q=80&fit=crop',
+    imgFallback: '🪑'
+  },
+  {
+    id: 'pullupbar',
+    name: 'Barra Fixa',
+    category: 'Estruturas',
+    categoryIcon: '🪑',
+    desc: 'A barra fixa é o equipamento mais eficiente para desenvolvimento de costas, bíceps e força funcional. Pode ser instalada em porta, parede ou tower station.',
+    exercises: ['Barra Fixa', 'Barra Supinada', 'Barra Neutra', 'Abdominal Suspenso'],
+    level: 2, levelLabel: 'Intermediário', priceRange: 'R$ 60–400',
+    img: 'https://images.unsplash.com/photo-1598971457999-ca4ef48a9a71?w=700&q=80&fit=crop',
+    imgFallback: '🧗'
+  },
+  {
+    id: 'cable',
+    name: 'Polia / Cabo',
+    category: 'Máquinas',
+    categoryIcon: '⚙️',
+    desc: 'As máquinas de polia (cabo) oferecem tensão constante durante todo o arco do movimento, diferente dos pesos livres. São ideais para isolamento e definição muscular.',
+    exercises: ['Tríceps Pulley', 'Puxada Frontal', 'Rosca Scott', 'Face Pull', 'Crossover'],
+    level: 1, levelLabel: 'Iniciante', priceRange: 'R$ 800–5.000',
+    img: 'https://images.unsplash.com/photo-1637430429868-6d7744f3a35f?w=700&q=80&fit=crop',
+    imgFallback: '⚙️'
+  },
+  {
+    id: 'legpress',
+    name: 'Leg Press',
+    category: 'Máquinas',
+    categoryIcon: '⚙️',
+    desc: 'O leg press permite trabalhar quadríceps, glúteos e isquiotibiais com cargas muito elevadas, com menor risco à coluna que o agachamento. Indispensável para hipertrofia de pernas.',
+    exercises: ['Leg Press 45°', 'Leg Press Horizontal', 'Leg Press Unilateral'],
+    level: 1, levelLabel: 'Iniciante', priceRange: 'R$ 2.000–12.000',
+    img: 'https://images.unsplash.com/photo-1520338220965-f7d05b8e5ae7?w=700&q=80&fit=crop',
+    imgFallback: '🦵'
+  },
+  {
+    id: 'kettlebell',
+    name: 'Kettlebell',
+    category: 'Pesos Livres',
+    categoryIcon: '🏋️',
+    desc: 'O kettlebell combina força, cardio e coordenação. Seu centro de massa deslocado exige mais estabilização, recrutando músculos acessórios. Ótimo para treino funcional.',
+    exercises: ['Swing', 'Turkish Get-Up', 'Goblet Squat', 'Clean & Press', 'Halo'],
+    level: 2, levelLabel: 'Intermediário', priceRange: 'R$ 80–600',
+    img: 'https://images.unsplash.com/photo-1547347298-4074fc3086f0?w=700&q=80&fit=crop',
+    imgFallback: '🔔'
+  },
+  {
+    id: 'bands',
+    name: 'Faixas Elásticas',
+    category: 'Acessórios',
+    categoryIcon: '🎽',
+    desc: 'As faixas elásticas (resistance bands) são versáteis, portáteis e baratas. Oferecem resistência progressiva (maior no pico do movimento) e são ótimas para aquecimento, reabilitação e treino em casa.',
+    exercises: ['Abdução de Quadril', 'Agachamento com Elástico', 'Remada', 'Tríceps Kickback', 'Rosca'],
+    level: 1, levelLabel: 'Iniciante', priceRange: 'R$ 30–150',
+    img: 'https://images.unsplash.com/photo-1598289431512-b97b0917affc?w=700&q=80&fit=crop',
+    imgFallback: '🎗️'
+  },
+  {
+    id: 'dips',
+    name: 'Paralelas (Dip Station)',
+    category: 'Estruturas',
+    categoryIcon: '🪑',
+    desc: 'As paralelas permitem realizar o mergulho (dip), um dos exercícios mais completos para tríceps e peitoral inferior. Também usadas para elevação de joelhos para o abdômen.',
+    exercises: ['Mergulho (Dip)', 'Dip Peitoral', 'Elevação de Joelhos', 'L-Sit'],
+    level: 2, levelLabel: 'Intermediário', priceRange: 'R$ 200–800',
+    img: 'https://images.unsplash.com/photo-1616803689943-5601631c7fec?w=700&q=80&fit=crop',
+    imgFallback: '🏊'
+  },
+  {
+    id: 'mat',
+    name: 'Colchonete / Mat',
+    category: 'Acessórios',
+    categoryIcon: '🎽',
+    desc: 'O colchonete é indispensável para exercícios no chão como abdominais, alongamentos, yoga e pilates. Proporciona conforto, higiene e amortecimento durante o treino.',
+    exercises: ['Abdominal Crunch', 'Prancha', 'Elevação de Pernas', 'Alongamentos', 'Yoga'],
+    level: 1, levelLabel: 'Iniciante', priceRange: 'R$ 30–200',
+    img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=700&q=80&fit=crop',
+    imgFallback: '🧘'
+  },
+  {
+    id: 'rack',
+    name: 'Rack / Gaiola',
+    category: 'Estruturas',
+    categoryIcon: '🪑',
+    desc: 'O power rack (gaiola) é a estrutura mais segura para treino pesado. Permite realizar agachamento, supino e desenvolvimento com segurança máxima, mesmo treinando sozinho.',
+    exercises: ['Agachamento Livre', 'Supino Reto', 'Desenvolvimento', 'Barra Fixa', 'Remada'],
+    level: 3, levelLabel: 'Avançado', priceRange: 'R$ 1.500–8.000',
+    img: 'https://images.unsplash.com/photo-1581009137042-c552e485697a?w=700&q=80&fit=crop',
+    imgFallback: '🏗️'
+  },
+  {
+    id: 'rope',
+    name: 'Corda Battle Rope',
+    category: 'Cardio & Funcional',
+    categoryIcon: '🏃',
+    desc: 'As battle ropes são excelentes para cardio de alta intensidade (HIIT) e trabalho de ombros, costas e core. Queimam muitas calorias e desenvolvem potência muscular.',
+    exercises: ['Ondas Alternadas', 'Ondas Simultâneas', 'Slams', 'Círculos', 'Snake Waves'],
+    level: 2, levelLabel: 'Intermediário', priceRange: 'R$ 150–600',
+    img: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=700&q=80&fit=crop',
+    imgFallback: '🪢'
+  }
+];
+
+const equipCategories = [
+  { id: 'todos', name: 'Todos', icon: '⚡', count: equipments.length },
+  { id: 'Pesos Livres', name: 'Pesos Livres', icon: '🏋️', count: equipments.filter(e => e.category === 'Pesos Livres').length },
+  { id: 'Máquinas', name: 'Máquinas', icon: '⚙️', count: equipments.filter(e => e.category === 'Máquinas').length },
+  { id: 'Estruturas', name: 'Estruturas', icon: '🪑', count: equipments.filter(e => e.category === 'Estruturas').length },
+  { id: 'Acessórios', name: 'Acessórios', icon: '🎽', count: equipments.filter(e => e.category === 'Acessórios').length },
+  { id: 'Cardio & Funcional', name: 'Cardio', icon: '🏃', count: equipments.filter(e => e.category === 'Cardio & Funcional').length },
+];
+
+let currentEquipCat = 'todos';
+
+function renderEquipCategories() {
+  const nav = document.getElementById('equip-cat-nav');
+  nav.innerHTML = equipCategories.map(c => `
+    <button class="equip-cat-btn ${c.id === currentEquipCat ? 'active' : ''}" onclick="filterEquipment('${c.id}', this)">
+      <div class="equip-cat-icon">${c.icon}</div>
+      <div class="equip-cat-name">${c.name}</div>
+      <div class="equip-cat-count">${c.count} item${c.count !== 1 ? 's' : ''}</div>
+    </button>
+  `).join('');
+}
+
+function renderEquipment(cat = 'todos') {
+  const grid = document.getElementById('equipment-grid');
+  const list = cat === 'todos' ? equipments : equipments.filter(e => e.category === cat);
+
+  grid.innerHTML = list.map(e => {
+    const dots = [1,2,3].map(d => `<span class="equip-dot ${d <= e.level ? 'on' : ''}"></span>`).join('');
+    const exTags = e.exercises.map(ex => `<span class="equip-ex-tag">${ex}</span>`).join('');
+    return `
+      <div class="equipment-card">
+        <div class="equipment-img-wrap">
+          <img src="${e.img}"
+               alt="${e.name}"
+               loading="lazy"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="equipment-img-fallback" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-size:5rem;">${e.imgFallback}</div>
+          <div class="equip-tag-overlay">${e.category}</div>
+        </div>
+        <div class="equipment-info">
+          <div class="equipment-category">${e.category}</div>
+          <div class="equipment-name">${e.name}</div>
+          <div class="equipment-desc">${e.desc}</div>
+          <div class="equipment-exercises">${exTags}</div>
+          <div class="equip-level-bar">
+            <span class="equip-level-label">NÍVEL</span>
+            <div class="equip-dots">${dots}</div>
+            <span style="font-size:0.75rem; color: #bbb;">${e.levelLabel}</span>
+            <span class="equip-price">${e.priceRange}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterEquipment(cat, btn) {
+  currentEquipCat = cat;
+  renderEquipCategories();
+  renderEquipment(cat);
+}
+
+// Init equipment
+renderEquipCategories();
+renderEquipment();
+</script>
+</body>
+</html>
