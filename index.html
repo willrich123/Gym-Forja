@@ -18,6 +18,7 @@
     --border: #222;
     --green: #00e676;
     --card-radius: 16px;
+    --header-h: 72px;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1713,16 +1714,157 @@
   .result-tip-text { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
 
   /* Responsive */
+  /* ============================================================
+     MOBILE — até 768px
+  ============================================================ */
   @media (max-width: 768px) {
-    header { padding: 14px 20px; }
-    .logo { font-size: 1.6rem; }
-    nav button { padding: 6px 12px; font-size: 0.8rem; }
-    section { padding: 80px 20px; }
-    .hero { padding: 100px 20px 60px; }
+
+    /* ── Header / Nav ── */
+    header {
+      padding: 10px 16px;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
+      --header-h: 100px;
+    }
+
+    nav {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 4px;
+      padding-bottom: 2px;
+    }
+
+    nav::-webkit-scrollbar { display: none; }
+
+    nav button {
+      padding: 7px 13px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .logo { font-size: 1.7rem; }
+
+    /* ── Sections ── */
+    section {
+      padding: 120px 16px 60px;
+    }
+
+    /* override inline padding-top on all page sections */
+    .page section[style*="padding-top"] {
+      padding-top: 120px !important;
+    }
+
+    .section-title { font-size: 2.2rem; }
+    .section-sub { font-size: 0.88rem; margin-bottom: 32px; }
+
+    /* ── Hero ── */
+    .hero { padding: 110px 20px 70px; min-height: auto; }
+    .hero h1 { font-size: clamp(3rem, 14vw, 5rem); }
+    .hero p { font-size: 0.95rem; }
     .hero-stats { display: none; }
-    .hero-cta { flex-direction: column; }
-    .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+    .hero-deco { display: none; }
+    .hero-cta { flex-direction: column; gap: 12px; }
+    .btn-primary, .btn-secondary { width: 100%; text-align: center; padding: 14px; }
+
+    /* ── Muscle chips ── */
+    .muscles-overview {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .muscle-chip { padding: 14px 8px; }
+    .muscle-chip-name { font-size: 0.75rem; }
+
+    /* ── Exercise grid ── */
+    .exercise-grid { grid-template-columns: 1fr; gap: 16px; }
+    .exercise-visual { height: 160px; }
+
+    /* ── Filter bar ── */
+    .filter-bar {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 6px;
+      gap: 8px;
+      scrollbar-width: none;
+      margin-bottom: 28px;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { white-space: nowrap; flex-shrink: 0; padding: 7px 16px; font-size: 0.8rem; }
+
+    /* ── Modal ── */
+    .modal {
+      width: 100%;
+      max-width: 100%;
+      height: 100dvh;
+      border-radius: 0;
+      margin: 0;
+      overflow-y: auto;
+    }
+    .modal-hero { height: 200px; }
+    .modal-body { padding: 20px; }
+    .modal-title { font-size: 1.8rem; }
     .modal-sets { grid-template-columns: repeat(3,1fr); gap: 8px; }
+    .modal-close { top: 14px; right: 14px; }
+
+    /* ── Diet page ── */
+    .diet-grid { grid-template-columns: 1fr; gap: 16px; }
+    .meal-row {
+      flex-direction: column;
+      gap: 6px;
+      padding: 16px;
+    }
+    .meal-time { min-width: unset; }
+    .meal-cal { align-self: flex-end; }
+    .meal-plan-header { flex-direction: column; gap: 4px; padding: 16px; }
+
+    /* ── Equipment ── */
+    .equip-category-nav {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+    .equipment-grid { grid-template-columns: 1fr; gap: 16px; }
+
+    /* ── Workout Builder ── */
+    .wb-layout { grid-template-columns: 1fr; gap: 16px; }
+    .wb-exercise-list { max-height: 320px; }
+    .wb-workout-items { max-height: 320px; }
+    .wb-item-controls { grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+
+    /* ── Suggested Plans ── */
+    .plan-grid { grid-template-columns: 1fr; gap: 16px; }
+    .plan-banner { height: 100px; }
+    .plan-banner-title { font-size: 1.4rem; }
+
+    /* ── Custom Diet Calculator ── */
+    .diet-calc-form { grid-template-columns: 1fr; gap: 14px; padding: 18px; }
+    .dc-field.full { grid-column: 1; }
+    .objetivo-grid { grid-template-columns: 1fr; gap: 10px; }
+    .result-macros { grid-template-columns: repeat(2,1fr); gap: 10px; }
+    .result-tips { grid-template-columns: 1fr; }
+    .diet-calc-card { margin: 0 0 32px; }
+
+    /* ── Saved workouts ── */
+    .wb-saved-actions { flex-direction: column; }
+    .wb-panel-footer { flex-direction: column; gap: 8px; }
+    .wb-save-btn, .wb-clear-btn { width: 100%; }
+  }
+
+  /* ============================================================
+     SMALL PHONES — até 420px
+  ============================================================ */
+  @media (max-width: 420px) {
+    .muscles-overview { grid-template-columns: repeat(2, 1fr); }
+    .hero h1 { font-size: 2.8rem; }
+    .result-macros { grid-template-columns: 1fr 1fr; }
+    .equip-category-nav { grid-template-columns: repeat(2, 1fr); }
+    .wb-item-controls { grid-template-columns: 1fr 1fr; }
+    .plan-tags { gap: 6px; }
+    .plan-tag { font-size: 0.65rem; padding: 2px 8px; }
+    section { padding: 95px 14px 50px; }
   }
 </style>
 </head>
