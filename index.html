@@ -805,7 +805,8 @@
     background: rgba(255,61,0,0.06);
   }
 
-  .muscle-chip-icon { font-size: 2rem; margin-bottom: 8px; }
+  .muscle-chip-icon { display:flex; align-items:center; justify-content:center; margin-bottom: 8px; opacity:0.75; }
+  .muscle-chip:hover .muscle-chip-icon { opacity: 1; }
   .muscle-chip-name { font-size: 0.85rem; font-weight: 600; }
 
   /* ===== HERO decorative element ===== */
@@ -1010,9 +1011,706 @@
     background: rgba(255,61,0,0.07);
   }
 
-  .equip-cat-icon { font-size: 1.6rem; margin-bottom: 6px; }
+  .equip-cat-icon { display:flex; align-items:center; justify-content:center; margin-bottom: 6px; opacity: 0.7; }
+  .equip-cat-btn:hover .equip-cat-icon, .equip-cat-btn.active .equip-cat-icon { opacity: 1; }
   .equip-cat-name { font-size: 0.82rem; font-weight: 600; }
   .equip-cat-count { font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; }
+
+  .diet-icon { margin-bottom: 16px; opacity: 0.85; }
+
+  /* ===== WORKOUT BUILDER ===== */
+  .wb-layout {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 28px;
+    align-items: start;
+  }
+  @media(max-width:900px){ .wb-layout { grid-template-columns: 1fr; } }
+
+  .wb-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+  }
+
+  .wb-panel-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .wb-panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+
+  .wb-search {
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .wb-search input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .wb-search input:focus { border-color: var(--accent); }
+
+  .wb-muscle-tabs {
+    display: flex;
+    gap: 6px;
+    padding: 12px 22px;
+    border-bottom: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .wb-tab {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .wb-tab:hover, .wb-tab.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .wb-exercise-list {
+    max-height: 480px;
+    overflow-y: auto;
+    padding: 8px 0;
+  }
+
+  .wb-ex-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 22px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .wb-ex-item:hover { background: var(--surface2); }
+
+  .wb-ex-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--surface2);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .wb-ex-info { flex: 1; min-width: 0; }
+  .wb-ex-name { font-weight: 600; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wb-ex-muscle { font-size: 0.72rem; color: var(--accent); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 1px; }
+
+  .wb-add-btn {
+    width: 30px; height: 30px;
+    background: rgba(255,61,0,0.12);
+    border: 1px solid rgba(255,61,0,0.3);
+    border-radius: 50%;
+    color: var(--accent);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .wb-add-btn:hover { background: var(--accent); color: white; }
+  .wb-add-btn.added { background: var(--green); border-color: var(--green); color: #000; }
+
+  /* My Workout panel */
+  .wb-workout-name-wrap {
+    padding: 14px 22px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .wb-workout-name {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    padding: 6px 0;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .wb-workout-name:focus { border-color: var(--accent); }
+  .wb-workout-name::placeholder { color: var(--muted); }
+
+  .wb-workout-items {
+    min-height: 200px;
+    padding: 8px 0;
+    max-height: 420px;
+    overflow-y: auto;
+  }
+
+  .wb-workout-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    color: var(--muted);
+    text-align: center;
+    gap: 12px;
+  }
+
+  .wb-workout-empty svg { opacity: 0.2; }
+  .wb-workout-empty p { font-size: 0.85rem; line-height: 1.5; }
+
+  .wb-workout-item {
+    padding: 14px 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    transition: background 0.15s;
+  }
+
+  .wb-workout-item:hover { background: rgba(255,255,255,0.02); }
+
+  .wb-item-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .wb-item-num {
+    width: 22px; height: 22px;
+    background: var(--accent);
+    border-radius: 50%;
+    font-size: 0.65rem;
+    font-family: 'Space Mono', monospace;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+
+  .wb-item-name { font-weight: 600; font-size: 0.9rem; flex: 1; }
+
+  .wb-item-remove {
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: all 0.2s;
+  }
+
+  .wb-item-remove:hover { color: var(--accent); background: rgba(255,61,0,0.1); }
+
+  .wb-item-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+
+  .wb-input-group { display: flex; flex-direction: column; gap: 3px; }
+  .wb-input-label { font-size: 0.65rem; color: var(--muted); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 1px; }
+
+  .wb-input-group input, .wb-input-group select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 8px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    outline: none;
+    width: 100%;
+    transition: border-color 0.2s;
+  }
+
+  .wb-input-group input:focus, .wb-input-group select:focus { border-color: var(--accent); }
+
+  .wb-panel-footer {
+    padding: 14px 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+  }
+
+  .wb-save-btn {
+    flex: 1;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.25s;
+    text-transform: uppercase;
+  }
+
+  .wb-save-btn:hover { background: #ff5722; box-shadow: 0 6px 20px rgba(255,61,0,0.35); }
+
+  .wb-clear-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .wb-clear-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Saved Workouts */
+  .wb-saved-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .wb-saved-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .wb-saved-card:hover { border-color: rgba(255,61,0,0.3); }
+
+  .wb-saved-header {
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .wb-saved-header.open { border-color: var(--border); }
+
+  .wb-saved-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+  }
+
+  .wb-saved-meta {
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .wb-saved-body {
+    display: none;
+    padding: 16px 20px;
+  }
+
+  .wb-saved-body.open { display: block; }
+
+  .wb-saved-ex {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .wb-saved-ex:last-child { border-bottom: none; }
+
+  .wb-saved-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  /* ===== SUGGESTED PLANS ===== */
+  .plan-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .plan-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+
+  .plan-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 50px rgba(255,61,0,0.12);
+  }
+
+  .plan-banner {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .plan-banner-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    line-height: 1;
+    position: relative;
+    z-index: 1;
+  }
+
+  .plan-banner-icon {
+    position: relative;
+    z-index: 1;
+    opacity: 0.8;
+  }
+
+  .plan-banner-bg {
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 6rem;
+    color: rgba(255,255,255,0.04);
+    right: -10px;
+    bottom: -10px;
+    letter-spacing: 4px;
+    user-select: none;
+  }
+
+  .plan-body { padding: 20px 22px; }
+
+  .plan-tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .plan-tag {
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 0.5px;
+    border: 1px solid;
+  }
+
+  .plan-tag.objetivo { color: var(--accent2); border-color: rgba(255,179,0,0.3); background: rgba(255,179,0,0.08); }
+  .plan-tag.nivel { color: var(--green); border-color: rgba(0,230,118,0.3); background: rgba(0,230,118,0.08); }
+  .plan-tag.dias { color: #40c4ff; border-color: rgba(64,196,255,0.3); background: rgba(64,196,255,0.08); }
+
+  .plan-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 18px;
+  }
+
+  .plan-days {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+
+  .plan-day {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .plan-day:hover { background: rgba(255,61,0,0.08); }
+
+  .plan-day-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 1px;
+    min-width: 36px;
+    padding-top: 2px;
+  }
+
+  .plan-day-name { font-weight: 700; font-size: 0.88rem; margin-bottom: 2px; }
+  .plan-day-exs { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+
+  .plan-start-btn {
+    width: 100%;
+    background: rgba(255,61,0,0.1);
+    border: 1px solid rgba(255,61,0,0.3);
+    color: var(--accent);
+    border-radius: 8px;
+    padding: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.25s;
+    text-transform: uppercase;
+  }
+
+  .plan-start-btn:hover {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 6px 20px rgba(255,61,0,0.35);
+  }
+
+  /* ===== CUSTOM DIET PAGE ===== */
+  .diet-calc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    max-width: 760px;
+    margin: 0 auto 56px;
+  }
+
+  .diet-calc-header {
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(135deg, rgba(255,61,0,0.06) 0%, transparent 100%);
+  }
+
+  .diet-calc-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .diet-calc-sub { font-size: 0.85rem; color: var(--muted); }
+
+  .diet-calc-form {
+    padding: 28px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media(max-width:600px){ .diet-calc-form { grid-template-columns: 1fr; } }
+
+  .dc-field { display: flex; flex-direction: column; gap: 6px; }
+  .dc-field.full { grid-column: 1 / -1; }
+
+  .dc-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .dc-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .dc-input:focus { border-color: var(--accent); }
+
+  .dc-select {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  .dc-select:focus { border-color: var(--accent); }
+
+  .objetivo-grid {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  @media(max-width:600px){ .objetivo-grid { grid-template-columns: 1fr; } }
+
+  .obj-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+
+  .obj-btn:hover { border-color: rgba(255,61,0,0.4); }
+  .obj-btn.selected { border-color: var(--accent); background: rgba(255,61,0,0.1); }
+
+  .obj-btn svg { margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto; }
+  .obj-btn-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 2px; }
+  .obj-btn-sub { font-size: 0.72rem; color: var(--muted); }
+
+  .dc-calc-btn {
+    grid-column: 1 / -1;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.25s;
+  }
+
+  .dc-calc-btn:hover { background: #ff5722; box-shadow: 0 8px 30px rgba(255,61,0,0.4); }
+
+  /* Result card */
+  .diet-result {
+    max-width: 760px;
+    margin: 0 auto;
+    display: none;
+  }
+
+  .diet-result.visible { display: block; }
+
+  .result-macros {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  @media(max-width:600px){ .result-macros { grid-template-columns: repeat(2,1fr); } }
+
+  .result-macro {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-macro::before {
+    content:'';
+    position: absolute;
+    top:0; left:0; right:0;
+    height: 3px;
+  }
+
+  .result-macro.kcal::before { background: var(--accent); }
+  .result-macro.prot::before { background: #ff9800; }
+  .result-macro.carb::before { background: var(--accent2); }
+  .result-macro.gord::before { background: var(--green); }
+
+  .result-macro-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .result-macro-unit { font-size: 0.7rem; color: var(--accent); font-family: 'Space Mono', monospace; }
+  .result-macro-name { font-size: 0.75rem; color: var(--muted); margin-top: 4px; }
+
+  .result-plan {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+
+  .result-plan-header {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .result-plan-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+
+  .result-tips {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+
+  .result-tip {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px;
+  }
+
+  .result-tip-icon { margin-bottom: 10px; }
+  .result-tip-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; }
+  .result-tip-text { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
 
   /* Responsive */
   @media (max-width: 768px) {
@@ -1036,7 +1734,9 @@
   <nav>
     <button class="active" onclick="showPage('home')">Início</button>
     <button onclick="showPage('exercises')">Exercícios</button>
-    <button onclick="showPage('diet')">Dieta</button>
+    <button onclick="showPage('workout')">Meu Treino</button>
+    <button onclick="showPage('suggested')">Treinos Prontos</button>
+    <button onclick="showPage('diet-custom')">Minha Dieta</button>
     <button onclick="showPage('equipment')">Equipamentos</button>
   </nav>
 </header>
@@ -1095,17 +1795,50 @@
     <div class="section-title">ONDE VOCÊ QUER FOCAR?</div>
     <div class="section-sub">Selecione um grupo muscular para ver os melhores exercícios e dicas de execução.</div>
     <div class="muscles-overview" id="muscle-overview">
-      <div class="muscle-chip" onclick="filterAndGo('Peito')"><div class="muscle-chip-icon">🫀</div><div class="muscle-chip-name">Peito</div></div>
-      <div class="muscle-chip" onclick="filterAndGo('Costas')"><div class="muscle-chip-icon">🏋️</div><div class="muscle-chip-name">Costas</div></div>
-      <div class="muscle-chip" onclick="filterAndGo('Ombros')"><div class="muscle-chip-icon">💪</div><div class="muscle-chip-name">Ombros</div></div>
-      <div class="muscle-chip" onclick="filterAndGo('Bíceps')"><div class="muscle-chip-icon">💪</div><div class="muscle-chip-name">Bíceps</div></div>
-      <div class="muscle-chip" onclick="filterAndGo('Tríceps')"><div class="muscle-chip-icon">💪</div><div class="muscle-chip-name">Tríceps</div></div>
-      <div class="muscle-chip" onclick="filterAndGo('Pernas')"><div class="muscle-chip-icon">🦵</div><div class="muscle-chip-name">Pernas</div></div>
-      <div class="muscle-chip" onclick="filterAndGo('Glúteos')"><div class="muscle-chip-icon">🍑</div><div class="muscle-chip-name">Glúteos</div></div>
-      <div class="muscle-chip" onclick="filterAndGo('Abdômen')"><div class="muscle-chip-icon">🔥</div><div class="muscle-chip-name">Abdômen</div></div>
-      <div class="muscle-chip" onclick="filterAndGo('Antebraço')"><div class="muscle-chip-icon">🤜</div><div class="muscle-chip-name">Antebraço</div></div>
-      <div class="muscle-chip" onclick="filterAndGo('Funcional')"><div class="muscle-chip-icon">⚡</div><div class="muscle-chip-name">Funcional</div></div>
-      <div class="muscle-chip" onclick="showPage('equipment')"><div class="muscle-chip-icon">⚙️</div><div class="muscle-chip-name">Equipamentos</div></div>
+      <div class="muscle-chip" onclick="filterAndGo('Peito')">
+        <div class="muscle-chip-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h4l2 6 4-9 2 6 4-3"/></svg></div>
+        <div class="muscle-chip-name">Peito</div>
+      </div>
+      <div class="muscle-chip" onclick="filterAndGo('Costas')">
+        <div class="muscle-chip-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="3" x2="20" y2="3"/><path d="M9 3v4l-2 3v3l2 5 3-2 3 2 2-5v-3l-2-3V3"/></svg></div>
+        <div class="muscle-chip-name">Costas</div>
+      </div>
+      <div class="muscle-chip" onclick="filterAndGo('Ombros')">
+        <div class="muscle-chip-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="2"/><line x1="12" y1="8" x2="12" y2="14"/><path d="M12 11l-7 3M12 11l7 3"/><line x1="5" y1="14" x2="2" y2="14"/><line x1="19" y1="14" x2="22" y2="14"/></svg></div>
+        <div class="muscle-chip-name">Ombros</div>
+      </div>
+      <div class="muscle-chip" onclick="filterAndGo('Bíceps')">
+        <div class="muscle-chip-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M12 20v-8"/><path d="M8 12a4 4 0 0 1 8 0"/><circle cx="12" cy="7" r="1.5"/></svg></div>
+        <div class="muscle-chip-name">Bíceps</div>
+      </div>
+      <div class="muscle-chip" onclick="filterAndGo('Tríceps')">
+        <div class="muscle-chip-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="3" x2="16" y2="3"/><line x1="12" y1="3" x2="12" y2="21"/><polyline points="8 17 12 21 16 17"/></svg></div>
+        <div class="muscle-chip-name">Tríceps</div>
+      </div>
+      <div class="muscle-chip" onclick="filterAndGo('Pernas')">
+        <div class="muscle-chip-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v5l-4 5v4"/><path d="M12 11l4 5v4"/><line x1="5" y1="20" x2="19" y2="20"/></svg></div>
+        <div class="muscle-chip-name">Pernas</div>
+      </div>
+      <div class="muscle-chip" onclick="filterAndGo('Glúteos')">
+        <div class="muscle-chip-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18c0-5 4-9 9-9s9 4 9 9"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        <div class="muscle-chip-name">Glúteos</div>
+      </div>
+      <div class="muscle-chip" onclick="filterAndGo('Abdômen')">
+        <div class="muscle-chip-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="10" rx="2"/><line x1="7" y1="8" x2="7" y2="18"/><line x1="12" y1="8" x2="12" y2="18"/><line x1="17" y1="8" x2="17" y2="18"/><line x1="3" y1="13" x2="21" y2="13"/></svg></div>
+        <div class="muscle-chip-name">Abdômen</div>
+      </div>
+      <div class="muscle-chip" onclick="filterAndGo('Antebraço')">
+        <div class="muscle-chip-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16h16"/><path d="M7 16V8a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v8"/></svg></div>
+        <div class="muscle-chip-name">Antebraço</div>
+      </div>
+      <div class="muscle-chip" onclick="filterAndGo('Funcional')">
+        <div class="muscle-chip-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+        <div class="muscle-chip-name">Funcional</div>
+      </div>
+      <div class="muscle-chip" onclick="showPage('equipment')">
+        <div class="muscle-chip-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="11" width="3" height="3" rx="1"/><rect x="20" y="11" width="3" height="3" rx="1"/><rect x="4" y="10" width="2" height="5" rx="1"/><rect x="18" y="10" width="2" height="5" rx="1"/><line x1="6" y1="12.5" x2="18" y2="12.5"/></svg></div>
+        <div class="muscle-chip-name">Equipamentos</div>
+      </div>
     </div>
   </section>
 </div>
@@ -1175,62 +1908,62 @@
     <div class="section-label" style="margin-bottom: 24px;">// Guia nutricional</div>
     <div class="diet-grid">
       <div class="diet-card proteina">
-        <div class="diet-icon">🥩</div>
+        <div class="diet-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
         <div class="diet-category">Proteínas</div>
         <div class="diet-title">CONSTRUÇÃO MUSCULAR</div>
         <div class="diet-text">Consuma 1,6 a 2,2g de proteína por kg de peso corporal. Distribua a ingestão ao longo do dia em 4–6 refeições para maximizar a síntese proteica muscular.</div>
         <div class="diet-foods">
-          <span class="food-tag">🥚 Ovos</span>
-          <span class="food-tag">🍗 Frango</span>
-          <span class="food-tag">🐟 Atum</span>
-          <span class="food-tag">🐄 Carne magra</span>
-          <span class="food-tag">🫘 Whey</span>
-          <span class="food-tag">🫘 Grão-de-bico</span>
+          <span class="food-tag">Ovos</span>
+          <span class="food-tag">Frango</span>
+          <span class="food-tag">Atum</span>
+          <span class="food-tag">Carne magra</span>
+          <span class="food-tag">Whey</span>
+          <span class="food-tag">Grão-de-bico</span>
         </div>
       </div>
 
       <div class="diet-card carbo">
-        <div class="diet-icon">🍚</div>
+        <div class="diet-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/><path d="M16 2l4 4-4 4"/><line x1="22" y1="2" x2="18" y2="6"/></svg></div>
         <div class="diet-category">Carboidratos</div>
         <div class="diet-title">ENERGIA PARA TREINAR</div>
         <div class="diet-text">Priorize carboidratos complexos de baixo índice glicêmico. Consuma carboidratos antes do treino para ter energia e após o treino para repor o glicogênio muscular.</div>
         <div class="diet-foods">
-          <span class="food-tag">🍠 Batata-doce</span>
-          <span class="food-tag">🍚 Arroz integral</span>
-          <span class="food-tag">🫐 Aveia</span>
-          <span class="food-tag">🍌 Banana</span>
-          <span class="food-tag">🍞 Pão integral</span>
-          <span class="food-tag">🌽 Mandioca</span>
+          <span class="food-tag">Batata-doce</span>
+          <span class="food-tag">Arroz integral</span>
+          <span class="food-tag">Aveia</span>
+          <span class="food-tag">Banana</span>
+          <span class="food-tag">Pão integral</span>
+          <span class="food-tag">Mandioca</span>
         </div>
       </div>
 
       <div class="diet-card gordura">
-        <div class="diet-icon">🥑</div>
+        <div class="diet-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <div class="diet-category">Gorduras Boas</div>
         <div class="diet-title">ESSENCIAIS AO CORPO</div>
         <div class="diet-text">Gorduras saudáveis são fundamentais para a produção de testosterona e absorção de vitaminas. Não elimine as gorduras — escolha as certas!</div>
         <div class="diet-foods">
-          <span class="food-tag">🥑 Abacate</span>
-          <span class="food-tag">🫒 Azeite</span>
-          <span class="food-tag">🥜 Amendoim</span>
-          <span class="food-tag">🐟 Salmão</span>
-          <span class="food-tag">🌰 Castanhas</span>
-          <span class="food-tag">🥥 Coco</span>
+          <span class="food-tag">Abacate</span>
+          <span class="food-tag">Azeite</span>
+          <span class="food-tag">Amendoim</span>
+          <span class="food-tag">Salmão</span>
+          <span class="food-tag">Castanhas</span>
+          <span class="food-tag">Coco</span>
         </div>
       </div>
 
       <div class="diet-card hidratacao">
-        <div class="diet-icon">💧</div>
+        <div class="diet-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg></div>
         <div class="diet-category">Hidratação</div>
         <div class="diet-title">PERFORMANCE MÁXIMA</div>
         <div class="diet-text">Desidratação de apenas 2% prejudica performance em até 25%. Beba 35–40ml de água por kg corporal por dia. Antes, durante e após o treino.</div>
         <div class="diet-foods">
-          <span class="food-tag">💧 Água</span>
-          <span class="food-tag">🍋 Água com limão</span>
-          <span class="food-tag">🫖 Chá verde</span>
-          <span class="food-tag">🥥 Água de coco</span>
-          <span class="food-tag">🍉 Melancia</span>
-          <span class="food-tag">🥒 Pepino</span>
+          <span class="food-tag">Água</span>
+          <span class="food-tag">Água com limão</span>
+          <span class="food-tag">Chá verde</span>
+          <span class="food-tag">Água de coco</span>
+          <span class="food-tag">Melancia</span>
+          <span class="food-tag">Pepino</span>
         </div>
       </div>
     </div>
@@ -1246,7 +1979,7 @@
         <div class="meal-row">
           <div class="meal-time">07:00</div>
           <div class="meal-details">
-            <div class="meal-name">☀️ Café da manhã</div>
+            <div class="meal-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:6px;opacity:.7"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>Café da manhã</div>
             <div class="meal-items">4 ovos mexidos + 2 fatias pão integral + 1 banana + café sem açúcar</div>
           </div>
           <div class="meal-cal">~480 kcal</div>
@@ -1254,7 +1987,7 @@
         <div class="meal-row">
           <div class="meal-time">10:00</div>
           <div class="meal-details">
-            <div class="meal-name">🍎 Lanche matinal</div>
+            <div class="meal-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:6px;opacity:.7"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Lanche matinal</div>
             <div class="meal-items">Iogurte grego (200g) + granola (30g) + frutas vermelhas</div>
           </div>
           <div class="meal-cal">~320 kcal</div>
@@ -1262,7 +1995,7 @@
         <div class="meal-row">
           <div class="meal-time">12:30</div>
           <div class="meal-details">
-            <div class="meal-name">🍗 Almoço</div>
+            <div class="meal-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:6px;opacity:.7"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>Almoço</div>
             <div class="meal-items">Frango grelhado (200g) + arroz integral (150g) + batata-doce (100g) + salada à vontade</div>
           </div>
           <div class="meal-cal">~650 kcal</div>
@@ -1270,7 +2003,7 @@
         <div class="meal-row">
           <div class="meal-time">15:30</div>
           <div class="meal-details">
-            <div class="meal-name">⚡ Pré-treino</div>
+            <div class="meal-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:6px;opacity:.7"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>Pré-treino</div>
             <div class="meal-items">Banana + pasta de amendoim (1 col) + café preto</div>
           </div>
           <div class="meal-cal">~250 kcal</div>
@@ -1278,7 +2011,7 @@
         <div class="meal-row">
           <div class="meal-time">17:00</div>
           <div class="meal-details">
-            <div class="meal-name">🏋️ TREINO</div>
+            <div class="meal-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:6px;opacity:.7"><rect x="1" y="11" width="3" height="3" rx="1"/><rect x="20" y="11" width="3" height="3" rx="1"/><rect x="4" y="10" width="2" height="5" rx="1"/><rect x="18" y="10" width="2" height="5" rx="1"/><line x1="6" y1="12.5" x2="18" y2="12.5"/></svg>TREINO</div>
             <div class="meal-items">Beba 500–700ml de água durante o treino</div>
           </div>
           <div class="meal-cal">—</div>
@@ -1286,7 +2019,7 @@
         <div class="meal-row">
           <div class="meal-time">18:30</div>
           <div class="meal-details">
-            <div class="meal-name">💪 Pós-treino</div>
+            <div class="meal-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:6px;opacity:.7"><path d="M7 20h10"/><path d="M12 20v-8"/><path d="M8 12a4 4 0 0 1 8 0"/><circle cx="12" cy="7" r="1.5"/></svg>Pós-treino</div>
             <div class="meal-items">Whey protein (40g) + água ou leite desnatado — consumir até 30 min após treino</div>
           </div>
           <div class="meal-cal">~160 kcal</div>
@@ -1294,7 +2027,7 @@
         <div class="meal-row">
           <div class="meal-time">20:00</div>
           <div class="meal-details">
-            <div class="meal-name">🌙 Jantar</div>
+            <div class="meal-name"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="margin-right:6px;opacity:.7"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>Jantar</div>
             <div class="meal-items">Salmão (180g) + quinoa (120g) + legumes assados (abobrinha, brócolis, cenoura)</div>
           </div>
           <div class="meal-cal">~540 kcal</div>
@@ -1307,32 +2040,32 @@
       <div class="section-label" style="margin-bottom: 16px;">// Dicas gerais de nutrição</div>
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px;">
         <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
-          <div style="font-size: 1.5rem; margin-bottom: 12px;">⏰</div>
+          <div style="margin-bottom: 14px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
           <div style="font-weight: 700; margin-bottom: 8px;">Timing é tudo</div>
           <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">Consuma proteína dentro de 30 a 60 minutos após o treino. Isso maximiza a janela anabólica e acelera a recuperação muscular.</div>
         </div>
         <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
-          <div style="font-size: 1.5rem; margin-bottom: 12px;">🍽️</div>
+          <div style="margin-bottom: 14px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg></div>
           <div style="font-weight: 700; margin-bottom: 8px;">Mastigar devagar</div>
           <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">Comer devagar melhora a digestão e a absorção de nutrientes. Leva ~20 min para o cérebro registrar a saciedade — não se apresse!</div>
         </div>
         <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
-          <div style="font-size: 1.5rem; margin-bottom: 12px;">🚫</div>
+          <div style="margin-bottom: 14px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
           <div style="font-weight: 700; margin-bottom: 8px;">Evite ultraprocessados</div>
           <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">Alimentos ultraprocessados causam inflamação, prejudicam a recuperação e sabotam seus ganhos. Prefira sempre alimentos naturais e minimamente processados.</div>
         </div>
         <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
-          <div style="font-size: 1.5rem; margin-bottom: 12px;">😴</div>
+          <div style="margin-bottom: 14px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
           <div style="font-weight: 700; margin-bottom: 8px;">Sono e recuperação</div>
           <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">O músculo cresce durante o descanso. Durma 7–9 horas por noite. Considere caseína ou cottage antes de dormir para alimentar os músculos durante a noite.</div>
         </div>
         <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
-          <div style="font-size: 1.5rem; margin-bottom: 12px;">📊</div>
+          <div style="margin-bottom: 14px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
           <div style="font-weight: 700; margin-bottom: 8px;">Superávit ou déficit</div>
           <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">Para ganhar massa: coma 200–300 kcal a mais que seu gasto. Para perder gordura: déficit de 300–500 kcal. Nunca abaixo de 1.200 kcal por dia.</div>
         </div>
         <div style="background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px;">
-          <div style="font-size: 1.5rem; margin-bottom: 12px;">🥦</div>
+          <div style="margin-bottom: 14px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
           <div style="font-weight: 700; margin-bottom: 8px;">Micronutrientes</div>
           <div style="color: var(--muted); font-size: 0.87rem; line-height: 1.6;">Vitaminas e minerais são essenciais para performance. Inclua bastante vegetais coloridos, frutas e, se necessário, um multivitamínico de qualidade.</div>
         </div>
@@ -1355,6 +2088,154 @@
 
     <!-- Equipment grid -->
     <div class="equipment-grid" id="equipment-grid"></div>
+  </section>
+</div>
+
+<!-- ============================
+     PAGE: WORKOUT BUILDER
+============================= -->
+<div id="page-workout" class="page">
+  <section style="padding-top:130px;">
+    <div class="section-label">// Monte seu treino</div>
+    <div class="section-title">MEU TREINO</div>
+    <div class="section-sub">Selecione exercícios, defina séries e repetições e salve seu treino personalizado.</div>
+
+    <div class="wb-layout">
+      <!-- LEFT: exercise picker -->
+      <div>
+        <div class="wb-panel">
+          <div class="wb-panel-header">
+            <div class="wb-panel-title">BIBLIOTECA</div>
+            <span style="font-size:0.75rem;color:var(--muted);font-family:'Space Mono',monospace;" id="wb-count"></span>
+          </div>
+          <div class="wb-search">
+            <input type="text" id="wb-search-input" placeholder="Buscar exercício..." oninput="wbFilter()">
+          </div>
+          <div class="wb-muscle-tabs" id="wb-tabs"></div>
+          <div class="wb-exercise-list" id="wb-list"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: my workout -->
+      <div>
+        <div class="wb-panel">
+          <div class="wb-panel-header">
+            <div class="wb-panel-title">MEU TREINO</div>
+            <span style="font-size:0.75rem;color:var(--muted);font-family:'Space Mono',monospace;" id="wb-item-count">0 exercícios</span>
+          </div>
+          <div class="wb-workout-name-wrap">
+            <input class="wb-workout-name" id="wb-name" type="text" placeholder="NOME DO TREINO..." maxlength="40">
+          </div>
+          <div class="wb-workout-items" id="wb-workout-items">
+            <div class="wb-workout-empty" id="wb-empty">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1" stroke-linecap="round"><rect x="1" y="11" width="3" height="3" rx="1"/><rect x="20" y="11" width="3" height="3" rx="1"/><rect x="4" y="10" width="2" height="5" rx="1"/><rect x="18" y="10" width="2" height="5" rx="1"/><line x1="6" y1="12.5" x2="18" y2="12.5"/></svg>
+              <p>Nenhum exercício adicionado.<br>Selecione da biblioteca ao lado.</p>
+            </div>
+          </div>
+          <div class="wb-panel-footer">
+            <button class="wb-save-btn" onclick="saveWorkout()">Salvar Treino</button>
+            <button class="wb-clear-btn" onclick="clearWorkout()">Limpar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Saved workouts -->
+    <div id="wb-saved-section" style="margin-top:48px; display:none;">
+      <div class="section-label" style="margin-bottom:20px;">// Treinos salvos</div>
+      <div class="wb-saved-list" id="wb-saved-list"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================
+     PAGE: SUGGESTED PLANS
+============================= -->
+<div id="page-suggested" class="page">
+  <section style="padding-top:130px;">
+    <div class="section-label">// Treinos prontos</div>
+    <div class="section-title">TREINOS SUGERIDOS</div>
+    <div class="section-sub">Planos de treino montados por objetivo. Escolha o seu e siga o protocolo.</div>
+
+    <div class="plan-grid" id="plan-grid"></div>
+  </section>
+</div>
+
+<!-- ============================
+     PAGE: CUSTOM DIET
+============================= -->
+<div id="page-diet-custom" class="page">
+  <section style="padding-top:130px;">
+    <div class="section-label">// Nutrição personalizada</div>
+    <div class="section-title">MINHA DIETA</div>
+    <div class="section-sub">Insira seus dados e receba um plano alimentar calculado para o seu objetivo.</div>
+
+    <div class="diet-calc-card">
+      <div class="diet-calc-header">
+        <div class="diet-calc-title">CALCULADORA NUTRICIONAL</div>
+        <div class="diet-calc-sub">Baseada na fórmula de Mifflin-St Jeor com ajuste de atividade física</div>
+      </div>
+      <div class="diet-calc-form">
+        <div class="dc-field">
+          <label class="dc-label">Peso (kg)</label>
+          <input class="dc-input" type="number" id="dc-peso" placeholder="Ex: 75" min="30" max="300">
+        </div>
+        <div class="dc-field">
+          <label class="dc-label">Altura (cm)</label>
+          <input class="dc-input" type="number" id="dc-altura" placeholder="Ex: 175" min="100" max="250">
+        </div>
+        <div class="dc-field">
+          <label class="dc-label">Idade</label>
+          <input class="dc-input" type="number" id="dc-idade" placeholder="Ex: 25" min="14" max="90">
+        </div>
+        <div class="dc-field">
+          <label class="dc-label">Sexo</label>
+          <select class="dc-select" id="dc-sexo">
+            <option value="m">Masculino</option>
+            <option value="f">Feminino</option>
+          </select>
+        </div>
+        <div class="dc-field full">
+          <label class="dc-label">Nível de atividade física</label>
+          <select class="dc-select" id="dc-atividade">
+            <option value="1.2">Sedentário (sem exercício)</option>
+            <option value="1.375">Levemente ativo (1–3x semana)</option>
+            <option value="1.55" selected>Moderadamente ativo (3–5x semana)</option>
+            <option value="1.725">Muito ativo (6–7x semana)</option>
+            <option value="1.9">Extremamente ativo (2x/dia)</option>
+          </select>
+        </div>
+        <div class="dc-field full">
+          <label class="dc-label">Objetivo</label>
+          <div class="objetivo-grid">
+            <button type="button" class="obj-btn selected" onclick="selectObj(this,'emagrecer')" data-obj="emagrecer">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              <div class="obj-btn-title">Emagrecer</div>
+              <div class="obj-btn-sub">Déficit calórico</div>
+            </button>
+            <button type="button" class="obj-btn" onclick="selectObj(this,'manter')" data-obj="manter">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="1.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <div class="obj-btn-title">Manter Peso</div>
+              <div class="obj-btn-sub">TDEE exato</div>
+            </button>
+            <button type="button" class="obj-btn" onclick="selectObj(this,'ganhar')" data-obj="ganhar">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="1.5" stroke-linecap="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+              <div class="obj-btn-title">Ganhar Massa</div>
+              <div class="obj-btn-sub">Superávit calórico</div>
+            </button>
+          </div>
+        </div>
+        <button type="button" class="dc-calc-btn" onclick="calcDiet()">Calcular Minha Dieta</button>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="diet-result" id="diet-result">
+      <div class="result-macros" id="result-macros"></div>
+      <div class="result-plan" id="result-plan"></div>
+      <div class="section-label" style="margin-bottom:16px;">// Dicas para seu objetivo</div>
+      <div class="result-tips" id="result-tips"></div>
+    </div>
   </section>
 </div>
 
@@ -2148,6 +3029,113 @@ const exercises = [
 ];
 
 // ==============================
+// SVG ICON MAP — outline branco
+// ==============================
+const icons = {
+  // ── Peito ──
+  'barbell-press':   `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="11" width="3" height="3" rx="1"/><rect x="20" y="11" width="3" height="3" rx="1"/><rect x="4" y="10" width="2" height="5" rx="1"/><rect x="18" y="10" width="2" height="5" rx="1"/><line x1="6" y1="12.5" x2="18" y2="12.5"/></svg>`,
+  'dumbbell':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4v16M18 4v16M3 8h3M3 16h3M18 8h3M18 16h3M6 12h12"/></svg>`,
+  'fly':             `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 12c0 0-4-4-7-3s-3 5 0 6"/><path d="M12 12c0 0 4-4 7-3s3 5 0 6"/><circle cx="12" cy="12" r="1.5"/></svg>`,
+  'pushup':          `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="4" r="2"/><path d="M3 20l4-8 3 2 3-6 5 4"/><line x1="3" y1="20" x2="21" y2="20"/></svg>`,
+  'crossover':       `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l16 16M20 4L4 20"/><circle cx="12" cy="12" r="2"/></svg>`,
+  // ── Costas ──
+  'pullup':          `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="3" x2="20" y2="3"/><path d="M9 3v4l-2 3v3l2 5 3-2 3 2 2-5v-3l-2-3V3"/><circle cx="12" cy="19" r="2"/></svg>`,
+  'row':             `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h14"/><polyline points="13 7 18 12 13 17"/><path d="M21 5v14"/></svg>`,
+  'deadlift':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v6l-3 4"/><path d="M12 12l3 4"/><line x1="3" y1="20" x2="21" y2="20"/><rect x="1" y="18" width="4" height="3" rx="1"/><rect x="19" y="18" width="4" height="3" rx="1"/></svg>`,
+  'lat-pull':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="3" x2="20" y2="3"/><path d="M7 3l-3 6h4M17 3l3 6h-4"/><line x1="12" y1="9" x2="12" y2="20"/><circle cx="12" cy="14" r="3"/></svg>`,
+  'pullover':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17a7 7 0 0 1 14 0"/><circle cx="12" cy="7" r="2"/><line x1="12" y1="9" x2="12" y2="14"/></svg>`,
+  'face-pull':       `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3"/><path d="M9 13c-3 1-5 3-5 6h16c0-3-2-5-5-6"/><path d="M20 8h3M1 8h3"/></svg>`,
+  'hyperext':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18c3-6 9-9 18-3"/><circle cx="7" cy="8" r="2"/></svg>`,
+  // ── Ombros ──
+  'overhead-press':  `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="8" x2="18" y2="8"/><rect x="3" y="7" width="3" height="3" rx="1"/><rect x="18" y="7" width="3" height="3" rx="1"/><path d="M12 8V3M9 3h6"/><circle cx="12" cy="17" r="3"/><line x1="12" y1="14" x2="12" y2="8"/></svg>`,
+  'lateral-raise':   `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="2"/><line x1="12" y1="8" x2="12" y2="14"/><path d="M12 11l-7 3M12 11l7 3"/><line x1="5" y1="14" x2="2" y2="14"/><line x1="19" y1="14" x2="22" y2="14"/></svg>`,
+  'shrug':           `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M8 9c0 0-2-1-2 2s2 4 2 4"/><path d="M16 9c0 0 2-1 2 2s-2 4-2 4"/><line x1="12" y1="7" x2="12" y2="20"/></svg>`,
+  'front-raise':     `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="16" r="2"/><line x1="12" y1="14" x2="12" y2="9"/><line x1="12" y1="9" x2="7" y2="4"/><line x1="12" y1="9" x2="17" y2="9"/></svg>`,
+  'rear-delt':       `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="6" r="2"/><line x1="12" y1="8" x2="12" y2="13"/><path d="M12 10l-7 5M12 10l7 5"/></svg>`,
+  // ── Bíceps ──
+  'curl':            `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M12 20v-8"/><path d="M8 12a4 4 0 0 1 8 0"/><circle cx="12" cy="7" r="1.5"/></svg>`,
+  'hammer':          `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 12l-8.5 8.5a2.12 2.12 0 0 1-3-3L12 9"/><path d="M17.64 15L22 10.64"/><path d="M20.91 11.7l-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.75l-3.58-3.58A3 3 0 0 0 12 3H7"/><path d="M7 3l1.5 1.5"/></svg>`,
+  'preacher':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18l4-9 6 2 3-7"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`,
+  'cable-curl':      `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16a9 9 0 1 1-9-9"/><polyline points="21 7 21 16 12 16"/></svg>`,
+  // ── Tríceps ──
+  'skull-crusher':   `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a5 5 0 0 1 5 5c0 2-1 3.5-2.5 4.5V16h-5v-2.5C8 12.5 7 11 7 9a5 5 0 0 1 5-5z"/><line x1="9.5" y1="16" x2="14.5" y2="16"/><line x1="10" y1="19" x2="14" y2="19"/><line x1="11" y1="22" x2="13" y2="22"/></svg>`,
+  'pushdown':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="3" x2="12" y2="21"/><polyline points="8 17 12 21 16 17"/><line x1="8" y1="3" x2="16" y2="3"/></svg>`,
+  'dip':             `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="4" y2="20"/><line x1="20" y1="6" x2="20" y2="20"/><path d="M4 10h4M16 10h4M9 10v5c0 2 1.5 3 3 3s3-1 3-3v-5"/></svg>`,
+  'overhead-ext':    `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v10"/><path d="M8 7l4-4 4 4"/><path d="M9 13h6v2a3 3 0 0 1-6 0v-2z"/></svg>`,
+  'kickback':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="7" r="2"/><path d="M6 9l1 5 5 3 5-3"/><line x1="6" y1="14" x2="6" y2="20"/></svg>`,
+  // ── Pernas ──
+  'squat':           `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v5l-4 5v4"/><path d="M12 11l4 5v4"/><line x1="5" y1="20" x2="19" y2="20"/></svg>`,
+  'leg-press':       `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="10" width="8" height="10" rx="2"/><path d="M10 14l4-4 6 6"/><circle cx="18" cy="18" r="2"/></svg>`,
+  'lunge':           `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6l-2 7-4 4v3"/><path d="M10 13l6 3v4"/></svg>`,
+  'stiff':           `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v5"/><path d="M8 11l-4 7"/><path d="M16 11l4 7"/><line x1="4" y1="18" x2="20" y2="18"/><line x1="12" y1="11" x2="12" y2="18"/></svg>`,
+  'calf':            `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-2 3-3 6-2 10 1 3 3 5 2 8"/><path d="M12 21h4"/></svg>`,
+  'leg-curl':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18c0-6 4-10 8-10s8 4 8 10"/><path d="M12 8V4"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`,
+  'leg-ext':         `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18V8l6-4 7 14"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`,
+  'hip-thrust':      `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="6" r="2"/><path d="M5 8l1 4h12v-4"/><path d="M6 12l1 6"/><path d="M17 12l1 6"/><line x1="5" y1="18" x2="19" y2="18"/></svg>`,
+  'step-up':         `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="14" width="20" height="6" rx="1"/><path d="M8 14V8"/><path d="M16 14V10"/><polyline points="5 10 8 7 11 10"/></svg>`,
+  'adductor':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20V8l4-4 4 4v12"/><line x1="8" y1="14" x2="16" y2="14"/></svg>`,
+  'abductor':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V8"/><path d="M12 12l-6 4M12 12l6 4"/></svg>`,
+  'sumo':            `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M6 8h12"/><path d="M6 8l-3 8"/><path d="M18 8l3 8"/><path d="M3 16h18"/></svg>`,
+  'good-morning':    `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6l-1 6-5 5"/><path d="M11 12l5 5"/><line x1="5" y1="19" x2="19" y2="22"/></svg>`,
+  'bulgarian':       `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="4" r="2"/><path d="M9 6l-2 8"/><path d="M7 14l6-2"/><path d="M13 12l2 6"/><rect x="15" y="16" width="5" height="3" rx="1"/></svg>`,
+  // ── Abdômen ──
+  'crunch':          `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M12 20V12"/><path d="M8 12c0-3 2-5 4-5s4 2 4 5"/><path d="M9 8l-4-3M15 8l4-3"/></svg>`,
+  'plank':           `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="7" r="2"/><path d="M4 17l14-8"/><line x1="2" y1="17" x2="22" y2="17"/><line x1="4" y1="17" x2="4" y2="14"/></svg>`,
+  'leg-raise':       `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="17" x2="21" y2="17"/><path d="M7 17V9"/><path d="M7 9l5-5 5 5"/><line x1="17" y1="9" x2="17" y2="17"/></svg>`,
+  'oblique':         `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l16-16"/><path d="M4 12l8-8"/><path d="M12 20l8-8"/></svg>`,
+  'russian-twist':   `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4"/><path d="M18.36 5.64l-2.83 2.83"/><path d="M21 12h-4"/><path d="M5.64 5.64l2.83 2.83"/><path d="M3 12h4"/><circle cx="12" cy="15" r="4"/></svg>`,
+  'mountain-climber':`<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2"/><path d="M3 19l5-8 4 4 3-6 5 10"/><line x1="3" y1="19" x2="21" y2="19"/></svg>`,
+  'cable-crunch':    `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l-1 9"/><path d="M11 12l-7 5"/><path d="M11 12l7 5"/><circle cx="12" cy="3" r="1.5"/></svg>`,
+  'dead-bug':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><path d="M5 12l-2-6"/><path d="M19 12l2-6"/><path d="M7 12l-2 6"/><path d="M17 12l2 6"/><circle cx="12" cy="12" r="2"/></svg>`,
+  'side-plank':      `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="6" r="2"/><path d="M4 18l14-10"/><line x1="2" y1="18" x2="22" y2="18"/><line x1="4" y1="14" x2="4" y2="18"/></svg>`,
+  'bicycle':         `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="17" r="3"/><circle cx="6" cy="17" r="3"/><path d="M9 17l3-10 4 5-5 5"/><path d="M9 6h6"/></svg>`,
+  // ── Glúteos ──
+  'cable-kickback':  `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="6" r="2"/><path d="M8 8l1 6"/><path d="M9 14l8 4"/><path d="M3 20h4"/></svg>`,
+  'glute-squat':     `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3" r="2"/><path d="M12 5l-5 8 5 4 5-4-5-8z"/><line x1="7" y1="21" x2="17" y2="21"/></svg>`,
+  'donkey-kick':     `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2"/><path d="M6 8v5"/><path d="M3 13h6"/><path d="M6 13l8-4"/><path d="M14 9l3-3"/></svg>`,
+  'bridge':          `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18c0-5 4-9 9-9s9 4 9 9"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`,
+  // ── Antebraço ──
+  'wrist-curl':      `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16h16"/><path d="M7 16V8a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v8"/><path d="M12 5v2"/></svg>`,
+  'farmer-walk':     `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v7"/><path d="M9 13l-4 7"/><path d="M15 13l4 7"/><path d="M5 10h4M15 10h4"/><rect x="3" y="8" width="3" height="3" rx="1"/><rect x="18" y="8" width="3" height="3" rx="1"/></svg>`,
+  // ── Funcional ──
+  'burpee':          `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3" r="2"/><path d="M12 5l-4 5h8l-4-5z"/><path d="M8 10l-4 4"/><path d="M16 10l4 4"/><line x1="3" y1="21" x2="21" y2="21"/></svg>`,
+  'kettlebell-swing':`<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 2-1 3-2 4l2 8H8l2-8c-1-1-2-2-2-4a4 4 0 0 1 4-4z"/><line x1="10" y1="7" x2="8" y2="10"/><line x1="14" y1="7" x2="16" y2="10"/></svg>`,
+  'box-jump':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="16" width="18" height="5" rx="1"/><circle cx="12" cy="6" r="2"/><path d="M12 8v4"/><path d="M9 11l3 4 3-4"/></svg>`,
+  'thruster':        `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M12 6v4"/><line x1="6" y1="10" x2="18" y2="10"/><path d="M9 10l-2 5"/><path d="M15 10l2 5"/><polyline points="10 6 12 4 14 6"/></svg>`,
+  'jump-rope':       `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M4 5c4 0 4 4 8 4s4-4 8-4"/><path d="M4 19c4 0 4-4 8-4s4 4 8 4"/></svg>`,
+  'jump-squat':      `<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="3" r="2"/><path d="M12 5l-3 6 3 2 3-2-3-6z"/><path d="M9 11l-3 7"/><path d="M15 11l3 7"/><path d="M8 21l4-3 4 3"/></svg>`,
+};
+
+// Mapa exercício → ícone
+const exerciseIconMap = {
+  1: 'barbell-press', 2: 'barbell-press', 3: 'fly', 4: 'pushup',
+  5: 'pullup', 6: 'row', 7: 'deadlift', 8: 'lat-pull',
+  9: 'overhead-press', 10: 'lateral-raise', 11: 'shrug',
+  12: 'curl', 13: 'curl', 14: 'preacher',
+  15: 'skull-crusher', 16: 'pushdown', 17: 'dip',
+  18: 'squat', 19: 'leg-press', 20: 'lunge', 21: 'stiff', 22: 'calf',
+  26: 'barbell-press', 27: 'crossover', 28: 'fly', 29: 'dumbbell', 30: 'dip',
+  31: 'row', 32: 'row', 33: 'lat-pull', 34: 'pullover', 35: 'face-pull', 36: 'pullup', 37: 'hyperext',
+  38: 'front-raise', 39: 'overhead-press', 40: 'lateral-raise', 41: 'rear-delt', 42: 'overhead-press',
+  43: 'curl', 44: 'hammer', 45: 'preacher', 46: 'curl', 47: 'cable-curl',
+  48: 'overhead-ext', 49: 'kickback', 50: 'pushdown', 51: 'dip', 52: 'pushdown',
+  53: 'bulgarian', 54: 'leg-ext', 55: 'leg-curl', 56: 'sumo', 57: 'adductor',
+  58: 'abductor', 59: 'hip-thrust', 60: 'step-up', 61: 'good-morning', 62: 'lunge',
+  63: 'calf',
+  64: 'crunch', 65: 'plank', 66: 'leg-raise', 67: 'oblique', 68: 'russian-twist',
+  69: 'mountain-climber', 70: 'cable-crunch', 71: 'dead-bug', 72: 'side-plank', 73: 'bicycle',
+  74: 'cable-kickback', 75: 'glute-squat', 76: 'donkey-kick', 77: 'bridge',
+  78: 'wrist-curl', 79: 'wrist-curl', 80: 'farmer-walk',
+  81: 'burpee', 82: 'kettlebell-swing', 83: 'box-jump', 84: 'thruster', 85: 'jump-rope', 86: 'jump-squat'
+};
+
+function getIcon(id, size = 72) {
+  const key = exerciseIconMap[id] || 'dumbbell';
+  const svg = icons[key] || icons['dumbbell'];
+  return svg.replace('<svg ', `<svg width="${size}" height="${size}" `);
+}
+
+// ==============================
 // RENDER
 // ==============================
 function renderExercises(filter = 'todos') {
@@ -2158,7 +3146,7 @@ function renderExercises(filter = 'todos') {
     <div class="exercise-card" onclick="openModal(${e.id})">
       <div class="exercise-visual" style="background: ${e.bg}">
         <div class="exercise-bg-text">${e.muscle}</div>
-        <div class="exercise-emoji">${e.emoji}</div>
+        <div class="exercise-emoji">${getIcon(e.id, 80)}</div>
         <div class="diff-badge diff-${e.difficulty}">${e.difficulty}</div>
       </div>
       <div class="exercise-info">
@@ -2166,9 +3154,9 @@ function renderExercises(filter = 'todos') {
         <div class="exercise-name">${e.name}</div>
         <div class="exercise-desc">${e.desc}</div>
         <div class="exercise-meta">
-          <span class="meta-item">📋 ${e.series} séries</span>
-          <span class="meta-item">🔁 ${e.reps} reps</span>
-          <span class="meta-item">⏱ ${e.descanso}</span>
+          <span class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${e.series} séries</span>
+          <span class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg> ${e.reps}</span>
+          <span class="meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${e.descanso}</span>
         </div>
       </div>
     </div>
@@ -2185,7 +3173,7 @@ function openModal(id) {
   document.getElementById('modal-hero').style.background = e.bg;
   document.getElementById('modal-hero').innerHTML = `
     <div class="exercise-bg-text">${e.muscle}</div>
-    <span style="font-size:5rem; filter: drop-shadow(0 4px 20px rgba(0,0,0,0.5));">${e.emoji}</span>
+    <div style="opacity:0.95; filter: drop-shadow(0 4px 30px rgba(0,0,0,0.6));">${getIcon(e.id, 110)}</div>
   `;
   document.getElementById('modal-tag').textContent = e.muscle;
   document.getElementById('modal-title').textContent = e.name;
@@ -2225,14 +3213,13 @@ document.addEventListener('keydown', e => {
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-
   document.getElementById('page-' + name).classList.add('active');
-
-  const idx = ['home','exercises','diet','equipment'].indexOf(name);
+  const idx = ['home','exercises','workout','suggested','diet-custom','equipment'].indexOf(name);
   document.querySelectorAll('nav button')[idx]?.classList.add('active');
-
   if (name === 'exercises') renderExercises();
   if (name === 'equipment') { renderEquipCategories(); renderEquipment(currentEquipCat); }
+  if (name === 'workout') renderWorkoutBuilder();
+  if (name === 'suggested') renderSuggestedPlans();
   window.scrollTo(0, 0);
 }
 
@@ -2393,12 +3380,12 @@ const equipments = [
 ];
 
 const equipCategories = [
-  { id: 'todos', name: 'Todos', icon: '⚡', count: equipments.length },
-  { id: 'Pesos Livres', name: 'Pesos Livres', icon: '🏋️', count: equipments.filter(e => e.category === 'Pesos Livres').length },
-  { id: 'Máquinas', name: 'Máquinas', icon: '⚙️', count: equipments.filter(e => e.category === 'Máquinas').length },
-  { id: 'Estruturas', name: 'Estruturas', icon: '🪑', count: equipments.filter(e => e.category === 'Estruturas').length },
-  { id: 'Acessórios', name: 'Acessórios', icon: '🎽', count: equipments.filter(e => e.category === 'Acessórios').length },
-  { id: 'Cardio & Funcional', name: 'Cardio', icon: '🏃', count: equipments.filter(e => e.category === 'Cardio & Funcional').length },
+  { id: 'todos',             name: 'Todos',        svg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="11" width="3" height="3" rx="1"/><rect x="20" y="11" width="3" height="3" rx="1"/><rect x="4" y="10" width="2" height="5" rx="1"/><rect x="18" y="10" width="2" height="5" rx="1"/><line x1="6" y1="12.5" x2="18" y2="12.5"/></svg>`, count: equipments.length },
+  { id: 'Pesos Livres',      name: 'Pesos Livres', svg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M6 4v16M18 4v16M3 8h3M3 16h3M18 8h3M18 16h3M6 12h12"/></svg>`, count: equipments.filter(e => e.category === 'Pesos Livres').length },
+  { id: 'Máquinas',          name: 'Máquinas',     svg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="3"/><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="8"/><line x1="12" y1="16" x2="12" y2="22"/><line x1="2" y1="12" x2="8" y2="12"/><line x1="16" y1="12" x2="22" y2="12"/></svg>`, count: equipments.filter(e => e.category === 'Máquinas').length },
+  { id: 'Estruturas',        name: 'Estruturas',   svg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="4" y1="3" x2="20" y2="3"/><path d="M9 3v4l-2 3v3l2 5 3-2 3 2 2-5v-3l-2-3V3"/></svg>`, count: equipments.filter(e => e.category === 'Estruturas').length },
+  { id: 'Acessórios',        name: 'Acessórios',   svg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>`, count: equipments.filter(e => e.category === 'Acessórios').length },
+  { id: 'Cardio & Funcional',name: 'Cardio',       svg: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`, count: equipments.filter(e => e.category === 'Cardio & Funcional').length },
 ];
 
 let currentEquipCat = 'todos';
@@ -2407,7 +3394,7 @@ function renderEquipCategories() {
   const nav = document.getElementById('equip-cat-nav');
   nav.innerHTML = equipCategories.map(c => `
     <button class="equip-cat-btn ${c.id === currentEquipCat ? 'active' : ''}" onclick="filterEquipment('${c.id}', this)">
-      <div class="equip-cat-icon">${c.icon}</div>
+      <div class="equip-cat-icon">${c.svg}</div>
       <div class="equip-cat-name">${c.name}</div>
       <div class="equip-cat-count">${c.count} item${c.count !== 1 ? 's' : ''}</div>
     </button>
@@ -2454,9 +3441,645 @@ function filterEquipment(cat, btn) {
   renderEquipment(cat);
 }
 
-// Init equipment
-renderEquipCategories();
-renderEquipment();
+// ============================================================
+// WORKOUT BUILDER
+// ============================================================
+let myWorkout = [];      // {exercise, series, reps, rest}
+let wbMuscleFilter = 'todos';
+let savedWorkouts = JSON.parse(localStorage.getItem('forja_workouts') || '[]');
+
+function renderWorkoutBuilder() {
+  // build tabs
+  const muscles = ['todos', ...new Set(exercises.map(e => e.muscle))];
+  document.getElementById('wb-tabs').innerHTML = muscles.map(m =>
+    `<button class="wb-tab ${m === wbMuscleFilter ? 'active' : ''}" onclick="wbSetMuscle('${m}',this)">${m === 'todos' ? 'Todos' : m}</button>`
+  ).join('');
+  wbRenderList();
+  wbRenderItems();
+  renderSavedWorkouts();
+}
+
+function wbSetMuscle(m, btn) {
+  wbMuscleFilter = m;
+  document.querySelectorAll('.wb-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  wbRenderList();
+}
+
+function wbFilter() {
+  wbRenderList();
+}
+
+function wbRenderList() {
+  const q = (document.getElementById('wb-search-input')?.value || '').toLowerCase();
+  let list = exercises;
+  if (wbMuscleFilter !== 'todos') list = list.filter(e => e.muscle === wbMuscleFilter);
+  if (q) list = list.filter(e => e.name.toLowerCase().includes(q) || e.muscle.toLowerCase().includes(q));
+
+  const addedIds = myWorkout.map(x => x.exercise.id);
+  document.getElementById('wb-count').textContent = list.length + ' exercícios';
+
+  document.getElementById('wb-list').innerHTML = list.map(e => {
+    const added = addedIds.includes(e.id);
+    return `
+    <div class="wb-ex-item">
+      <div class="wb-ex-icon">${getIcon(e.id, 28)}</div>
+      <div class="wb-ex-info">
+        <div class="wb-ex-name">${e.name}</div>
+        <div class="wb-ex-muscle">${e.muscle}</div>
+      </div>
+      <button class="wb-add-btn ${added ? 'added' : ''}" onclick="wbAddExercise(${e.id})" title="${added ? 'Já adicionado' : 'Adicionar'}">
+        ${added
+          ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`
+          : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`
+        }
+      </button>
+    </div>`;
+  }).join('') || `<div style="padding:32px;text-align:center;color:var(--muted);font-size:0.85rem;">Nenhum exercício encontrado</div>`;
+}
+
+function wbAddExercise(id) {
+  if (myWorkout.find(x => x.exercise.id === id)) return;
+  const ex = exercises.find(e => e.id === id);
+  if (!ex) return;
+  myWorkout.push({ exercise: ex, series: ex.series || '3', reps: ex.reps || '10–12', rest: ex.descanso || '60s' });
+  wbRenderList();
+  wbRenderItems();
+}
+
+function wbRemoveExercise(idx) {
+  myWorkout.splice(idx, 1);
+  wbRenderList();
+  wbRenderItems();
+}
+
+function wbRenderItems() {
+  const container = document.getElementById('wb-workout-items');
+  const empty = document.getElementById('wb-empty');
+  document.getElementById('wb-item-count').textContent = myWorkout.length + ' exercício' + (myWorkout.length !== 1 ? 's' : '');
+
+  if (myWorkout.length === 0) {
+    empty.style.display = 'flex';
+    // remove all item divs
+    container.querySelectorAll('.wb-workout-item').forEach(el => el.remove());
+    return;
+  }
+  empty.style.display = 'none';
+  container.querySelectorAll('.wb-workout-item').forEach(el => el.remove());
+
+  myWorkout.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'wb-workout-item';
+    div.innerHTML = `
+      <div class="wb-item-header">
+        <div class="wb-item-num">${String(i+1).padStart(2,'0')}</div>
+        <div class="wb-item-name">${item.exercise.name}</div>
+        <button class="wb-item-remove" onclick="wbRemoveExercise(${i})" title="Remover">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="wb-item-controls">
+        <div class="wb-input-group">
+          <span class="wb-input-label">Séries</span>
+          <input type="text" value="${item.series}" onchange="myWorkout[${i}].series=this.value">
+        </div>
+        <div class="wb-input-group">
+          <span class="wb-input-label">Repetições</span>
+          <input type="text" value="${item.reps}" onchange="myWorkout[${i}].reps=this.value">
+        </div>
+        <div class="wb-input-group">
+          <span class="wb-input-label">Descanso</span>
+          <input type="text" value="${item.rest}" onchange="myWorkout[${i}].rest=this.value">
+        </div>
+      </div>`;
+    container.appendChild(div);
+  });
+}
+
+function clearWorkout() {
+  if (myWorkout.length === 0) return;
+  if (!confirm('Limpar todos os exercícios do treino atual?')) return;
+  myWorkout = [];
+  document.getElementById('wb-name').value = '';
+  wbRenderList();
+  wbRenderItems();
+}
+
+function saveWorkout() {
+  if (myWorkout.length === 0) { alert('Adicione pelo menos um exercício!'); return; }
+  const name = document.getElementById('wb-name').value.trim() || 'MEU TREINO ' + (savedWorkouts.length + 1);
+  const workout = {
+    id: Date.now(),
+    name,
+    date: new Date().toLocaleDateString('pt-BR'),
+    exercises: myWorkout.map(x => ({
+      name: x.exercise.name,
+      muscle: x.exercise.muscle,
+      id: x.exercise.id,
+      series: x.series,
+      reps: x.reps,
+      rest: x.rest
+    }))
+  };
+  savedWorkouts.unshift(workout);
+  localStorage.setItem('forja_workouts', JSON.stringify(savedWorkouts));
+  myWorkout = [];
+  document.getElementById('wb-name').value = '';
+  wbRenderList();
+  wbRenderItems();
+  renderSavedWorkouts();
+  // success flash
+  const btn = document.querySelector('.wb-save-btn');
+  const orig = btn.textContent;
+  btn.textContent = '✓ Treino Salvo!';
+  btn.style.background = 'var(--green)';
+  btn.style.color = '#000';
+  setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 2000);
+}
+
+function renderSavedWorkouts() {
+  const section = document.getElementById('wb-saved-section');
+  const list = document.getElementById('wb-saved-list');
+  if (savedWorkouts.length === 0) { section.style.display = 'none'; return; }
+  section.style.display = 'block';
+  list.innerHTML = savedWorkouts.map((w, wi) => `
+    <div class="wb-saved-card">
+      <div class="wb-saved-header" onclick="toggleSavedWorkout(${w.id})">
+        <div>
+          <div class="wb-saved-name">${w.name}</div>
+          <div class="wb-saved-meta">${w.exercises.length} exercícios · ${w.date}</div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="wb-saved-body" id="saved-body-${w.id}">
+        ${w.exercises.map((ex, ei) => `
+          <div class="wb-saved-ex">
+            <div class="wb-item-num">${String(ei+1).padStart(2,'0')}</div>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:0.88rem;">${ex.name}</div>
+              <div style="font-size:0.72rem;color:var(--accent);font-family:'Space Mono',monospace;">${ex.muscle}</div>
+            </div>
+            <div style="font-size:0.75rem;color:var(--muted);font-family:'Space Mono',monospace;text-align:right;">
+              ${ex.series}×${ex.reps}<br>${ex.rest}
+            </div>
+          </div>`).join('')}
+        <div class="wb-saved-actions">
+          <button class="wb-save-btn" style="font-size:0.8rem;padding:9px;" onclick="loadWorkout(${w.id})">Carregar para editar</button>
+          <button class="wb-clear-btn" style="font-size:0.8rem;padding:9px 14px;" onclick="deleteSavedWorkout(${w.id})">Excluir</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function toggleSavedWorkout(id) {
+  const body = document.getElementById('saved-body-' + id);
+  body.classList.toggle('open');
+}
+
+function loadWorkout(id) {
+  const w = savedWorkouts.find(x => x.id === id);
+  if (!w) return;
+  myWorkout = w.exercises.map(ex => ({
+    exercise: exercises.find(e => e.id === ex.id) || { id: ex.id, name: ex.name, muscle: ex.muscle },
+    series: ex.series, reps: ex.reps, rest: ex.rest
+  }));
+  document.getElementById('wb-name').value = w.name;
+  wbRenderList();
+  wbRenderItems();
+  window.scrollTo(0, 0);
+}
+
+function deleteSavedWorkout(id) {
+  if (!confirm('Excluir este treino?')) return;
+  savedWorkouts = savedWorkouts.filter(x => x.id !== id);
+  localStorage.setItem('forja_workouts', JSON.stringify(savedWorkouts));
+  renderSavedWorkouts();
+}
+
+// ============================================================
+// SUGGESTED PLANS
+// ============================================================
+const suggestedPlans = [
+  {
+    id: 1,
+    name: 'HIPERTROFIA A/B',
+    goal: 'Ganhar Massa',
+    level: 'Intermediário',
+    days: 4,
+    color: 'linear-gradient(135deg,#1a0505 0%,#2a0808 100%)',
+    accentColor: 'var(--accent)',
+    desc: 'Divisão A/B em 4 dias. Foco em volume e progressão de carga para máximo ganho de massa muscular. Ideal para quem treina há mais de 6 meses.',
+    schedule: [
+      { day: 'SEG', name: 'Treino A — Peito & Tríceps', exercises: ['Supino Reto 4×8–12','Supino Inclinado 3×10','Peck Deck 3×12–15','Crossover no Cabo 3×15','Tríceps Pulley 4×10–12','Mergulho (Dip) 3×10','Tríceps Francês 3×12'] },
+      { day: 'TER', name: 'Treino B — Costas & Bíceps', exercises: ['Barra Fixa 4×6–10','Levantamento Terra 3×5–8','Remada Curvada 4×10','Remada Unilateral 3×10 cada','Puxada Frontal 3×12','Rosca Direta 3×10–12','Rosca Martelo 3×12','Rosca Scott 3×12'] },
+      { day: 'QUI', name: 'Treino A — Ombros & Tríceps', exercises: ['Desenvolvimento 4×8–12','Elevação Lateral 4×15','Elevação Frontal 3×12','Desenvolvimento Arnold 3×10','Face Pull 3×15–20','Tríceps Francês 3×10','Kickback 3×12'] },
+      { day: 'SEX', name: 'Treino B — Pernas Completo', exercises: ['Agachamento Livre 5×5–8','Leg Press 4×10–12','Avanço (Lunge) 3×12 cada','Extensão de Perna 3×15','Flexão de Perna 3×15','Hip Thrust 4×12','Panturrilha 4×20'] },
+    ]
+  },
+  {
+    id: 2,
+    name: 'EMAGRECIMENTO',
+    goal: 'Perder Gordura',
+    level: 'Iniciante–Interm.',
+    days: 5,
+    color: 'linear-gradient(135deg,#051a05 0%,#0a2a0a 100%)',
+    accentColor: 'var(--green)',
+    desc: 'Treino HIIT + força 5 dias por semana. Alta intensidade, pouco descanso, máximo gasto calórico. Combine com déficit calórico para resultados rápidos.',
+    schedule: [
+      { day: 'SEG', name: 'Full Body + HIIT', exercises: ['Agachamento com Salto 4×15','Flexão de Braço 3×15','Remada Curvada 3×12','Mountain Climber 4×45s','Burpee 3×10','Prancha 3×45s'] },
+      { day: 'TER', name: 'HIIT Cardio', exercises: ['Corda de Pular 5×2min','Agachamento com Salto 5×20','Box Jump 4×10','Mountain Climber 4×60s','Burpee 4×12','Corrida estacionária 5×1min'] },
+      { day: 'QUA', name: 'Força + Core', exercises: ['Levantamento Terra 3×8','Supino Reto 3×10','Barra Fixa 3×8','Russian Twist 4×30','Prancha Lateral 3×40s','Abdominal Crunch 3×25','Elevação de Pernas 3×20'] },
+      { day: 'QUI', name: 'Pernas + HIIT', exercises: ['Agachamento Sumô 4×15','Hip Thrust 4×15','Extensão de Perna 3×20','Flexão de Perna 3×20','Agachamento com Salto 4×15','Kettlebell Swing 3×20','Corda de Pular 3×2min'] },
+      { day: 'SEX', name: 'Full Body Metabólico', exercises: ['Thruster 4×10','Burpee 4×12','Swing com Kettlebell 4×20','Box Jump 4×10','Mountain Climber 3×60s','Prancha 3×60s'] },
+    ]
+  },
+  {
+    id: 3,
+    name: 'FORÇA BRUTA',
+    goal: 'Aumentar Força',
+    level: 'Avançado',
+    days: 4,
+    color: 'linear-gradient(135deg,#1a1505 0%,#2a2008 100%)',
+    accentColor: 'var(--accent2)',
+    desc: 'Protocolo baseado nos movimentos fundamentais: agachamento, supino, terra e desenvolvimento. Progressão linear de carga a cada semana. Foco em força máxima.',
+    schedule: [
+      { day: 'SEG', name: 'Dia do Agachamento', exercises: ['Agachamento Livre 5×5 (pesado)','Good Morning 3×8','Leg Press 3×8','Extensão de Perna 3×12','Flexão de Perna 3×12','Panturrilha no Leg Press 4×20'] },
+      { day: 'TER', name: 'Dia do Supino', exercises: ['Supino Reto 5×5 (pesado)','Desenvolvimento Militar 4×6','Supino com Halteres 3×8','Tríceps Pulley 3×10','Tríceps Francês 3×10','Rosca Direta 3×10'] },
+      { day: 'QUI', name: 'Dia do Levantamento Terra', exercises: ['Levantamento Terra 5×3–5 (pesado)','Barra Fixa Lastrada 4×5','Remada Curvada 4×6','Hiperextensão 3×10','Rosca Martelo 3×10','Face Pull 3×15'] },
+      { day: 'SEX', name: 'Dia do Desenvolvimento', exercises: ['Desenvolvimento Militar 5×5','Supino Declinado 4×6','Elevação Lateral 4×12','Elevação Frontal 3×12','Desenvolvimento Arnold 3×8','Encolhimento de Ombros 3×15'] },
+    ]
+  },
+  {
+    id: 4,
+    name: 'TREINO EM CASA',
+    goal: 'Fitness Geral',
+    level: 'Iniciante',
+    days: 3,
+    color: 'linear-gradient(135deg,#0a051a 0%,#120a2a 100%)',
+    accentColor: '#7c4dff',
+    desc: 'Treino 3 dias/semana sem equipamentos. Apenas o peso do corpo. Perfeito para quem quer começar ou manter o condicionamento em casa.',
+    schedule: [
+      { day: 'SEG', name: 'Peito, Tríceps & Core', exercises: ['Flexão de Braço 4×15','Flexão Inclinada 3×12','Mergulho no Banco 3×15','Mountain Climber 3×45s','Prancha 3×45s','Abdominal Crunch 3×25','Russian Twist 3×30'] },
+      { day: 'QUA', name: 'Pernas & Glúteos', exercises: ['Agachamento com Salto 4×20','Passada Reversa 3×12 cada','Glúteo 4 Apoios 3×15 cada','Ponte de Glúteos 4×20','Panturrilha (pé no degrau) 4×25','Step Up 3×12 cada','Agachamento Sumô 3×20'] },
+      { day: 'SEX', name: 'Costas, Bíceps & Ombros', exercises: ['Barra Fixa (se disponível) 3×8','Prancha Lateral 3×30s','Elevação Posterior 3×15','Dead Bug 3×10 cada','Elevação de Pernas 3×15','Bicicleta (Bicycle Crunch) 3×30','Prancha 3×60s'] },
+    ]
+  },
+  {
+    id: 5,
+    name: 'GLÚTEOS & PERNAS',
+    goal: 'Tonificação',
+    level: 'Iniciante–Interm.',
+    days: 3,
+    color: 'linear-gradient(135deg,#1a0a10 0%,#2a0a18 100%)',
+    accentColor: '#ff4081',
+    desc: 'Foco total em glúteos, coxas e panturrilhas. Protocolo de 3 dias com alta repetição e variação de exercícios para máxima ativação glútea.',
+    schedule: [
+      { day: 'SEG', name: 'Glúteo & Quadríceps', exercises: ['Hip Thrust 5×15','Agachamento Livre 4×12','Agachamento Búlgaro 3×12 cada','Extensão de Perna 3×15','Leg Press 4×15','Glúteo na Polia 3×15 cada'] },
+      { day: 'QUA', name: 'Posterior & Isquiotibiais', exercises: ['Stiff 4×12','Flexão de Perna 4×15','Good Morning 3×12','Cadeira Adutora 4×20','Cadeira Abdutora 4×20','Ponte de Glúteos 4×20','Panturrilha 4×25'] },
+      { day: 'SEX', name: 'Glúteo Completo', exercises: ['Agachamento Sumô 4×15','Hip Thrust Unilateral 3×15 cada','Passada Reversa 3×12 cada','Glúteo 4 Apoios 4×20 cada','Cadeira Adutora 3×20','Step Up 3×15 cada','Prancha Lateral 3×40s cada'] },
+    ]
+  },
+  {
+    id: 6,
+    name: 'FUNCIONAL TOTAL',
+    goal: 'Condicionamento',
+    level: 'Intermediário',
+    days: 4,
+    color: 'linear-gradient(135deg,#051010 0%,#0a1a1a 100%)',
+    accentColor: '#00bcd4',
+    desc: 'Treino funcional com exercícios compostos e movimentos atléticos. Desenvolve força, resistência, coordenação e agilidade ao mesmo tempo.',
+    schedule: [
+      { day: 'SEG', name: 'Força + Potência', exercises: ['Levantamento Terra 4×5','Agachamento Livre 4×6','Thruster 4×10','Box Jump 4×8','Kettlebell Swing 4×15','Farmer Walk 3×40m'] },
+      { day: 'TER', name: 'HIIT Metabólico', exercises: ['Burpee 5×10','Mountain Climber 4×60s','Agachamento com Salto 4×15','Corda de Pular 4×2min','Russian Twist 3×30','Prancha 3×60s'] },
+      { day: 'QUI', name: 'Empurrar & Puxar', exercises: ['Supino Reto 4×8','Desenvolvimento Militar 4×8','Barra Fixa 4×8','Remada Curvada 4×10','Tríceps Pulley 3×12','Rosca Direta 3×12'] },
+      { day: 'SEX', name: 'Core & Mobilidade', exercises: ['Prancha 4×60s','Prancha Lateral 3×45s cada','Dead Bug 3×10 cada','Russian Twist 4×30','Abdominal no Cabo 3×15','Elevação de Pernas 3×20','Good Morning 3×10'] },
+    ]
+  }
+];
+
+function renderSuggestedPlans() {
+  document.getElementById('plan-grid').innerHTML = suggestedPlans.map(p => `
+    <div class="plan-card">
+      <div class="plan-banner" style="background:${p.color}">
+        <div>
+          <div class="plan-banner-title" style="color:${p.accentColor}">${p.name}</div>
+        </div>
+        <div class="plan-banner-icon">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="${p.accentColor}" stroke-width="1.2" stroke-linecap="round" opacity="0.7">
+            <rect x="1" y="11" width="3" height="3" rx="1"/><rect x="20" y="11" width="3" height="3" rx="1"/>
+            <rect x="4" y="10" width="2" height="5" rx="1"/><rect x="18" y="10" width="2" height="5" rx="1"/>
+            <line x1="6" y1="12.5" x2="18" y2="12.5"/>
+          </svg>
+        </div>
+        <div class="plan-banner-bg">${p.name.split(' ')[0]}</div>
+      </div>
+      <div class="plan-body">
+        <div class="plan-tags">
+          <span class="plan-tag objetivo">${p.goal}</span>
+          <span class="plan-tag nivel">${p.level}</span>
+          <span class="plan-tag dias">${p.days}x / semana</span>
+        </div>
+        <div class="plan-desc">${p.desc}</div>
+        <div class="plan-days">
+          ${p.schedule.map(s => `
+            <div class="plan-day">
+              <div class="plan-day-label">${s.day}</div>
+              <div>
+                <div class="plan-day-name">${s.name}</div>
+                <div class="plan-day-exs">${s.exercises.slice(0,3).join(' · ')}${s.exercises.length > 3 ? ` +${s.exercises.length-3} mais` : ''}</div>
+              </div>
+            </div>`).join('')}
+        </div>
+        <button class="plan-start-btn" onclick="importPlan(${p.id})">Usar este treino</button>
+      </div>
+    </div>`).join('');
+}
+
+function importPlan(id) {
+  const plan = suggestedPlans.find(p => p.id === id);
+  if (!plan) return;
+  // Save each day as a separate workout
+  plan.schedule.forEach(day => {
+    const w = {
+      id: Date.now() + Math.random(),
+      name: `${plan.name} — ${day.name}`,
+      date: new Date().toLocaleDateString('pt-BR'),
+      exercises: day.exercises.map(exStr => {
+        const parts = exStr.split(' ');
+        const setsReps = parts.pop();
+        const name = parts.join(' ').replace(/\d+×/,'').trim();
+        const [s, r] = setsReps.includes('×') ? setsReps.split('×') : ['3','10–12'];
+        const found = exercises.find(e => e.name.toLowerCase().includes(name.toLowerCase().substring(0,6)));
+        return { name: exStr.replace(/\d+×[^ ]+/,'').trim(), muscle: found?.muscle || 'Variado', id: found?.id || null, series: s, reps: r, rest: '60s' };
+      })
+    };
+    savedWorkouts.unshift(w);
+  });
+  localStorage.setItem('forja_workouts', JSON.stringify(savedWorkouts));
+  showPage('workout');
+}
+
+// ============================================================
+// CUSTOM DIET CALCULATOR
+// ============================================================
+let selectedObj = 'emagrecer';
+
+function selectObj(btn, obj) {
+  document.querySelectorAll('.obj-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedObj = obj;
+}
+
+function calcDiet() {
+  try {
+  const peso = parseFloat(document.getElementById('dc-peso').value);
+  const altura = parseFloat(document.getElementById('dc-altura').value);
+  const idade = parseFloat(document.getElementById('dc-idade').value);
+  const sexo = document.getElementById('dc-sexo').value;
+  const atividade = parseFloat(document.getElementById('dc-atividade').value);
+
+  if (isNaN(peso) || isNaN(altura) || isNaN(idade) || peso < 30 || altura < 100 || idade < 10) {
+    alert('Preencha todos os campos corretamente antes de calcular!');
+    return;
+  }
+
+  // Mifflin-St Jeor
+  let tmb;
+  if (sexo === 'm') {
+    tmb = 10 * peso + 6.25 * altura - 5 * idade + 5;
+  } else {
+    tmb = 10 * peso + 6.25 * altura - 5 * idade - 161;
+  }
+
+  const tdee = Math.round(tmb * atividade);
+
+  let kcal, objLabel, objColor, deficit;
+  if (selectedObj === 'emagrecer') {
+    deficit = Math.min(500, Math.max(300, tdee * 0.2));
+    kcal = Math.round(tdee - deficit);
+    objLabel = 'EMAGRECER';
+    objColor = 'var(--accent)';
+  } else if (selectedObj === 'manter') {
+    kcal = tdee;
+    objLabel = 'MANTER PESO';
+    objColor = 'var(--accent2)';
+  } else {
+    deficit = Math.round(tdee * 0.12);
+    kcal = Math.round(tdee + deficit);
+    objLabel = 'GANHAR MASSA';
+    objColor = 'var(--green)';
+  }
+
+  // Macros
+  let protG, carbG, gordG;
+  if (selectedObj === 'emagrecer') {
+    protG = Math.round(peso * 2.0);           // 2g/kg
+    gordG = Math.round(kcal * 0.25 / 9);
+    carbG = Math.round((kcal - protG*4 - gordG*9) / 4);
+  } else if (selectedObj === 'manter') {
+    protG = Math.round(peso * 1.8);
+    gordG = Math.round(kcal * 0.28 / 9);
+    carbG = Math.round((kcal - protG*4 - gordG*9) / 4);
+  } else {
+    protG = Math.round(peso * 2.2);           // 2.2g/kg para ganho
+    gordG = Math.round(kcal * 0.25 / 9);
+    carbG = Math.round((kcal - protG*4 - gordG*9) / 4);
+  }
+
+  // Generate meal plan
+  const meals = generateMealPlan(kcal, protG, carbG, gordG, selectedObj, peso);
+
+  // Render macros
+  document.getElementById('result-macros').innerHTML = `
+    <div class="result-macro kcal">
+      <div class="result-macro-val">${kcal}</div>
+      <div class="result-macro-unit">KCAL / DIA</div>
+      <div class="result-macro-name">Calorias</div>
+    </div>
+    <div class="result-macro prot">
+      <div class="result-macro-val">${protG}g</div>
+      <div class="result-macro-unit">${Math.round(protG*4/kcal*100)}% das kcal</div>
+      <div class="result-macro-name">Proteína</div>
+    </div>
+    <div class="result-macro carb">
+      <div class="result-macro-val">${carbG}g</div>
+      <div class="result-macro-unit">${Math.round(carbG*4/kcal*100)}% das kcal</div>
+      <div class="result-macro-name">Carboidratos</div>
+    </div>
+    <div class="result-macro gord">
+      <div class="result-macro-val">${gordG}g</div>
+      <div class="result-macro-unit">${Math.round(gordG*9/kcal*100)}% das kcal</div>
+      <div class="result-macro-name">Gorduras</div>
+    </div>`;
+
+  // Render meal plan
+  document.getElementById('result-plan').innerHTML = `
+    <div class="result-plan-header">
+      <div class="result-plan-title">PLANO ALIMENTAR — ${objLabel}</div>
+      <span style="font-size:0.75rem;color:var(--muted);font-family:'Space Mono',monospace;">${kcal} kcal · ${peso}kg</span>
+    </div>
+    <div class="meal-rows">
+      ${meals.map(m => `
+        <div class="meal-row">
+          <div class="meal-time">${m.time}</div>
+          <div class="meal-details">
+            <div class="meal-name" style="display:flex;align-items:center;gap:6px;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="${objColor}" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              ${m.name}
+            </div>
+            <div class="meal-items">${m.foods}</div>
+          </div>
+          <div class="meal-cal">~${m.kcal} kcal</div>
+        </div>`).join('')}
+    </div>`;
+
+  // Tips
+  const tips = getDietTips(selectedObj, peso, kcal, protG);
+  document.getElementById('result-tips').innerHTML = tips.map(t => `
+    <div class="result-tip">
+      <div class="result-tip-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${objColor}" stroke-width="1.5" stroke-linecap="round">${t.icon}</svg>
+      </div>
+      <div class="result-tip-title">${t.title}</div>
+      <div class="result-tip-text">${t.text}</div>
+    </div>`).join('');
+
+  document.getElementById('diet-result').classList.add('visible');
+  document.getElementById('diet-result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // animate button
+  const btn = document.querySelector('.dc-calc-btn');
+  btn.textContent = '✓ Dieta Calculada!';
+  btn.style.background = 'var(--green)';
+  btn.style.color = '#000';
+  setTimeout(() => { btn.textContent = 'Calcular Minha Dieta'; btn.style.background = ''; btn.style.color = ''; }, 2500);
+
+  } catch(err) {
+    console.error('Erro ao calcular dieta:', err);
+    alert('Ocorreu um erro ao calcular. Verifique os dados e tente novamente.');
+  }
+}
+
+function generateMealPlan(kcal, prot, carb, gord, obj, peso) {
+  // Distribute calories across 6 meals with smart ratios
+  const dist = obj === 'emagrecer'
+    ? [0.20, 0.10, 0.28, 0.12, 0.20, 0.10]   // maiores refeições, lanchinhos menores
+    : obj === 'ganhar'
+    ? [0.18, 0.12, 0.25, 0.14, 0.08, 0.23]   // pós-treino grande
+    : [0.20, 0.10, 0.27, 0.13, 0.22, 0.08];
+
+  const meals = [
+    { time: '07:00', name: 'Café da manhã', foods: '', kcal: 0 },
+    { time: '10:00', name: 'Lanche da manhã', foods: '', kcal: 0 },
+    { time: '12:30', name: 'Almoço', foods: '', kcal: 0 },
+    { time: '16:00', name: 'Pré-treino', foods: '', kcal: 0 },
+    { time: '19:00', name: 'Pós-treino', foods: '', kcal: 0 },
+    { time: '21:00', name: 'Jantar', foods: '', kcal: 0 },
+  ];
+
+  const mealFoods = {
+    emagrecer: [
+      `${Math.round(peso*0.3)}g de aveia com canela + 3 claras + 1 ovo inteiro + café sem açúcar`,
+      `1 iogurte grego sem açúcar (170g) + 10 morangos + 15g de whey misturado`,
+      `${Math.round(peso*1.5)}g de frango grelhado + salada grande (folhas, tomate, pepino) + 1 fio de azeite`,
+      `1 banana + 1 col. de pasta de amendoim + café preto`,
+      `40g de whey protein + 200ml de água ou leite desnatado`,
+      `${Math.round(peso*1.2)}g de peixe (tilápia/salmão) + brócolis e abobrinha refogados + 1 fio de azeite`
+    ],
+    manter: [
+      `${Math.round(peso*0.4)}g de aveia + 3 ovos mexidos + 1 fatia pão integral + café`,
+      `1 iogurte grego + 30g de granola + frutas vermelhas`,
+      `${Math.round(peso*1.8)}g de frango + ${Math.round(peso*1.2)}g de arroz integral + feijão + salada`,
+      `1 banana + 20g de amendoim + suplemento pré-treino (opcional)`,
+      `40g de whey + 1 banana + 50g de aveia`,
+      `${Math.round(peso*1.5)}g de carne magra ou peixe + batata-doce (${Math.round(peso*1.5)}g) + legumes`
+    ],
+    ganhar: [
+      `${Math.round(peso*0.6)}g de aveia + 4 ovos + 2 fatias pão integral + manteiga de amendoim + leite`,
+      `1 iogurte grego integral + 40g de granola + 1 banana + mel`,
+      `${Math.round(peso*2)}g de frango + ${Math.round(peso*2)}g de arroz + feijão + azeite + salada`,
+      `${Math.round(peso*1.5)}g de batata-doce + 20g de whey + 1 banana — 45min antes do treino`,
+      `40g de whey + 50g de maltodextrina ou dextrose + 1 banana — logo após o treino`,
+      `${Math.round(peso*1.8)}g de carne vermelha magra + ${Math.round(peso*1.5)}g de macarrão integral + legumes + queijo cottage`
+    ]
+  };
+
+  meals.forEach((m, i) => {
+    m.kcal = Math.round(kcal * dist[i]);
+    m.foods = mealFoods[obj][i];
+  });
+
+  return meals;
+}
+
+function getDietTips(obj, peso, kcal, prot) {
+  const base = [
+    {
+      icon: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+      title: 'Distribuição proteica',
+      text: `Consuma ${prot}g de proteína distribuídos em pelo menos 5 refeições (${Math.round(prot/5)}g cada). Isso maximiza a síntese muscular ao longo do dia.`
+    },
+    {
+      icon: '<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>',
+      title: 'Hidratação',
+      text: `Beba ${(peso * 0.035).toFixed(1)}–${(peso * 0.04).toFixed(1)}L de água por dia (${peso}kg × 35–40ml). Aumente em 500ml nos dias de treino.`
+    }
+  ];
+
+  const specific = {
+    emagrecer: [
+      {
+        icon: '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>',
+        title: 'Déficit inteligente',
+        text: `Seu déficit é de ${Math.round(kcal * 0.18)} kcal/dia. Nunca fique abaixo de ${Math.max(1200, kcal - 200)} kcal para não perder massa muscular.`
+      },
+      {
+        icon: '<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
+        title: 'Proteína alta para emagrecer',
+        text: `Manter 2g/kg de proteína durante o déficit protege a massa muscular. ${prot}g/dia é sua meta — não abra mão disso.`
+      },
+      {
+        icon: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+        title: 'Dia de recarga (Refeed)',
+        text: 'A cada 7–10 dias, consuma as calorias de manutenção por 1 dia. Isso reseta hormônios e evita adaptação metabólica ao déficit.'
+      }
+    ],
+    manter: [
+      {
+        icon: '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+        title: 'Monitore semanalmente',
+        text: 'Pese-se toda semana no mesmo horário. Variações de 1–2kg são normais (água, glicogênio). Observe a tendência de 2–3 semanas.'
+      },
+      {
+        icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+        title: 'Consistência é o segredo',
+        text: 'Para manter o peso, o foco é na consistência semanal — não diária. Um jantar mais calórico é ok se a semana fechar no alvo.'
+      }
+    ],
+    ganhar: [
+      {
+        icon: '<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>',
+        title: 'Superávit limpo',
+        text: `Superávit de ~${Math.round(kcal * 0.12)} kcal. Ganho ideal: 0,5–1% do peso corporal por mês (${(peso*0.005).toFixed(1)}–${(peso*0.01).toFixed(1)}kg). Mais rápido = mais gordura.`
+      },
+      {
+        icon: '<circle cx="12" cy="8" r="4"/><path d="M12 14c-5 0-8 2.5-8 5h16c0-2.5-3-5-8-5z"/>',
+        title: 'Coma mais vezes',
+        text: 'Para consumir mais calorias sem desconforto, divida em 6–7 refeições. Shakes hipercalóricos caseiros (aveia + banana + leite + pasta de amendoim) ajudam muito.'
+      },
+      {
+        icon: '<path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>',
+        title: 'Pós-treino é prioridade',
+        text: 'Nos 30 min pós-treino, consuma 40g de proteína + carboidratos de alto índice glicêmico (maltodextrina, banana, dextrose). Essa janela é ouro para crescimento.'
+      }
+    ]
+  };
+
+  return [...base, ...(specific[obj] || [])];
+}
+
+// Init new pages on load
+renderSavedWorkouts();
 </script>
 </body>
 </html>
