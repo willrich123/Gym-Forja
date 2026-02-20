@@ -1715,6 +1715,250 @@
 
   /* Responsive */
   /* ============================================================
+     LOGIN SCREEN
+  ============================================================ */
+  #login-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .login-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+    animation: slideUp 0.5s ease both;
+  }
+
+  .login-top {
+    background: linear-gradient(135deg, #120000 0%, #0a0a0a 100%);
+    padding: 40px 36px 32px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .login-top::before {
+    content: 'FORJA';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 9rem;
+    color: rgba(255,61,0,0.04);
+    right: -20px;
+    bottom: -20px;
+    letter-spacing: 4px;
+    user-select: none;
+  }
+
+  .login-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    letter-spacing: 6px;
+    color: var(--accent);
+    text-shadow: 0 0 40px rgba(255,61,0,0.4);
+    position: relative;
+  }
+
+  .login-tagline {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 6px;
+    position: relative;
+  }
+
+  .login-body { padding: 32px 36px; }
+
+  .login-tabs {
+    display: flex;
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 28px;
+    gap: 4px;
+  }
+
+  .login-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .login-tab.active {
+    background: var(--accent);
+    color: white;
+  }
+
+  .login-form { display: flex; flex-direction: column; gap: 14px; }
+
+  .login-field { display: flex; flex-direction: column; gap: 6px; }
+
+  .login-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .login-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 13px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .login-input:focus { border-color: var(--accent); }
+
+  .login-btn {
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.25s;
+    margin-top: 4px;
+  }
+
+  .login-btn:hover {
+    background: #ff5722;
+    box-shadow: 0 8px 30px rgba(255,61,0,0.4);
+    transform: translateY(-1px);
+  }
+
+  .login-error {
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-family: 'Space Mono', monospace;
+    text-align: center;
+    padding: 8px;
+    background: rgba(255,61,0,0.08);
+    border-radius: 8px;
+    border: 1px solid rgba(255,61,0,0.2);
+    display: none;
+  }
+
+  .login-error.visible { display: block; }
+
+  .login-footer {
+    text-align: center;
+    padding: 16px 36px 28px;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  /* ── User badge in header ── */
+  .user-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 6px 14px 6px 8px;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    flex-shrink: 0;
+  }
+
+  .user-badge:hover { border-color: var(--accent); }
+
+  .user-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: white;
+    letter-spacing: 1px;
+  }
+
+  .user-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .user-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 8px;
+    min-width: 180px;
+    z-index: 2000;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+    display: none;
+  }
+
+  .user-menu.open { display: block; }
+
+  .user-menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.88rem;
+    color: var(--text);
+    transition: background 0.15s;
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .user-menu-item:hover { background: var(--surface2); }
+  .user-menu-item.danger { color: var(--accent); }
+  .user-menu-divider { border: none; border-top: 1px solid var(--border); margin: 6px 0; }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+  }
+
+  /* ============================================================
      MOBILE — até 768px
   ============================================================ */
   @media (max-width: 768px) {
@@ -1851,6 +2095,19 @@
     .wb-saved-actions { flex-direction: column; }
     .wb-panel-footer { flex-direction: column; gap: 8px; }
     .wb-save-btn, .wb-clear-btn { width: 100%; }
+
+    /* ── Login ── */
+    #login-screen { padding: 16px; align-items: flex-end; padding-bottom: 0; }
+    .login-card { border-radius: 20px 20px 0 0; max-width: 100%; }
+    .login-top { padding: 28px 24px 22px; }
+    .login-body { padding: 24px; }
+    .login-footer { padding: 12px 24px 24px; }
+
+    /* ── Header user badge ── */
+    .user-name { display: none; }
+    .user-badge { padding: 5px 10px 5px 6px; }
+    .user-menu { right: 0; }
+    .header-right { margin-left: auto; }
   }
 
   /* ============================================================
@@ -1865,13 +2122,67 @@
     .plan-tags { gap: 6px; }
     .plan-tag { font-size: 0.65rem; padding: 2px 8px; }
     section { padding: 95px 14px 50px; }
+    .login-card { border-radius: 12px; }
+    .login-top { padding: 24px 18px 18px; }
+    .login-body { padding: 18px; }
   }
 </style>
 </head>
 <body>
 
+<!-- ============================
+     LOGIN SCREEN
+============================= -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-top">
+      <div class="login-logo">FORJA</div>
+      <div class="login-tagline">// Academia & Treino</div>
+    </div>
+    <div class="login-body">
+      <div class="login-tabs">
+        <button type="button" class="login-tab active" onclick="switchLoginTab('login',this)">Entrar</button>
+        <button type="button" class="login-tab" onclick="switchLoginTab('register',this)">Criar Conta</button>
+      </div>
+
+      <!-- Login Form -->
+      <div id="form-login" class="login-form">
+        <div class="login-field">
+          <label class="login-label">Usuário</label>
+          <input class="login-input" type="text" id="login-user" placeholder="Seu usuário" autocomplete="username">
+        </div>
+        <div class="login-field">
+          <label class="login-label">Senha</label>
+          <input class="login-input" type="password" id="login-pass" placeholder="Sua senha" autocomplete="current-password">
+        </div>
+        <div class="login-error" id="login-error">Usuário ou senha incorretos</div>
+        <button type="button" class="login-btn" onclick="doLogin()">Entrar</button>
+      </div>
+
+      <!-- Register Form -->
+      <div id="form-register" class="login-form" style="display:none;">
+        <div class="login-field">
+          <label class="login-label">Nome</label>
+          <input class="login-input" type="text" id="reg-name" placeholder="Seu nome completo">
+        </div>
+        <div class="login-field">
+          <label class="login-label">Usuário</label>
+          <input class="login-input" type="text" id="reg-user" placeholder="Escolha um usuário">
+        </div>
+        <div class="login-field">
+          <label class="login-label">Senha</label>
+          <input class="login-input" type="password" id="reg-pass" placeholder="Mínimo 4 caracteres">
+        </div>
+        <div class="login-error" id="reg-error"></div>
+        <button type="button" class="login-btn" onclick="doRegister()">Criar Conta</button>
+      </div>
+    </div>
+    <div class="login-footer">Seus treinos ficam salvos por usuário 💪</div>
+  </div>
+</div>
+
 <!-- HEADER -->
-<header>
+<header id="main-header" style="display:none;">
   <a class="logo" href="#" onclick="showPage('home')">FORJA</a>
   <nav>
     <button class="active" onclick="showPage('home')">Início</button>
@@ -1881,6 +2192,28 @@
     <button onclick="showPage('diet-custom')">Minha Dieta</button>
     <button onclick="showPage('equipment')">Equipamentos</button>
   </nav>
+  <div class="header-right">
+    <div class="user-badge" onclick="toggleUserMenu()">
+      <div class="user-avatar" id="header-avatar">?</div>
+      <span class="user-name" id="header-username">Usuário</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="user-menu" id="user-menu">
+      <button type="button" class="user-menu-item" onclick="showPage('workout');closeUserMenu()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="11" width="3" height="3" rx="1"/><rect x="20" y="11" width="3" height="3" rx="1"/><rect x="4" y="10" width="2" height="5" rx="1"/><rect x="18" y="10" width="2" height="5" rx="1"/><line x1="6" y1="12.5" x2="18" y2="12.5"/></svg>
+        Meus Treinos
+      </button>
+      <button type="button" class="user-menu-item" onclick="showPage('diet-custom');closeUserMenu()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        Minha Dieta
+      </button>
+      <hr class="user-menu-divider">
+      <button type="button" class="user-menu-item danger" onclick="doLogout()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+  </div>
 </header>
 
 <!-- ============================
@@ -3584,11 +3917,160 @@ function filterEquipment(cat, btn) {
 }
 
 // ============================================================
+// AUTH SYSTEM
+// ============================================================
+let currentUser = null; // { username, name, avatar }
+
+function getUsers() {
+  return JSON.parse(localStorage.getItem('forja_users') || '{}');
+}
+
+function saveUsers(users) {
+  localStorage.setItem('forja_users', JSON.stringify(users));
+}
+
+function getUserKey(key) {
+  return `forja_${currentUser.username}_${key}`;
+}
+
+function switchLoginTab(tab, btn) {
+  document.querySelectorAll('.login-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('form-login').style.display = tab === 'login' ? 'flex' : 'none';
+  document.getElementById('form-register').style.display = tab === 'register' ? 'flex' : 'none';
+  document.getElementById('login-error').classList.remove('visible');
+  document.getElementById('reg-error').classList.remove('visible');
+}
+
+function doLogin() {
+  const username = document.getElementById('login-user').value.trim().toLowerCase();
+  const password = document.getElementById('login-pass').value;
+  const err = document.getElementById('login-error');
+
+  if (!username || !password) {
+    err.textContent = 'Preencha usuário e senha';
+    err.classList.add('visible'); return;
+  }
+
+  const users = getUsers();
+  const user = users[username];
+
+  if (!user || user.password !== btoa(password)) {
+    err.textContent = 'Usuário ou senha incorretos';
+    err.classList.add('visible'); return;
+  }
+
+  err.classList.remove('visible');
+  loginSuccess({ username, name: user.name, avatar: user.name[0].toUpperCase() });
+}
+
+function doRegister() {
+  const name     = document.getElementById('reg-name').value.trim();
+  const username = document.getElementById('reg-user').value.trim().toLowerCase();
+  const password = document.getElementById('reg-pass').value;
+  const err      = document.getElementById('reg-error');
+
+  if (!name || !username || !password) {
+    err.textContent = 'Preencha todos os campos'; err.classList.add('visible'); return;
+  }
+  if (username.length < 3) {
+    err.textContent = 'Usuário deve ter ao menos 3 caracteres'; err.classList.add('visible'); return;
+  }
+  if (password.length < 4) {
+    err.textContent = 'Senha deve ter ao menos 4 caracteres'; err.classList.add('visible'); return;
+  }
+  if (!/^[a-z0-9_]+$/.test(username)) {
+    err.textContent = 'Use apenas letras, números e _'; err.classList.add('visible'); return;
+  }
+
+  const users = getUsers();
+  if (users[username]) {
+    err.textContent = 'Esse usuário já existe'; err.classList.add('visible'); return;
+  }
+
+  users[username] = { name, password: btoa(password), createdAt: Date.now() };
+  saveUsers(users);
+  err.classList.remove('visible');
+  loginSuccess({ username, name, avatar: name[0].toUpperCase() });
+}
+
+function loginSuccess(user) {
+  currentUser = user;
+  localStorage.setItem('forja_session', JSON.stringify(user));
+
+  // Update header UI
+  document.getElementById('header-avatar').textContent   = user.avatar;
+  document.getElementById('header-username').textContent = user.name.split(' ')[0];
+
+  // Hide login, show app
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('main-header').style.display  = 'flex';
+
+  // Load user workouts
+  savedWorkouts = JSON.parse(localStorage.getItem(getUserKey('workouts')) || '[]');
+  renderSavedWorkouts();
+  showPage('home');
+}
+
+function doLogout() {
+  closeUserMenu();
+  currentUser = null;
+  savedWorkouts = [];
+  myWorkout = [];
+  localStorage.removeItem('forja_session');
+
+  // Clear form fields
+  ['login-user','login-pass','reg-name','reg-user','reg-pass'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+
+  document.getElementById('main-header').style.display  = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+function toggleUserMenu() {
+  document.getElementById('user-menu').classList.toggle('open');
+}
+
+function closeUserMenu() {
+  document.getElementById('user-menu').classList.remove('open');
+}
+
+// Close menu clicking outside
+document.addEventListener('click', e => {
+  const badge = document.querySelector('.user-badge');
+  const menu  = document.getElementById('user-menu');
+  if (menu && badge && !badge.contains(e.target) && !menu.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
+
+// Enter key on login inputs
+document.getElementById('login-pass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('login-user').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('reg-pass' ).addEventListener('keydown', e => { if (e.key === 'Enter') doRegister(); });
+
+// Auto-restore session
+(function restoreSession() {
+  const saved = localStorage.getItem('forja_session');
+  if (saved) {
+    try {
+      const user = JSON.parse(saved);
+      const users = getUsers();
+      if (users[user.username]) { loginSuccess(user); return; }
+    } catch(e) {}
+  }
+  // No valid session — show login
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('main-header').style.display  = 'none';
+})();
+
+// ============================================================
 // WORKOUT BUILDER
 // ============================================================
-let myWorkout = [];      // {exercise, series, reps, rest}
+let myWorkout = [];
 let wbMuscleFilter = 'todos';
-let savedWorkouts = JSON.parse(localStorage.getItem('forja_workouts') || '[]');
+let savedWorkouts = [];
 
 function renderWorkoutBuilder() {
   // build tabs
@@ -3708,6 +4190,7 @@ function clearWorkout() {
 }
 
 function saveWorkout() {
+  if (!currentUser) return;
   if (myWorkout.length === 0) { alert('Adicione pelo menos um exercício!'); return; }
   const name = document.getElementById('wb-name').value.trim() || 'MEU TREINO ' + (savedWorkouts.length + 1);
   const workout = {
@@ -3724,7 +4207,7 @@ function saveWorkout() {
     }))
   };
   savedWorkouts.unshift(workout);
-  localStorage.setItem('forja_workouts', JSON.stringify(savedWorkouts));
+  localStorage.setItem(getUserKey('workouts'), JSON.stringify(savedWorkouts));
   myWorkout = [];
   document.getElementById('wb-name').value = '';
   wbRenderList();
@@ -3794,7 +4277,7 @@ function loadWorkout(id) {
 function deleteSavedWorkout(id) {
   if (!confirm('Excluir este treino?')) return;
   savedWorkouts = savedWorkouts.filter(x => x.id !== id);
-  localStorage.setItem('forja_workouts', JSON.stringify(savedWorkouts));
+  localStorage.setItem(getUserKey('workouts'), JSON.stringify(savedWorkouts));
   renderSavedWorkouts();
 }
 
@@ -3896,6 +4379,104 @@ const suggestedPlans = [
       { day: 'QUI', name: 'Empurrar & Puxar', exercises: ['Supino Reto 4×8','Desenvolvimento Militar 4×8','Barra Fixa 4×8','Remada Curvada 4×10','Tríceps Pulley 3×12','Rosca Direta 3×12'] },
       { day: 'SEX', name: 'Core & Mobilidade', exercises: ['Prancha 4×60s','Prancha Lateral 3×45s cada','Dead Bug 3×10 cada','Russian Twist 4×30','Abdominal no Cabo 3×15','Elevação de Pernas 3×20','Good Morning 3×10'] },
     ]
+  },
+  {
+    id: 7,
+    name: 'PUSH / PULL / LEGS',
+    goal: 'Ganhar Massa',
+    level: 'Intermediário',
+    days: 6,
+    color: 'linear-gradient(135deg,#0a0a1a 0%,#12122a 100%)',
+    accentColor: '#7c4dff',
+    desc: 'A divisão PPL é uma das mais eficientes para hipertrofia. 6 dias por semana, cada grupo muscular treinado 2x. Alta frequência = mais crescimento.',
+    schedule: [
+      { day: 'SEG', name: 'Push — Peito, Ombros & Tríceps', exercises: ['Supino Reto 4×8–12','Supino Inclinado 3×10','Desenvolvimento Militar 4×8','Elevação Lateral 4×15','Crossover no Cabo 3×15','Tríceps Pulley 3×12','Tríceps Francês 3×12'] },
+      { day: 'TER', name: 'Pull — Costas & Bíceps', exercises: ['Barra Fixa 4×8','Remada Curvada 4×10','Puxada Frontal 3×12','Remada Unilateral 3×10 cada','Face Pull 3×15','Rosca Direta 4×10','Rosca Martelo 3×12'] },
+      { day: 'QUA', name: 'Legs — Quadríceps & Isquio', exercises: ['Agachamento Livre 5×5–8','Leg Press 4×12','Extensão de Perna 3×15','Flexão de Perna 3×15','Agachamento Búlgaro 3×10 cada','Panturrilha 4×20'] },
+      { day: 'QUI', name: 'Push 2 — Foco Ombros', exercises: ['Desenvolvimento Arnold 4×10','Elevação Lateral 5×15','Elevação Frontal 3×12','Supino com Halteres 4×10','Peck Deck 3×15','Pushdown com Corda 3×15','Mergulho (Dip) 3×10'] },
+      { day: 'SEX', name: 'Pull 2 — Foco Costas', exercises: ['Levantamento Terra 4×5','Barra Supinada (Chin-up) 4×8','Remada Sentado (Cabo) 4×12','Pullover com Halter 3×12','Puxada Neutra (Triângulo) 3×12','Rosca Scott 3×12','Rosca no Cabo 3×15'] },
+      { day: 'SAB', name: 'Legs 2 — Glúteos & Posterior', exercises: ['Stiff 4×10','Hip Thrust 5×12','Agachamento Sumô 4×15','Cadeira Adutora 3×20','Cadeira Abdutora 3×20','Glúteo na Polia 3×15 cada','Panturrilha no Leg Press 4×20'] },
+    ]
+  },
+  {
+    id: 8,
+    name: 'UPPER / LOWER',
+    goal: 'Força + Massa',
+    level: 'Intermediário',
+    days: 4,
+    color: 'linear-gradient(135deg,#0a100a 0%,#102010 100%)',
+    accentColor: '#00e676',
+    desc: 'Divisão superior/inferior 4 dias. Cada segmento treinado 2x por semana com variação de volume e intensidade. Excelente para progressão de força e hipertrofia.',
+    schedule: [
+      { day: 'SEG', name: 'Upper A — Foco Força', exercises: ['Supino Reto 4×5','Remada Curvada 4×5','Desenvolvimento Militar 3×6','Barra Fixa Lastrada 3×6','Rosca Direta 3×10','Tríceps Pulley 3×10'] },
+      { day: 'TER', name: 'Lower A — Foco Força', exercises: ['Agachamento Livre 5×5','Stiff 3×6','Leg Press 3×8','Flexão de Perna 3×10','Extensão de Perna 3×12','Panturrilha 4×15'] },
+      { day: 'QUI', name: 'Upper B — Foco Volume', exercises: ['Supino Inclinado 4×10','Puxada Frontal 4×12','Elevação Lateral 4×15','Remada Unilateral 3×12 cada','Crossover no Cabo 3×15','Rosca Alternada 3×12','Tríceps Francês 3×12'] },
+      { day: 'SEX', name: 'Lower B — Foco Volume', exercises: ['Hip Thrust 5×12','Agachamento Búlgaro 3×12 cada','Extensão de Perna 4×15','Flexão de Perna 4×15','Cadeira Adutora 3×20','Cadeira Abdutora 3×20','Panturrilha no Leg Press 4×20'] },
+    ]
+  },
+  {
+    id: 9,
+    name: 'INICIANTE TOTAL',
+    goal: 'Condicionamento Geral',
+    level: 'Iniciante',
+    days: 3,
+    color: 'linear-gradient(135deg,#1a1005 0%,#2a1a08 100%)',
+    accentColor: '#ffb300',
+    desc: 'O programa ideal para quem está começando. Full body 3 dias por semana com exercícios fundamentais e progressão simples de carga. Sem complicação.',
+    schedule: [
+      { day: 'SEG', name: 'Full Body A', exercises: ['Agachamento Livre 3×10','Supino Reto 3×10','Remada Curvada 3×10','Desenvolvimento 3×10','Rosca Direta 2×12','Tríceps Pulley 2×12','Prancha 3×30s'] },
+      { day: 'QUA', name: 'Full Body B', exercises: ['Leg Press 3×12','Supino Inclinado 3×10','Puxada Frontal 3×12','Elevação Lateral 3×12','Rosca Martelo 2×12','Pushdown 2×12','Abdominal Crunch 3×20'] },
+      { day: 'SEX', name: 'Full Body C', exercises: ['Agachamento Sumô 3×12','Stiff 3×10','Crucifixo 3×12','Remada Unilateral 3×10 cada','Rosca Scott 2×12','Tríceps Francês 2×12','Prancha Lateral 3×30s cada'] },
+    ]
+  },
+  {
+    id: 10,
+    name: '5x5 STRONGLIFTS',
+    goal: 'Força Máxima',
+    level: 'Iniciante–Interm.',
+    days: 3,
+    color: 'linear-gradient(135deg,#150505 0%,#200a0a 100%)',
+    accentColor: '#ff6e40',
+    desc: 'O clássico Stronglifts 5×5. Apenas 5 exercícios compostos, progressão de 2,5kg por treino. O programa mais testado e comprovado para ganho de força bruta.',
+    schedule: [
+      { day: 'SEG', name: 'Treino A', exercises: ['Agachamento Livre 5×5 (+ 2,5kg/treino)','Supino Reto 5×5 (+ 2,5kg/treino)','Remada Curvada 5×5 (+ 2,5kg/treino)'] },
+      { day: 'QUA', name: 'Treino B', exercises: ['Agachamento Livre 5×5 (+ 2,5kg/treino)','Desenvolvimento Militar 5×5 (+ 2,5kg/treino)','Levantamento Terra 1×5 (+ 5kg/treino)'] },
+      { day: 'SEX', name: 'Treino A (repetir)', exercises: ['Agachamento Livre 5×5','Supino Reto 5×5','Remada Curvada 5×5','Obs: alterne A e B a cada semana'] },
+    ]
+  },
+  {
+    id: 11,
+    name: 'DEFINIÇÃO TOTAL',
+    goal: 'Definição Muscular',
+    level: 'Intermediário',
+    days: 5,
+    color: 'linear-gradient(135deg,#0a0a15 0%,#10101f 100%)',
+    accentColor: '#40c4ff',
+    desc: 'Protocolo de 5 dias para definição máxima. Altas repetições, pouco descanso e superseries estratégicas. Ideal para quem quer manter massa e queimar gordura.',
+    schedule: [
+      { day: 'SEG', name: 'Peito + Tríceps (superseries)', exercises: ['SS: Supino Reto 4×15 + Crossover 4×20','SS: Supino Inclinado 3×15 + Peck Deck 3×20','SS: Tríceps Pulley 4×20 + Tríceps Francês 4×15','Prancha 3×45s'] },
+      { day: 'TER', name: 'Costas + Bíceps (superseries)', exercises: ['SS: Puxada Frontal 4×15 + Remada Cabo 4×15','SS: Remada Unilateral 3×15 + Face Pull 3×20','SS: Rosca Direta 4×20 + Rosca Martelo 4×15','SS: Rosca Scott 3×15 + Rosca no Cabo 3×20'] },
+      { day: 'QUA', name: 'Pernas + Core', exercises: ['Agachamento com Salto 4×20','Leg Press 4×20','Extensão de Perna 4×20','Flexão de Perna 4×20','Russian Twist 3×30','Elevação de Pernas 3×20','Bicicleta (Bicycle Crunch) 3×30'] },
+      { day: 'QUI', name: 'Ombros + Pescoço', exercises: ['SS: Desenvolvimento 4×15 + Elevação Lateral 4×20','SS: Elevação Frontal 3×15 + Elevação Posterior 3×20','SS: Desenvolvimento Arnold 3×15 + Elevação Lateral Cabo 3×20','Encolhimento de Ombros 4×20'] },
+      { day: 'SEX', name: 'Glúteos + HIIT', exercises: ['Hip Thrust 5×20','Agachamento Búlgaro 4×15 cada','Cadeira Abdutora 4×25','Glúteo 4 Apoios 4×20 cada','Burpee 4×15','Mountain Climber 4×45s','Corda de Pular 3×2min'] },
+    ]
+  },
+  {
+    id: 12,
+    name: 'CORRIDA + MUSCULAÇÃO',
+    goal: 'Condicionamento & Saúde',
+    level: 'Iniciante',
+    days: 5,
+    color: 'linear-gradient(135deg,#051515 0%,#0a2020 100%)',
+    accentColor: '#00bcd4',
+    desc: 'Combina musculação com treino aeróbico. Perfeito para quem quer saúde cardiovascular e corpo definido ao mesmo tempo. 5 dias variados.',
+    schedule: [
+      { day: 'SEG', name: 'Musculação — Peito & Costas', exercises: ['Supino Reto 3×12','Puxada Frontal 3×12','Supino Inclinado 3×10','Remada Sentado 3×12','Crossover 3×15','Face Pull 3×15'] },
+      { day: 'TER', name: 'Corrida intervalada 35min', exercises: ['Aquecimento 5min caminhada','10× (1min corrida forte + 1min caminhada)','Descanso ativo 5min ao final','Estique: panturrilha, quadríceps, isquio'] },
+      { day: 'QUA', name: 'Musculação — Pernas & Core', exercises: ['Agachamento Livre 3×12','Leg Press 3×15','Stiff 3×12','Hip Thrust 3×15','Prancha 3×45s','Russian Twist 3×25'] },
+      { day: 'QUI', name: 'Corrida longa 40–50min', exercises: ['Ritmo confortável (conversa fácil)','Objetivo: completar sem parar','Fique dentro de 65–75% da FC máx','Hidrate a cada 15min'] },
+      { day: 'SEX', name: 'Musculação — Braços & Ombros', exercises: ['Desenvolvimento 3×12','Elevação Lateral 4×15','Rosca Direta 3×12','Tríceps Pulley 3×12','Rosca Martelo 3×12','Tríceps Francês 3×12'] },
+    ]
   }
 ];
 
@@ -3957,7 +4538,7 @@ function importPlan(id) {
     };
     savedWorkouts.unshift(w);
   });
-  localStorage.setItem('forja_workouts', JSON.stringify(savedWorkouts));
+  localStorage.setItem(getUserKey('workouts'), JSON.stringify(savedWorkouts));
   showPage('workout');
 }
 
@@ -4220,8 +4801,7 @@ function getDietTips(obj, peso, kcal, prot) {
   return [...base, ...(specific[obj] || [])];
 }
 
-// Init new pages on load
-renderSavedWorkouts();
+// Auth system handles init (restoreSession runs on load)
 </script>
 </body>
 </html>
