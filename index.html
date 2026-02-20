@@ -1713,6 +1713,559 @@
   .result-tip-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; }
   .result-tip-text { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
 
+  /* ============================================================
+     1. THEME TOGGLE
+  ============================================================ */
+  body.light {
+    --bg: #f5f5f5;
+    --surface: #ffffff;
+    --surface2: #eeeeee;
+    --text: #111111;
+    --muted: #888;
+    --border: #ddd;
+  }
+
+  .theme-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .theme-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ============================================================
+     2. REST TIMER OVERLAY
+  ============================================================ */
+  #rest-timer-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 8000;
+    background: rgba(0,0,0,0.88);
+    backdrop-filter: blur(12px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 24px;
+  }
+  #rest-timer-overlay.open { display: flex; }
+
+  .rt-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .rt-ring {
+    position: relative;
+    width: 220px; height: 220px;
+  }
+
+  .rt-svg { width: 220px; height: 220px; transform: rotate(-90deg); }
+
+  .rt-track { fill: none; stroke: var(--surface2); stroke-width: 10; }
+  .rt-progress {
+    fill: none; stroke: var(--accent);
+    stroke-width: 10;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s linear;
+  }
+  .rt-progress.green { stroke: var(--green); }
+
+  .rt-time {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .rt-seconds {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .rt-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .rt-ex-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    max-width: 300px;
+  }
+
+  .rt-btns { display: flex; gap: 12px; }
+
+  .rt-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 10px 22px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+  .rt-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .rt-btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
+
+  /* ============================================================
+     3. ACTIVE WORKOUT MODE
+  ============================================================ */
+  #active-workout-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 7000;
+    background: var(--bg);
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  #active-workout-overlay.open { display: flex; }
+
+  .aw-header {
+    padding: 16px 20px;
+    background: rgba(10,10,10,0.95);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+
+  .aw-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .aw-progress-wrap { padding: 0 20px 10px; background: var(--surface); flex-shrink: 0; }
+  .aw-progress-bar { height: 4px; background: var(--surface2); border-radius: 2px; margin-top: 10px; }
+  .aw-progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.4s ease; }
+  .aw-progress-label { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--muted); margin-top: 4px; }
+
+  .aw-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .aw-ex-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .aw-ex-card.current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+  .aw-ex-card.done { opacity: 0.45; }
+
+  .aw-ex-header {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .aw-ex-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-weight: 700;
+  }
+  .aw-ex-card.done .aw-ex-num { background: var(--green); }
+
+  .aw-ex-info { flex: 1; }
+  .aw-ex-name { font-weight: 700; font-size: 0.95rem; }
+  .aw-ex-muscle { font-size: 0.72rem; color: var(--accent); font-family: 'Space Mono', monospace; text-transform: uppercase; letter-spacing: 1px; }
+
+  .aw-sets {
+    padding: 14px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .aw-set-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border-radius: 8px;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .aw-set-row.done-set { background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.3); }
+  .aw-set-row.done-set .aw-set-num { color: var(--green); }
+
+  .aw-set-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    min-width: 50px;
+  }
+  .aw-set-info { flex: 1; font-size: 0.88rem; }
+  .aw-set-weight { font-family: 'Space Mono', monospace; font-size: 0.8rem; }
+
+  .aw-set-weight input {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--border);
+    width: 56px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    padding: 2px 4px;
+    text-align: right;
+    outline: none;
+  }
+  .aw-set-weight input:focus { border-color: var(--accent); }
+
+  .aw-set-check {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .aw-set-row.done-set .aw-set-check { background: var(--green); border-color: var(--green); }
+
+  .aw-footer {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    background: var(--surface);
+  }
+
+  .aw-btn {
+    flex: 1;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .aw-btn:hover { background: #ff5722; }
+  .aw-btn.secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    flex: 0 0 auto;
+    padding: 14px 18px;
+  }
+  .aw-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .aw-elapsed {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+    padding-top: 14px;
+  }
+
+  /* ============================================================
+     4. PROGRESS TRACKER PAGE
+  ============================================================ */
+  .progress-ex-select {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 24px;
+  }
+
+  .progress-chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 24px;
+    min-height: 220px;
+  }
+
+  .progress-log-form {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    margin-bottom: 24px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 12px;
+    align-items: end;
+  }
+
+  .progress-log-history {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .prog-entry {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.88rem;
+  }
+  .prog-entry:last-child { border-bottom: none; }
+  .prog-date { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--muted); min-width: 80px; }
+  .prog-weight { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--accent); min-width: 70px; }
+  .prog-reps { color: var(--muted); font-size: 0.82rem; flex: 1; }
+  .prog-del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1rem; padding: 4px; transition: color 0.2s; }
+  .prog-del:hover { color: var(--accent); }
+
+  /* mini SVG chart */
+  .sparkline { width: 100%; height: 140px; }
+  .sparkline-empty { display: flex; align-items: center; justify-content: center; height: 140px; color: var(--muted); font-size: 0.85rem; }
+
+  /* ============================================================
+     5. WORKOUT HISTORY PAGE
+  ============================================================ */
+  .history-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 28px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+
+  .cal-header { grid-column: 1/-1; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .cal-month { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: var(--accent); }
+  .cal-nav { background: none; border: 1px solid var(--border); border-radius: 6px; padding: 4px 10px; color: var(--text); cursor: pointer; }
+  .cal-nav:hover { border-color: var(--accent); }
+
+  .cal-day-label { font-family: 'Space Mono', monospace; font-size: 0.6rem; color: var(--muted); text-align: center; text-transform: uppercase; padding-bottom: 6px; }
+
+  .cal-day {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    cursor: default;
+    transition: all 0.15s;
+  }
+  .cal-day.has-workout { background: rgba(255,61,0,0.15); color: var(--accent); border: 1px solid rgba(255,61,0,0.3); font-weight: 700; cursor: pointer; }
+  .cal-day.has-workout:hover { background: rgba(255,61,0,0.3); }
+  .cal-day.today { border: 1px solid var(--muted); color: var(--text); }
+  .cal-day.empty { opacity: 0; pointer-events: none; }
+
+  .history-streak {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .streak-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+  }
+  .streak-val { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: var(--accent); line-height: 1; }
+  .streak-label { font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; margin-top: 4px; }
+
+  .history-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .history-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: border-color 0.2s;
+  }
+  .history-item:hover { border-color: rgba(255,61,0,0.3); }
+
+  .history-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+  .history-name { font-weight: 700; font-size: 0.92rem; flex: 1; }
+  .history-meta { font-size: 0.75rem; color: var(--muted); font-family: 'Space Mono', monospace; white-space: nowrap; }
+  .history-duration { font-size: 0.75rem; color: var(--accent2); font-family: 'Space Mono', monospace; }
+
+  /* ============================================================
+     6. IMC CALCULATOR
+  ============================================================ */
+  .imc-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--card-radius);
+    overflow: hidden;
+    max-width: 680px;
+    margin: 0 auto 32px;
+  }
+
+  .imc-result-bar {
+    height: 16px;
+    background: linear-gradient(90deg, #00e676 0%, #ffb300 35%, #ff6e40 65%, #ff1744 100%);
+    border-radius: 8px;
+    position: relative;
+    margin: 20px 0 8px;
+  }
+
+  .imc-needle {
+    position: absolute;
+    top: -6px;
+    width: 4px; height: 28px;
+    background: white;
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    transform: translateX(-50%);
+    transition: left 0.6s ease;
+  }
+
+  .imc-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .imc-result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .imc-stat {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .imc-stat-val { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; }
+  .imc-stat-label { font-size: 0.72rem; color: var(--muted); font-family: 'Space Mono', monospace; margin-top: 4px; }
+
+  /* ============================================================
+     7. SHARE WORKOUT
+  ============================================================ */
+  #share-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 6000;
+    background: rgba(0,0,0,0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  #share-modal.open { display: flex; }
+
+  .share-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  }
+
+  /* ============================================================
+     8. NOTIFICATIONS BANNER
+  ============================================================ */
+  #notif-banner {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 5000;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 12px;
+    padding: 14px 18px;
+    max-width: 320px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+    display: none;
+    animation: slideUp 0.4s ease both;
+  }
+  #notif-banner.show { display: flex; gap: 12px; align-items: flex-start; }
+  .notif-icon { flex-shrink: 0; margin-top: 2px; }
+  .notif-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 2px; }
+  .notif-text { font-size: 0.78rem; color: var(--muted); line-height: 1.4; }
+  .notif-close { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 1.1rem; margin-left: auto; padding: 0; flex-shrink: 0; }
+
+  /* ============================================================
+     EXTRA UTILITY
+  ============================================================ */
+  .badge-new {
+    background: var(--accent);
+    color: white;
+    font-size: 0.55rem;
+    font-family: 'Space Mono', monospace;
+    padding: 1px 5px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+    margin-left: 4px;
+    text-transform: uppercase;
+  }
+
   /* Responsive */
   /* ============================================================
      LOGIN SCREEN
@@ -2108,6 +2661,29 @@
     .user-badge { padding: 5px 10px 5px 6px; }
     .user-menu { right: 0; }
     .header-right { margin-left: auto; }
+
+    /* ── Progress page ── */
+    .progress-log-form { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .progress-log-form .dc-field:last-child { grid-column: 1/-1; }
+
+    /* ── History calendar ── */
+    .history-streak { grid-template-columns: repeat(3,1fr); gap: 10px; }
+    .streak-val { font-size: 1.8rem; }
+
+    /* ── Rest timer ── */
+    .rt-ring { width: 180px; height: 180px; }
+    .rt-svg { width: 180px; height: 180px; }
+    .rt-seconds { font-size: 4rem; }
+
+    /* ── Active workout ── */
+    .aw-set-row { flex-wrap: wrap; gap: 6px; }
+    .aw-set-weight input { width: 44px; }
+
+    /* ── Notif banner ── */
+    #notif-banner { bottom: 12px; right: 12px; left: 12px; max-width: none; }
+
+    /* ── IMC result ── */
+    .imc-result-grid { grid-template-columns: 1fr 1fr; }
   }
 
   /* ============================================================
@@ -2190,9 +2766,15 @@
     <button onclick="showPage('workout')">Meu Treino</button>
     <button onclick="showPage('suggested')">Treinos Prontos</button>
     <button onclick="showPage('diet-custom')">Minha Dieta</button>
+    <button onclick="showPage('imc')">IMC</button>
+    <button onclick="showPage('progress')">Progresso</button>
+    <button onclick="showPage('history')">Histórico</button>
     <button onclick="showPage('equipment')">Equipamentos</button>
   </nav>
   <div class="header-right">
+    <button type="button" class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Alternar tema">
+      <svg id="theme-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    </button>
     <div class="user-badge" onclick="toggleUserMenu()">
       <div class="user-avatar" id="header-avatar">?</div>
       <span class="user-name" id="header-username">Usuário</span>
@@ -2203,11 +2785,23 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="1" y="11" width="3" height="3" rx="1"/><rect x="20" y="11" width="3" height="3" rx="1"/><rect x="4" y="10" width="2" height="5" rx="1"/><rect x="18" y="10" width="2" height="5" rx="1"/><line x1="6" y1="12.5" x2="18" y2="12.5"/></svg>
         Meus Treinos
       </button>
+      <button type="button" class="user-menu-item" onclick="showPage('progress');closeUserMenu()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Progresso de Carga
+      </button>
+      <button type="button" class="user-menu-item" onclick="showPage('history');closeUserMenu()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Histórico
+      </button>
       <button type="button" class="user-menu-item" onclick="showPage('diet-custom');closeUserMenu()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
         Minha Dieta
       </button>
       <hr class="user-menu-divider">
+      <button type="button" class="user-menu-item" onclick="toggleTheme();closeUserMenu()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/></svg>
+        Alternar Tema
+      </button>
       <button type="button" class="user-menu-item danger" onclick="doLogout()">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
         Sair
@@ -2712,6 +3306,199 @@
       <div class="result-tips" id="result-tips"></div>
     </div>
   </section>
+</div>
+
+<!-- ============================
+     PAGE: PROGRESS TRACKER
+============================= -->
+<div id="page-progress" class="page">
+  <section style="padding-top:130px;">
+    <div class="section-label">// Evolução de carga</div>
+    <div class="section-title">MEU PROGRESSO</div>
+    <div class="section-sub">Registre o peso usado em cada exercício e acompanhe sua evolução com gráfico.</div>
+
+    <div class="progress-ex-select">
+      <div class="dc-label" style="margin-bottom:8px;">Exercício</div>
+      <select class="dc-select" id="prog-ex-select" onchange="renderProgressChart()" style="width:100%;max-width:400px;">
+        <option value="">— Selecione um exercício —</option>
+      </select>
+    </div>
+
+    <div class="progress-chart-wrap">
+      <div id="prog-chart-container"><div class="sparkline-empty">Selecione um exercício para ver o gráfico</div></div>
+    </div>
+
+    <div class="progress-log-form">
+      <div class="dc-field">
+        <label class="dc-label">Peso (kg)</label>
+        <input class="dc-input" type="number" id="prog-weight" placeholder="Ex: 60" step="0.5">
+      </div>
+      <div class="dc-field">
+        <label class="dc-label">Repetições</label>
+        <input class="dc-input" type="number" id="prog-reps" placeholder="Ex: 10">
+      </div>
+      <div class="dc-field">
+        <label class="dc-label">Observação</label>
+        <input class="dc-input" type="text" id="prog-note" placeholder="Opcional">
+      </div>
+      <div class="dc-field">
+        <label class="dc-label" style="opacity:0;">.</label>
+        <button type="button" class="wb-save-btn" style="padding:12px 20px;" onclick="logProgress()">Registrar</button>
+      </div>
+    </div>
+
+    <div class="progress-log-history">
+      <div style="padding:16px 18px;border-bottom:1px solid var(--border);font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--accent);">HISTÓRICO DE REGISTROS</div>
+      <div id="prog-history-list"><div style="padding:32px;text-align:center;color:var(--muted);font-size:0.85rem;">Nenhum registro ainda. Selecione um exercício e registre sua carga.</div></div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================
+     PAGE: WORKOUT HISTORY
+============================= -->
+<div id="page-history" class="page">
+  <section style="padding-top:130px;">
+    <div class="section-label">// Seus treinos realizados</div>
+    <div class="section-title">HISTÓRICO</div>
+    <div class="section-sub">Acompanhe sua frequência, sequência e evolução ao longo do tempo.</div>
+
+    <div class="history-streak" id="history-streak"></div>
+    <div class="history-calendar" id="history-calendar"></div>
+    <div class="section-label" style="margin-bottom:14px;">// Treinos recentes</div>
+    <div class="history-list" id="history-list"></div>
+  </section>
+</div>
+
+<!-- ============================
+     PAGE: IMC + BODY CALC
+============================= -->
+<div id="page-imc" class="page">
+  <section style="padding-top:130px;">
+    <div class="section-label">// Composição corporal</div>
+    <div class="section-title">IMC & PESO IDEAL</div>
+    <div class="section-sub">Calcule seu IMC, percentual de gordura estimado e o peso ideal para seu objetivo.</div>
+
+    <div class="imc-card">
+      <div class="diet-calc-header">
+        <div class="diet-calc-title">CALCULADORA CORPORAL</div>
+        <div class="diet-calc-sub">IMC · Gordura corporal estimada · Peso ideal</div>
+      </div>
+      <div class="diet-calc-form">
+        <div class="dc-field">
+          <label class="dc-label">Peso (kg)</label>
+          <input class="dc-input" type="number" id="imc-peso" placeholder="Ex: 80">
+        </div>
+        <div class="dc-field">
+          <label class="dc-label">Altura (cm)</label>
+          <input class="dc-input" type="number" id="imc-altura" placeholder="Ex: 178">
+        </div>
+        <div class="dc-field">
+          <label class="dc-label">Idade</label>
+          <input class="dc-input" type="number" id="imc-idade" placeholder="Ex: 28">
+        </div>
+        <div class="dc-field">
+          <label class="dc-label">Sexo</label>
+          <select class="dc-select" id="imc-sexo">
+            <option value="m">Masculino</option>
+            <option value="f">Feminino</option>
+          </select>
+        </div>
+        <button type="button" class="dc-calc-btn" onclick="calcIMC()">Calcular</button>
+      </div>
+    </div>
+
+    <div id="imc-result" style="display:none;max-width:680px;margin:0 auto;">
+      <div class="imc-card" style="padding:24px;">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--accent);margin-bottom:16px;">RESULTADO</div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px;">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:4rem;line-height:1;" id="imc-val">—</span>
+          <span style="font-family:'Space Mono',monospace;font-size:0.75rem;color:var(--muted);">IMC</span>
+        </div>
+        <div style="font-weight:700;font-size:1.1rem;margin-bottom:16px;" id="imc-class">—</div>
+        <div class="imc-result-bar"><div class="imc-needle" id="imc-needle"></div></div>
+        <div class="imc-labels"><span>Abaixo 16</span><span>Normal</span><span>Obeso</span><span>40+</span></div>
+        <div class="imc-result-grid" id="imc-grid"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================
+     REST TIMER OVERLAY
+============================= -->
+<div id="rest-timer-overlay">
+  <div class="rt-title">DESCANSO</div>
+  <div class="rt-ring">
+    <svg class="rt-svg" viewBox="0 0 220 220">
+      <circle class="rt-track" cx="110" cy="110" r="96"/>
+      <circle class="rt-progress" id="rt-circle" cx="110" cy="110" r="96" stroke-dasharray="603" stroke-dashoffset="0"/>
+    </svg>
+    <div class="rt-time">
+      <div class="rt-seconds" id="rt-seconds">60</div>
+      <div class="rt-label">segundos</div>
+    </div>
+  </div>
+  <div class="rt-ex-name" id="rt-ex-name"></div>
+  <div class="rt-btns">
+    <button type="button" class="rt-btn" onclick="addRestTime(15)">+15s</button>
+    <button type="button" class="rt-btn primary" onclick="skipRest()">Pular</button>
+    <button type="button" class="rt-btn" onclick="closeRestTimer()">Fechar</button>
+  </div>
+</div>
+
+<!-- ============================
+     ACTIVE WORKOUT OVERLAY
+============================= -->
+<div id="active-workout-overlay">
+  <div class="aw-header">
+    <button type="button" class="aw-btn secondary" style="flex:0 0 auto;padding:8px 14px;" onclick="confirmEndWorkout()">✕</button>
+    <div class="aw-title" id="aw-title">TREINO</div>
+    <div class="aw-elapsed" id="aw-elapsed">00:00</div>
+  </div>
+  <div class="aw-progress-wrap">
+    <div class="aw-progress-bar"><div class="aw-progress-fill" id="aw-progress-fill" style="width:0%"></div></div>
+    <div class="aw-progress-label" id="aw-progress-label">0 de 0 exercícios</div>
+  </div>
+  <div class="aw-body" id="aw-body"></div>
+  <div class="aw-footer">
+    <button type="button" class="aw-btn secondary" onclick="confirmEndWorkout()">Encerrar</button>
+    <button type="button" class="aw-btn" onclick="nextExercise()">Próximo Exercício</button>
+  </div>
+</div>
+
+<!-- ============================
+     SHARE MODAL
+============================= -->
+<div id="share-modal">
+  <div class="share-card">
+    <div style="padding:18px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;color:var(--accent);">COMPARTILHAR TREINO</div>
+      <button type="button" onclick="closeShareModal()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.2rem;">✕</button>
+    </div>
+    <div id="share-preview" style="padding:20px;"></div>
+    <div style="padding:0 20px 20px;display:flex;flex-direction:column;gap:10px;">
+      <button type="button" class="wb-save-btn" onclick="copyShareText()">Copiar texto</button>
+      <button type="button" class="wb-clear-btn" onclick="closeShareModal()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     NOTIFICATION BANNER
+============================= -->
+<div id="notif-banner">
+  <div class="notif-icon">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round">
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+    </svg>
+  </div>
+  <div>
+    <div class="notif-title" id="notif-title">Hora de treinar!</div>
+    <div class="notif-text" id="notif-text">Você não registra um treino há 2 dias.</div>
+  </div>
+  <button type="button" class="notif-close" onclick="closeNotif()">✕</button>
 </div>
 
 <!-- MODAL -->
@@ -3688,13 +4475,16 @@ document.addEventListener('keydown', e => {
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  const idx = ['home','exercises','workout','suggested','diet-custom','equipment'].indexOf(name);
+  document.getElementById('page-' + name)?.classList.add('active');
+  const pages = ['home','exercises','workout','suggested','diet-custom','imc','progress','history','equipment'];
+  const idx = pages.indexOf(name);
   document.querySelectorAll('nav button')[idx]?.classList.add('active');
   if (name === 'exercises') renderExercises();
   if (name === 'equipment') { renderEquipCategories(); renderEquipment(currentEquipCat); }
   if (name === 'workout') renderWorkoutBuilder();
   if (name === 'suggested') renderSuggestedPlans();
+  if (name === 'progress') renderProgressPage();
+  if (name === 'history') renderHistoryPage();
   window.scrollTo(0, 0);
 }
 
@@ -4009,7 +4799,9 @@ function loginSuccess(user) {
   // Load user workouts
   savedWorkouts = JSON.parse(localStorage.getItem(getUserKey('workouts')) || '[]');
   renderSavedWorkouts();
+  applyTheme();
   showPage('home');
+  setTimeout(checkWorkoutReminder, 3500);
 }
 
 function doLogout() {
@@ -4222,39 +5014,7 @@ function saveWorkout() {
   setTimeout(() => { btn.textContent = orig; btn.style.background = ''; btn.style.color = ''; }, 2000);
 }
 
-function renderSavedWorkouts() {
-  const section = document.getElementById('wb-saved-section');
-  const list = document.getElementById('wb-saved-list');
-  if (savedWorkouts.length === 0) { section.style.display = 'none'; return; }
-  section.style.display = 'block';
-  list.innerHTML = savedWorkouts.map((w, wi) => `
-    <div class="wb-saved-card">
-      <div class="wb-saved-header" onclick="toggleSavedWorkout(${w.id})">
-        <div>
-          <div class="wb-saved-name">${w.name}</div>
-          <div class="wb-saved-meta">${w.exercises.length} exercícios · ${w.date}</div>
-        </div>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-      <div class="wb-saved-body" id="saved-body-${w.id}">
-        ${w.exercises.map((ex, ei) => `
-          <div class="wb-saved-ex">
-            <div class="wb-item-num">${String(ei+1).padStart(2,'0')}</div>
-            <div style="flex:1;">
-              <div style="font-weight:600;font-size:0.88rem;">${ex.name}</div>
-              <div style="font-size:0.72rem;color:var(--accent);font-family:'Space Mono',monospace;">${ex.muscle}</div>
-            </div>
-            <div style="font-size:0.75rem;color:var(--muted);font-family:'Space Mono',monospace;text-align:right;">
-              ${ex.series}×${ex.reps}<br>${ex.rest}
-            </div>
-          </div>`).join('')}
-        <div class="wb-saved-actions">
-          <button class="wb-save-btn" style="font-size:0.8rem;padding:9px;" onclick="loadWorkout(${w.id})">Carregar para editar</button>
-          <button class="wb-clear-btn" style="font-size:0.8rem;padding:9px 14px;" onclick="deleteSavedWorkout(${w.id})">Excluir</button>
-        </div>
-      </div>
-    </div>`).join('');
-}
+// renderSavedWorkouts is defined later with full Start/Share buttons
 
 function toggleSavedWorkout(id) {
   const body = document.getElementById('saved-body-' + id);
@@ -4802,6 +5562,641 @@ function getDietTips(obj, peso, kcal, prot) {
 }
 
 // Auth system handles init (restoreSession runs on load)
+
+// ============================================================
+// 1. THEME TOGGLE
+// ============================================================
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem('forja_theme', isLight ? 'light' : 'dark');
+  const icon = document.getElementById('theme-icon');
+  if (isLight) {
+    icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  } else {
+    icon.innerHTML = '<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  }
+}
+
+// Apply saved theme on login
+function applyTheme() {
+  const saved = localStorage.getItem('forja_theme');
+  if (saved === 'light') {
+    document.body.classList.add('light');
+    const icon = document.getElementById('theme-icon');
+    if (icon) icon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  }
+}
+
+// ============================================================
+// 2. REST TIMER
+// ============================================================
+let restTimerInterval = null;
+let restTimerSeconds  = 0;
+let restTimerTotal    = 0;
+const RT_CIRCUM       = 603; // 2π × 96
+
+function startRestTimer(seconds, exerciseName) {
+  restTimerSeconds = seconds;
+  restTimerTotal   = seconds;
+  document.getElementById('rt-seconds').textContent = seconds;
+  document.getElementById('rt-ex-name').textContent = exerciseName ? `Próximo: ${exerciseName}` : '';
+  document.getElementById('rest-timer-overlay').classList.add('open');
+  updateRtCircle();
+  clearInterval(restTimerInterval);
+  restTimerInterval = setInterval(() => {
+    restTimerSeconds--;
+    document.getElementById('rt-seconds').textContent = restTimerSeconds;
+    updateRtCircle();
+    if (restTimerSeconds <= 0) {
+      clearInterval(restTimerInterval);
+      document.getElementById('rt-seconds').textContent = '0';
+      document.getElementById('rt-circle').classList.add('green');
+      // vibrate if supported
+      if (navigator.vibrate) navigator.vibrate([300, 100, 300]);
+      // beep
+      playBeep();
+      setTimeout(() => closeRestTimer(), 1500);
+    }
+  }, 1000);
+}
+
+function updateRtCircle() {
+  const frac   = restTimerSeconds / restTimerTotal;
+  const offset = RT_CIRCUM * (1 - frac);
+  const circle = document.getElementById('rt-circle');
+  circle.style.strokeDashoffset = offset;
+  circle.classList.remove('green');
+  circle.style.stroke = restTimerSeconds <= 5 ? '#ffb300' : 'var(--accent)';
+}
+
+function addRestTime(s) {
+  restTimerSeconds += s;
+  restTimerTotal   += s;
+}
+
+function skipRest()        { clearInterval(restTimerInterval); closeRestTimer(); }
+function closeRestTimer()  {
+  document.getElementById('rest-timer-overlay').classList.remove('open');
+  clearInterval(restTimerInterval);
+  document.getElementById('rt-circle').classList.remove('green');
+}
+
+function playBeep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [0, 0.15, 0.30].forEach(t => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0.4, ctx.currentTime + t);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.12);
+      osc.start(ctx.currentTime + t);
+      osc.stop(ctx.currentTime + t + 0.12);
+    });
+  } catch(e) {}
+}
+
+// ============================================================
+// 3. ACTIVE WORKOUT MODE
+// ============================================================
+let awWorkout       = null;
+let awCurrentEx     = 0;
+let awSetsDone      = {};   // { exIdx: [setIdx, ...] }
+let awWeights       = {};   // { exIdx_setIdx: weight }
+let awStartTime     = null;
+let awElapsedTimer  = null;
+
+function startActiveWorkout(workout) {
+  if (!workout || !workout.exercises.length) return;
+  awWorkout     = workout;
+  awCurrentEx   = 0;
+  awSetsDone    = {};
+  awWeights     = {};
+  awStartTime   = Date.now();
+
+  document.getElementById('aw-title').textContent = workout.name;
+  clearInterval(awElapsedTimer);
+  awElapsedTimer = setInterval(updateAwElapsed, 1000);
+
+  renderAwBody();
+  document.getElementById('active-workout-overlay').classList.add('open');
+}
+
+function updateAwElapsed() {
+  const secs  = Math.floor((Date.now() - awStartTime) / 1000);
+  const mm    = String(Math.floor(secs / 60)).padStart(2,'0');
+  const ss    = String(secs % 60).padStart(2,'0');
+  document.getElementById('aw-elapsed').textContent = mm + ':' + ss;
+}
+
+function renderAwBody() {
+  const exs = awWorkout.exercises;
+  const total = exs.length;
+  const done  = Object.keys(awSetsDone).filter(i => {
+    const sets = parseInt(exs[i].series) || 3;
+    return (awSetsDone[i]||[]).length >= sets;
+  }).length;
+
+  document.getElementById('aw-progress-fill').style.width  = (done/total*100) + '%';
+  document.getElementById('aw-progress-label').textContent = `${done} de ${total} exercícios`;
+
+  document.getElementById('aw-body').innerHTML = exs.map((ex, i) => {
+    const sets    = parseInt(ex.series) || 3;
+    const isDone  = (awSetsDone[i]||[]).length >= sets;
+    const isCur   = i === awCurrentEx;
+    const setRows = Array.from({length: sets}, (_,s) => {
+      const setDone = (awSetsDone[i]||[]).includes(s);
+      const wKey    = `${i}_${s}`;
+      return `
+        <div class="aw-set-row ${setDone ? 'done-set' : ''}" onclick="toggleAwSet(${i},${s})">
+          <div class="aw-set-num">SÉRIE ${s+1}</div>
+          <div class="aw-set-info">${ex.reps} reps</div>
+          <div class="aw-set-weight">
+            <input type="number" placeholder="kg" value="${awWeights[wKey]||''}"
+              onclick="event.stopPropagation()"
+              onchange="awWeights['${wKey}']=this.value"
+              style="width:52px;">
+          </div>
+          <div class="aw-set-check">
+            ${setDone ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>' : ''}
+          </div>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="aw-ex-card ${isCur ? 'current' : ''} ${isDone ? 'done' : ''}">
+        <div class="aw-ex-header">
+          <div class="aw-ex-num">${isDone ? '✓' : String(i+1).padStart(2,'0')}</div>
+          <div class="aw-ex-info">
+            <div class="aw-ex-name">${ex.name}</div>
+            <div class="aw-ex-muscle">${ex.muscle||''}</div>
+          </div>
+          <div style="font-family:'Space Mono',monospace;font-size:0.7rem;color:var(--muted);">
+            ${sets}×${ex.reps} · ${ex.rest}
+          </div>
+        </div>
+        ${isCur || isDone ? `<div class="aw-sets">${setRows}</div>` : ''}
+      </div>`;
+  }).join('');
+}
+
+function toggleAwSet(exIdx, setIdx) {
+  if (!awSetsDone[exIdx]) awSetsDone[exIdx] = [];
+  const arr = awSetsDone[exIdx];
+  const pos = arr.indexOf(setIdx);
+  if (pos === -1) {
+    arr.push(setIdx);
+    const ex   = awWorkout.exercises[exIdx];
+    const sets = parseInt(ex.series) || 3;
+    const rest = parseInt(ex.rest) || 60;
+    if (arr.length < sets) startRestTimer(rest, ex.name);
+    else if (arr.length === sets) {
+      // auto-advance
+      const nextEx = awWorkout.exercises[awCurrentEx + 1];
+      startRestTimer(rest, nextEx?.name);
+    }
+  } else {
+    arr.splice(pos, 1);
+  }
+  renderAwBody();
+}
+
+function nextExercise() {
+  const exs  = awWorkout.exercises;
+  const sets = parseInt(exs[awCurrentEx]?.series) || 3;
+  if (!awSetsDone[awCurrentEx]) awSetsDone[awCurrentEx] = [];
+  // mark remaining sets done
+  for (let s = 0; s < sets; s++) {
+    if (!awSetsDone[awCurrentEx].includes(s)) awSetsDone[awCurrentEx].push(s);
+  }
+  if (awCurrentEx < exs.length - 1) {
+    awCurrentEx++;
+    renderAwBody();
+    // scroll to current card
+    setTimeout(() => {
+      document.querySelectorAll('.aw-ex-card.current')[0]?.scrollIntoView({behavior:'smooth',block:'center'});
+    }, 100);
+  } else {
+    finishWorkout();
+  }
+}
+
+function confirmEndWorkout() {
+  if (confirm('Encerrar o treino agora?')) finishWorkout();
+}
+
+function finishWorkout() {
+  clearInterval(awElapsedTimer);
+  const elapsed   = Math.floor((Date.now() - awStartTime) / 1000);
+  const mm        = Math.floor(elapsed/60);
+  const ss        = elapsed % 60;
+  const wName     = awWorkout?.name || 'Treino';
+  const wExCount  = awWorkout?.exercises?.length || 0;
+
+  // Save to history
+  const entry = {
+    id:       Date.now(),
+    name:     wName,
+    date:     new Date().toLocaleDateString('pt-BR'),
+    dateISO:  new Date().toISOString().split('T')[0],
+    duration: `${mm}min${ss > 0 ? ` ${ss}s` : ''}`,
+    exercises: wExCount,
+    sets:      Object.values(awSetsDone).reduce((a,b) => a + b.length, 0)
+  };
+  const history = JSON.parse(localStorage.getItem(getUserKey('history')) || '[]');
+  history.unshift(entry);
+  localStorage.setItem(getUserKey('history'), JSON.stringify(history));
+
+  document.getElementById('active-workout-overlay').classList.remove('open');
+  awWorkout = null;
+
+  showNotif('🏆 Treino concluído!', `${wName} — ${mm}min. Salvo no histórico!`);
+  showPage('history');
+}
+
+// ============================================================
+// 4. PROGRESS TRACKER
+// ============================================================
+function renderProgressPage() {
+  const sel = document.getElementById('prog-ex-select');
+  if (sel.options.length <= 1) {
+    exercises.forEach(e => {
+      const opt = document.createElement('option');
+      opt.value = e.id;
+      opt.textContent = `${e.name} (${e.muscle})`;
+      sel.appendChild(opt);
+    });
+  }
+  renderProgressChart();
+}
+
+function getProgressData() {
+  return JSON.parse(localStorage.getItem(getUserKey('progress')) || '{}');
+}
+
+function renderProgressChart() {
+  const exId = document.getElementById('prog-ex-select').value;
+  const container = document.getElementById('prog-chart-container');
+  const histDiv   = document.getElementById('prog-history-list');
+
+  if (!exId) {
+    container.innerHTML = '<div class="sparkline-empty">Selecione um exercício para ver o gráfico</div>';
+    histDiv.innerHTML   = '<div style="padding:32px;text-align:center;color:var(--muted);font-size:0.85rem;">Selecione um exercício acima</div>';
+    return;
+  }
+
+  const data = getProgressData();
+  const logs = (data[exId] || []).slice().reverse(); // oldest first
+
+  if (!logs.length) {
+    container.innerHTML = '<div class="sparkline-empty">Nenhum registro ainda para este exercício</div>';
+    histDiv.innerHTML   = '<div style="padding:32px;text-align:center;color:var(--muted);font-size:0.85rem;">Nenhum registro. Use o formulário abaixo.</div>';
+    return;
+  }
+
+  // Draw SVG sparkline
+  const W = 600, H = 140, PAD = 30;
+  const vals   = logs.map(l => parseFloat(l.weight) || 0);
+  const minV   = Math.min(...vals);
+  const maxV   = Math.max(...vals);
+  const range  = maxV - minV || 1;
+  const pts    = logs.map((l,i) => {
+    const x = PAD + (i / Math.max(logs.length-1,1)) * (W - PAD*2);
+    const y = H - PAD - ((parseFloat(l.weight)||0) - minV) / range * (H - PAD*2);
+    return [x,y];
+  });
+
+  const polyline = pts.map(p => p.join(',')).join(' ');
+  const area     = `${PAD},${H-PAD} ` + polyline + ` ${W-PAD},${H-PAD}`;
+
+  container.innerHTML = `
+    <svg viewBox="0 0 ${W} ${H}" class="sparkline" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.3"/>
+          <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <polygon points="${area}" fill="url(#grad)"/>
+      <polyline points="${polyline}" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      ${pts.map((p,i) => `
+        <circle cx="${p[0]}" cy="${p[1]}" r="4" fill="var(--accent)"/>
+        <text x="${p[0]}" y="${p[1]-10}" text-anchor="middle" fill="var(--text)" font-size="11" font-family="Space Mono,monospace">${vals[i]}kg</text>
+      `).join('')}
+      <text x="${PAD}" y="${H-8}" fill="var(--muted)" font-size="10" font-family="Space Mono,monospace">${logs[0]?.date}</text>
+      <text x="${W-PAD}" y="${H-8}" text-anchor="end" fill="var(--muted)" font-size="10" font-family="Space Mono,monospace">${logs[logs.length-1]?.date}</text>
+    </svg>`;
+
+  // Render history
+  const sorted = [...(data[exId]||[])]; // newest first
+  histDiv.innerHTML = sorted.map((l,i) => `
+    <div class="prog-entry">
+      <div class="prog-date">${l.date}</div>
+      <div class="prog-weight">${l.weight}kg</div>
+      <div class="prog-reps">${l.reps} reps${l.note ? ` · ${l.note}` : ''}</div>
+      <button class="prog-del" onclick="deleteProgress('${exId}',${i})" title="Excluir">✕</button>
+    </div>`).join('');
+}
+
+function logProgress() {
+  const exId   = document.getElementById('prog-ex-select').value;
+  const weight = document.getElementById('prog-weight').value;
+  const reps   = document.getElementById('prog-reps').value;
+  const note   = document.getElementById('prog-note').value.trim();
+
+  if (!exId) { alert('Selecione um exercício!'); return; }
+  if (!weight) { alert('Informe o peso!'); return; }
+
+  const data = getProgressData();
+  if (!data[exId]) data[exId] = [];
+  data[exId].unshift({ weight: parseFloat(weight), reps: parseInt(reps)||0, note, date: new Date().toLocaleDateString('pt-BR') });
+  localStorage.setItem(getUserKey('progress'), JSON.stringify(data));
+
+  document.getElementById('prog-weight').value = '';
+  document.getElementById('prog-reps').value   = '';
+  document.getElementById('prog-note').value   = '';
+  renderProgressChart();
+
+  const btn = document.querySelector('#page-progress .wb-save-btn');
+  btn.textContent = '✓ Registrado!'; btn.style.background = 'var(--green)'; btn.style.color='#000';
+  setTimeout(() => { btn.textContent='Registrar'; btn.style.background=''; btn.style.color=''; }, 1800);
+}
+
+function deleteProgress(exId, idx) {
+  if (!confirm('Excluir este registro?')) return;
+  const data = getProgressData();
+  data[exId]?.splice(idx, 1);
+  localStorage.setItem(getUserKey('progress'), JSON.stringify(data));
+  renderProgressChart();
+}
+
+// ============================================================
+// 5. WORKOUT HISTORY
+// ============================================================
+function renderHistoryPage() {
+  const history = JSON.parse(localStorage.getItem(getUserKey('history')) || '[]');
+
+  // Streak stats
+  const dates   = [...new Set(history.map(h => h.dateISO))].sort();
+  const total   = dates.length;
+  let streak    = 0, maxStreak = 0, cur = 0;
+  const today   = new Date().toISOString().split('T')[0];
+  for (let i = dates.length - 1; i >= 0; i--) {
+    const d = new Date(dates[i]);
+    const diff = Math.round((new Date(i < dates.length-1 ? dates[i+1] : today) - d) / 86400000);
+    if (diff <= 1) { cur++; maxStreak = Math.max(maxStreak, cur); }
+    else cur = 1;
+  }
+  // current streak (consecutive from today)
+  streak = 0;
+  let checkDate = new Date(today);
+  for (let i = dates.length - 1; i >= 0; i--) {
+    const d = dates[i];
+    const diff = Math.round((checkDate - new Date(d)) / 86400000);
+    if (diff <= 1) { streak++; checkDate = new Date(d); }
+    else break;
+  }
+
+  document.getElementById('history-streak').innerHTML = `
+    <div class="streak-card"><div class="streak-val">${streak}</div><div class="streak-label">Sequência atual (dias)</div></div>
+    <div class="streak-card"><div class="streak-val">${maxStreak}</div><div class="streak-label">Maior sequência</div></div>
+    <div class="streak-card"><div class="streak-val">${total}</div><div class="streak-label">Dias treinados</div></div>`;
+
+  renderCalendar(history);
+
+  // History list
+  const listEl = document.getElementById('history-list');
+  if (!history.length) {
+    listEl.innerHTML = '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;text-align:center;color:var(--muted);">Nenhum treino registrado ainda. Use o <b>Modo Treino</b> para registrar automaticamente.</div>';
+    return;
+  }
+  listEl.innerHTML = history.slice(0,30).map(h => `
+    <div class="history-item">
+      <div class="history-dot"></div>
+      <div>
+        <div class="history-name">${h.name}</div>
+        <div style="font-size:0.75rem;color:var(--muted);font-family:'Space Mono',monospace;">${h.exercises} exercícios · ${h.sets} séries</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="history-meta">${h.date}</div>
+        <div class="history-duration">${h.duration}</div>
+      </div>
+    </div>`).join('');
+}
+
+let calMonth = new Date().getMonth();
+let calYear  = new Date().getFullYear();
+
+function renderCalendar(history) {
+  const workoutDates = new Set(history.map(h => h.dateISO));
+  const today = new Date().toISOString().split('T')[0];
+  const cal   = document.getElementById('history-calendar');
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const monthNames = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const dayLabels  = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+
+  let html = `
+    <div class="cal-header">
+      <button type="button" class="cal-nav" onclick="changeCalMonth(-1)">◀</button>
+      <div class="cal-month">${monthNames[calMonth]} ${calYear}</div>
+      <button type="button" class="cal-nav" onclick="changeCalMonth(1)">▶</button>
+    </div>
+    ${dayLabels.map(d => `<div class="cal-day-label">${d}</div>`).join('')}
+    ${Array(firstDay).fill('<div class="cal-day empty"></div>').join('')}`;
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const iso  = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const hasW = workoutDates.has(iso);
+    const isT  = iso === today;
+    html += `<div class="cal-day ${hasW?'has-workout':''} ${isT?'today':''}" title="${hasW?'Treino realizado':''}">${d}</div>`;
+  }
+
+  cal.innerHTML = html;
+}
+
+function changeCalMonth(delta) {
+  calMonth += delta;
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  if (calMonth > 11) { calMonth = 0;  calYear++; }
+  const history = JSON.parse(localStorage.getItem(getUserKey('history')) || '[]');
+  renderCalendar(history);
+}
+
+// ============================================================
+// 6. IMC CALCULATOR
+// ============================================================
+function calcIMC() {
+  const peso   = parseFloat(document.getElementById('imc-peso').value);
+  const altura = parseFloat(document.getElementById('imc-altura').value) / 100;
+  const idade  = parseFloat(document.getElementById('imc-idade').value);
+  const sexo   = document.getElementById('imc-sexo').value;
+
+  if (!peso || !altura || !idade) { alert('Preencha todos os campos!'); return; }
+
+  const imc    = peso / (altura * altura);
+  const imcStr = imc.toFixed(1);
+
+  let classe, cor;
+  if      (imc < 16)   { classe = 'Magreza grave';    cor = '#00e676'; }
+  else if (imc < 17)   { classe = 'Magreza moderada'; cor = '#69f0ae'; }
+  else if (imc < 18.5) { classe = 'Magreza leve';     cor = '#b9f6ca'; }
+  else if (imc < 25)   { classe = 'Normal ✓';         cor = '#00e676'; }
+  else if (imc < 30)   { classe = 'Sobrepeso';        cor = '#ffb300'; }
+  else if (imc < 35)   { classe = 'Obesidade grau I'; cor = '#ff6e40'; }
+  else if (imc < 40)   { classe = 'Obesidade grau II';cor = '#ff3d00'; }
+  else                 { classe = 'Obesidade grau III';cor = '#d50000'; }
+
+  // Needle position: IMC scale 15–40 → 0–100%
+  const pct = Math.min(100, Math.max(0, (imc - 15) / 25 * 100));
+  document.getElementById('imc-needle').style.left = pct + '%';
+
+  // % gordura estimado (fórmula Deurenberg)
+  const gord = (1.2 * imc) + (0.23 * idade) - (10.8 * (sexo==='m'?1:0)) - 5.4;
+  const gordStr = Math.max(5, gord).toFixed(1);
+
+  // Peso ideal (Devine formula)
+  const altCm  = altura * 100;
+  let pesoIdeal;
+  if (sexo === 'm') pesoIdeal = 50 + 2.3 * ((altCm - 152.4) / 2.54);
+  else              pesoIdeal = 45.5 + 2.3 * ((altCm - 152.4) / 2.54);
+  pesoIdeal = Math.max(40, pesoIdeal);
+
+  // Peso para IMC normal (18.5–24.9)
+  const pesoMin = (18.5 * altura * altura).toFixed(1);
+  const pesoMax = (24.9 * altura * altura).toFixed(1);
+
+  document.getElementById('imc-val').textContent   = imcStr;
+  document.getElementById('imc-class').textContent = classe;
+  document.getElementById('imc-class').style.color = cor;
+
+  document.getElementById('imc-grid').innerHTML = `
+    <div class="imc-stat"><div class="imc-stat-val" style="color:${cor}">${imcStr}</div><div class="imc-stat-label">IMC</div></div>
+    <div class="imc-stat"><div class="imc-stat-val" style="color:#ff9800">${gordStr}%</div><div class="imc-stat-label">% Gordura estimado</div></div>
+    <div class="imc-stat"><div class="imc-stat-val" style="color:var(--green)">${pesoIdeal.toFixed(1)}kg</div><div class="imc-stat-label">Peso ideal (Devine)</div></div>
+    <div class="imc-stat"><div class="imc-stat-val" style="color:var(--accent2);font-size:1.2rem;">${pesoMin}–${pesoMax}kg</div><div class="imc-stat-label">Faixa normal para sua altura</div></div>`;
+
+  document.getElementById('imc-result').style.display = 'block';
+  document.getElementById('imc-result').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ============================================================
+// 7. SHARE WORKOUT
+// ============================================================
+function openShareModal(workout) {
+  const lines = workout.exercises.map((ex, i) =>
+    `${String(i+1).padStart(2,'0')}. ${ex.name} — ${ex.series}×${ex.reps} (descanso ${ex.rest})`
+  ).join('\n');
+
+  const text = `💪 FORJA — ${workout.name}\n${'─'.repeat(30)}\n${lines}\n${'─'.repeat(30)}\nMontado com FORJA Academia App`;
+
+  document.getElementById('share-preview').innerHTML = `
+    <pre style="font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--text);white-space:pre-wrap;line-height:1.7;background:var(--surface2);padding:14px;border-radius:8px;max-height:280px;overflow-y:auto;">${text}</pre>`;
+
+  document.getElementById('share-modal')._shareText = text;
+  document.getElementById('share-modal').classList.add('open');
+}
+
+function closeShareModal() {
+  document.getElementById('share-modal').classList.remove('open');
+}
+
+function copyShareText() {
+  const text = document.getElementById('share-modal')._shareText || '';
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('#share-modal .wb-save-btn');
+    btn.textContent = '✓ Copiado!'; btn.style.background='var(--green)'; btn.style.color='#000';
+    setTimeout(() => { btn.textContent='Copiar texto'; btn.style.background=''; btn.style.color=''; }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  });
+}
+
+// ============================================================
+// 8. IN-APP NOTIFICATIONS
+// ============================================================
+function showNotif(title, text, duration = 5000) {
+  const banner = document.getElementById('notif-banner');
+  document.getElementById('notif-title').textContent = title;
+  document.getElementById('notif-text').textContent  = text;
+  banner.classList.add('show');
+  setTimeout(() => banner.classList.remove('show'), duration);
+}
+
+function closeNotif() {
+  document.getElementById('notif-banner').classList.remove('show');
+}
+
+function checkWorkoutReminder() {
+  if (!currentUser) return;
+  const history = JSON.parse(localStorage.getItem(getUserKey('history')) || '[]');
+  if (!history.length) return;
+  const last    = new Date(history[0].dateISO);
+  const diffDays = Math.floor((Date.now() - last) / 86400000);
+  if (diffDays >= 2) {
+    setTimeout(() => showNotif(
+      '🔥 Hora de treinar!',
+      `Você não treina há ${diffDays} dia${diffDays>1?'s':''}. Bora manter a sequência?`
+    ), 3000);
+  }
+}
+
+// ============================================================
+// INTEGRATE: add "Iniciar Treino" + "Compartilhar" to saved workouts
+// ============================================================
+// Override renderSavedWorkouts to include Start + Share buttons
+const _origRenderSaved = renderSavedWorkouts;
+function renderSavedWorkouts() {
+  const section = document.getElementById('wb-saved-section');
+  const list    = document.getElementById('wb-saved-list');
+  if (!savedWorkouts || savedWorkouts.length === 0) { if(section) section.style.display = 'none'; return; }
+  if(section) section.style.display = 'block';
+  list.innerHTML = savedWorkouts.map((w) => `
+    <div class="wb-saved-card">
+      <div class="wb-saved-header" onclick="toggleSavedWorkout(${w.id})">
+        <div>
+          <div class="wb-saved-name">${w.name}</div>
+          <div class="wb-saved-meta">${w.exercises.length} exercícios · ${w.date}</div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="wb-saved-body" id="saved-body-${w.id}">
+        ${w.exercises.map((ex, ei) => `
+          <div class="wb-saved-ex">
+            <div class="wb-item-num">${String(ei+1).padStart(2,'0')}</div>
+            <div style="flex:1;">
+              <div style="font-weight:600;font-size:0.88rem;">${ex.name}</div>
+              <div style="font-size:0.72rem;color:var(--accent);font-family:'Space Mono',monospace;">${ex.muscle}</div>
+            </div>
+            <div style="font-size:0.75rem;color:var(--muted);font-family:'Space Mono',monospace;text-align:right;">
+              ${ex.series}×${ex.reps}<br>${ex.rest}
+            </div>
+          </div>`).join('')}
+        <div class="wb-saved-actions" style="flex-wrap:wrap;">
+          <button class="wb-save-btn" style="font-size:0.8rem;padding:9px;background:var(--green);color:#000;" onclick="startActiveWorkout(savedWorkouts.find(x=>x.id===${w.id}))">▶ Iniciar Treino</button>
+          <button class="wb-save-btn" style="font-size:0.8rem;padding:9px;" onclick="loadWorkout(${w.id})">Editar</button>
+          <button class="wb-save-btn" style="font-size:0.8rem;padding:9px;background:var(--surface2);color:var(--text);border:1px solid var(--border);" onclick="openShareModal(savedWorkouts.find(x=>x.id===${w.id}))">Compartilhar</button>
+          <button class="wb-clear-btn" style="font-size:0.8rem;padding:9px 14px;" onclick="deleteSavedWorkout(${w.id})">Excluir</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ============================================================
+// MOBILE responsive additions
+// ============================================================
+// progress-log-form responsive
+const mediaQ = window.matchMedia('(max-width:768px)');
+function handleMobileProgressForm(e) {
+  const form = document.querySelector('.progress-log-form');
+  if (!form) return;
+  form.style.gridTemplateColumns = e.matches ? '1fr' : '1fr 1fr 1fr auto';
+}
+mediaQ.addEventListener('change', handleMobileProgressForm);
+
 </script>
 </body>
 </html>
