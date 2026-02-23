@@ -2266,6 +2266,344 @@
     text-transform: uppercase;
   }
 
+  /* ============================================================
+     AI AGENT — FORJA IA
+  ============================================================ */
+
+  /* Floating button */
+  #ai-fab {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 4500;
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff3d00 0%, #ff6d00 100%);
+    border: none;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(255,61,0,0.5);
+    transition: all 0.3s;
+    animation: pulse-fab 3s ease-in-out infinite;
+  }
+  #ai-fab.visible { display: flex; }
+  #ai-fab:hover { transform: scale(1.08); box-shadow: 0 12px 40px rgba(255,61,0,0.7); }
+
+  @keyframes pulse-fab {
+    0%,100% { box-shadow: 0 8px 32px rgba(255,61,0,0.5); }
+    50%      { box-shadow: 0 8px 48px rgba(255,61,0,0.8), 0 0 0 8px rgba(255,61,0,0.1); }
+  }
+
+  .ai-fab-badge {
+    position: absolute;
+    top: -4px; right: -4px;
+    width: 18px; height: 18px;
+    background: var(--green);
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    display: none;
+  }
+  .ai-fab-badge.visible { display: block; }
+
+  /* Chat overlay */
+  #ai-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 4800;
+    display: none;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 24px;
+    pointer-events: none;
+  }
+  #ai-overlay.open { display: flex; pointer-events: all; }
+
+  /* Backdrop click to close */
+  #ai-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+  }
+
+  /* Chat window */
+  #ai-chat {
+    position: relative;
+    z-index: 1;
+    width: 420px;
+    max-width: calc(100vw - 32px);
+    height: min(680px, calc(100vh - 100px));
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+    animation: slideUpChat 0.35s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  @keyframes slideUpChat {
+    from { opacity:0; transform: translateY(40px) scale(0.95); }
+    to   { opacity:1; transform: translateY(0) scale(1); }
+  }
+
+  /* Chat header */
+  .ai-header {
+    padding: 16px 18px;
+    background: linear-gradient(135deg, #1a0800 0%, #0a0a0a 100%);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+  }
+
+  .ai-avatar {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff3d00, #ff6d00);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 0 16px rgba(255,61,0,0.5);
+  }
+
+  .ai-header-info { flex: 1; }
+  .ai-header-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .ai-header-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--green);
+    letter-spacing: 1px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .ai-status-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: blink 2s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .ai-header-btns { display: flex; gap: 8px; }
+  .ai-icon-btn {
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; padding: 4px; border-radius: 6px;
+    transition: all 0.2s; display: flex; align-items: center;
+  }
+  .ai-icon-btn:hover { color: var(--text); background: rgba(255,255,255,0.06); }
+
+  /* Quick actions */
+  .ai-quick-bar {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    flex-shrink: 0;
+    scrollbar-width: none;
+  }
+  .ai-quick-bar::-webkit-scrollbar { display: none; }
+
+  .ai-quick-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 5px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .ai-quick-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(255,61,0,0.06); }
+
+  /* Messages */
+  .ai-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+  }
+
+  .ai-msg {
+    display: flex;
+    gap: 8px;
+    max-width: 92%;
+    animation: msgIn 0.25s ease both;
+  }
+  @keyframes msgIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+  .ai-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+
+  .ai-msg-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.72rem;
+    font-family: 'Bebas Neue', sans-serif;
+    margin-top: 2px;
+  }
+  .ai-msg.bot  .ai-msg-avatar { background: linear-gradient(135deg,#ff3d00,#ff6d00); color:white; }
+  .ai-msg.user .ai-msg-avatar { background: var(--surface2); border:1px solid var(--border); color:var(--muted); }
+
+  .ai-msg-bubble {
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    max-width: 100%;
+  }
+  .ai-msg.bot  .ai-msg-bubble {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px 16px 16px 16px;
+    color: var(--text);
+  }
+  .ai-msg.user .ai-msg-bubble {
+    background: var(--accent);
+    color: white;
+    border-radius: 16px 4px 16px 16px;
+  }
+
+  /* Markdown-like rendering inside bubbles */
+  .ai-msg-bubble strong { color: var(--accent2); font-weight: 700; }
+  .ai-msg.user .ai-msg-bubble strong { color: rgba(255,255,255,0.9); }
+  .ai-msg-bubble em { color: var(--green); font-style: normal; font-weight: 600; }
+  .ai-msg-bubble code {
+    background: rgba(255,61,0,0.12);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+  .ai-msg-bubble ul, .ai-msg-bubble ol { padding-left: 16px; margin: 6px 0; }
+  .ai-msg-bubble li { margin: 3px 0; }
+  .ai-msg-bubble hr { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
+  .ai-msg-bubble h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+    color: var(--accent);
+    font-size: 1rem;
+    margin: 8px 0 4px;
+  }
+
+  /* Typing indicator */
+  .ai-typing {
+    display: flex; gap: 5px;
+    padding: 10px 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 4px 16px 16px 16px;
+    width: fit-content;
+  }
+  .ai-typing span {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--muted);
+    animation: typingDot 1.2s ease-in-out infinite;
+  }
+  .ai-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .ai-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingDot { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-6px);opacity:1} }
+
+  /* Action chips inside messages */
+  .ai-action-chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .ai-chip {
+    background: rgba(255,61,0,0.1);
+    border: 1px solid rgba(255,61,0,0.3);
+    color: var(--accent);
+    border-radius: 50px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+  }
+  .ai-chip:hover { background: var(--accent); color: white; }
+
+  /* Input area */
+  .ai-input-area {
+    padding: 12px 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    flex-shrink: 0;
+    background: var(--surface);
+  }
+
+  #ai-input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    resize: none;
+    max-height: 120px;
+    min-height: 42px;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+    overflow-y: auto;
+  }
+  #ai-input:focus { border-color: var(--accent); }
+  #ai-input::placeholder { color: var(--muted); }
+
+  .ai-send-btn {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .ai-send-btn:hover { background: #ff5722; transform: scale(1.05); }
+  .ai-send-btn:disabled { background: var(--surface2); cursor: not-allowed; transform: none; }
+
+  /* Key setup overlay inside chat */
+  .ai-key-setup {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 28px 24px;
+    gap: 16px;
+    text-align: center;
+  }
+  .ai-key-setup-icon { opacity: 0.6; margin-bottom: 4px; }
+  .ai-key-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: var(--accent); }
+  .ai-key-sub { font-size: 0.82rem; color: var(--muted); line-height: 1.6; max-width: 300px; }
+
+  /* Mobile chat */
+  @media (max-width: 768px) {
+    #ai-overlay { padding: 0; align-items: flex-end; justify-content: center; }
+    #ai-chat { width: 100%; max-width: 100%; height: 85vh; border-radius: 20px 20px 0 0; }
+    #ai-fab { bottom: 20px; right: 20px; width: 54px; height: 54px; }
+  }
+
   /* Responsive */
   /* ============================================================
      LOGIN SCREEN
@@ -2770,6 +3108,7 @@
     <button onclick="showPage('progress')">Progresso</button>
     <button onclick="showPage('history')">Histórico</button>
     <button onclick="showPage('equipment')">Equipamentos</button>
+    <button onclick="toggleAIChat()" style="color:var(--accent);border:1px solid rgba(255,61,0,0.3);">✦ IA</button>
   </nav>
   <div class="header-right">
     <button type="button" class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="Alternar tema">
@@ -3499,6 +3838,76 @@
     <div class="notif-text" id="notif-text">Você não registra um treino há 2 dias.</div>
   </div>
   <button type="button" class="notif-close" onclick="closeNotif()">✕</button>
+</div>
+
+<!-- ============================
+     AI AGENT — FORJA IA
+============================= -->
+
+<!-- Floating action button -->
+<button id="ai-fab" onclick="toggleAIChat()" title="FORJA IA — Personal Trainer">
+  <div class="ai-fab-badge" id="ai-fab-badge"></div>
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round">
+    <path d="M12 2a10 10 0 0 1 10 10c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2z"/>
+    <path d="M8 12h.01M12 12h.01M16 12h.01"/>
+    <path d="M9 9c0-1.1.9-2 2-2h2a2 2 0 0 1 0 4h-1l-1 2"/>
+  </svg>
+</button>
+
+<!-- Chat overlay -->
+<div id="ai-overlay">
+  <div id="ai-backdrop" onclick="closeAIChat()"></div>
+  <div id="ai-chat">
+
+    <!-- Header -->
+    <div class="ai-header">
+      <div class="ai-avatar">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round">
+          <circle cx="12" cy="8" r="4"/>
+          <path d="M6 20v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/>
+          <path d="M19 3l1 1-1 1M5 3l-1 1 1 1"/>
+        </svg>
+      </div>
+      <div class="ai-header-info">
+        <div class="ai-header-name">FORJA IA</div>
+        <div class="ai-header-status">
+          <div class="ai-status-dot"></div>
+          Personal Trainer Virtual
+        </div>
+      </div>
+      <div class="ai-header-btns">
+        <button type="button" class="ai-icon-btn" onclick="clearAIChat()" title="Limpar conversa">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        </button>
+        <button type="button" class="ai-icon-btn" onclick="closeAIChat()" title="Fechar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick actions -->
+    <div class="ai-quick-bar" id="ai-quick-bar">
+      <button type="button" class="ai-quick-btn" onclick="aiQuick('monte_treino')">💪 Montar Treino</button>
+      <button type="button" class="ai-quick-btn" onclick="aiQuick('monte_dieta')">🥗 Montar Dieta</button>
+      <button type="button" class="ai-quick-btn" onclick="aiQuick('analisar_progresso')">📈 Analisar Progresso</button>
+      <button type="button" class="ai-quick-btn" onclick="aiQuick('tecnica')">🎯 Dicas de Técnica</button>
+      <button type="button" class="ai-quick-btn" onclick="aiQuick('suplementos')">💊 Suplementos</button>
+      <button type="button" class="ai-quick-btn" onclick="aiQuick('descanso')">😴 Descanso & Recuperação</button>
+    </div>
+
+    <!-- Messages -->
+    <div class="ai-messages" id="ai-messages"></div>
+
+    <!-- Input -->
+    <div class="ai-input-area">
+      <textarea id="ai-input" placeholder="Pergunte ao seu Personal Trainer IA..." rows="1"
+        onkeydown="aiInputKeydown(event)" oninput="aiInputResize(this)"></textarea>
+      <button type="button" class="ai-send-btn" id="ai-send-btn" onclick="aiSend()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+
+  </div>
 </div>
 
 <!-- MODAL -->
@@ -5053,90 +5462,90 @@ const suggestedPlans = [
     days: 4,
     color: 'linear-gradient(135deg,#1a0505 0%,#2a0808 100%)',
     accentColor: 'var(--accent)',
-    desc: 'Divisão A/B em 4 dias. Foco em volume e progressão de carga para máximo ganho de massa muscular. Ideal para quem treina há mais de 6 meses.',
+    desc: 'Divisão A/B clássica em 4 dias. Volume moderado-alto com foco em progressão de carga. Cada grupo muscular 2x por semana. Ideal para quem treina há mais de 6 meses.',
     schedule: [
-      { day: 'SEG', name: 'Treino A — Peito & Tríceps', exercises: ['Supino Reto 4×8–12','Supino Inclinado 3×10','Peck Deck 3×12–15','Crossover no Cabo 3×15','Tríceps Pulley 4×10–12','Mergulho (Dip) 3×10','Tríceps Francês 3×12'] },
-      { day: 'TER', name: 'Treino B — Costas & Bíceps', exercises: ['Barra Fixa 4×6–10','Levantamento Terra 3×5–8','Remada Curvada 4×10','Remada Unilateral 3×10 cada','Puxada Frontal 3×12','Rosca Direta 3×10–12','Rosca Martelo 3×12','Rosca Scott 3×12'] },
-      { day: 'QUI', name: 'Treino A — Ombros & Tríceps', exercises: ['Desenvolvimento 4×8–12','Elevação Lateral 4×15','Elevação Frontal 3×12','Desenvolvimento Arnold 3×10','Face Pull 3×15–20','Tríceps Francês 3×10','Kickback 3×12'] },
-      { day: 'SEX', name: 'Treino B — Pernas Completo', exercises: ['Agachamento Livre 5×5–8','Leg Press 4×10–12','Avanço (Lunge) 3×12 cada','Extensão de Perna 3×15','Flexão de Perna 3×15','Hip Thrust 4×12','Panturrilha 4×20'] },
+      { day: 'SEG', name: 'Treino A — Peito & Tríceps', exercises: ['Supino Reto 4×8–12','Supino Inclinado com Halteres 3×10','Crossover no Cabo 3×15','Peck Deck 3×12','Tríceps Pulley com Corda 4×12','Tríceps Francês 3×10','Mergulho (Dip) 3×10'] },
+      { day: 'TER', name: 'Treino B — Costas & Bíceps', exercises: ['Barra Fixa (Pull-up) 4×6–10','Remada Curvada com Barra 4×10','Remada Unilateral 3×10 cada','Puxada Frontal 3×12','Rosca Direta na Barra 4×10','Rosca Martelo 3×12','Rosca Scott 3×12'] },
+      { day: 'QUI', name: 'Treino A — Ombros & Tríceps', exercises: ['Desenvolvimento Militar 4×8–10','Elevação Lateral com Halteres 5×15','Elevação Frontal 3×12','Desenvolvimento Arnold 3×10','Face Pull no Cabo 3×15','Tríceps Francês 3×10','Kickback com Halter 3×12'] },
+      { day: 'SEX', name: 'Treino B — Pernas Completo', exercises: ['Agachamento Livre 5×5–8','Leg Press 4×10–12','Avanço (Lunge) com Halteres 3×12 cada','Cadeira Extensora 3×15','Flexão de Perna 3×15','Hip Thrust 4×12','Panturrilha no Smith 4×20'] },
     ]
   },
   {
     id: 2,
-    name: 'EMAGRECIMENTO',
+    name: 'CUTTING — DEFINIÇÃO',
     goal: 'Perder Gordura',
     level: 'Iniciante–Interm.',
     days: 5,
     color: 'linear-gradient(135deg,#051a05 0%,#0a2a0a 100%)',
     accentColor: 'var(--green)',
-    desc: 'Treino HIIT + força 5 dias por semana. Alta intensidade, pouco descanso, máximo gasto calórico. Combine com déficit calórico para resultados rápidos.',
+    desc: 'Protocolo de 5 dias focado em queima de gordura com preservação de músculo. Combina força com circuitos metabólicos. Déficit calórico + treino = resultados rápidos.',
     schedule: [
-      { day: 'SEG', name: 'Full Body + HIIT', exercises: ['Agachamento com Salto 4×15','Flexão de Braço 3×15','Remada Curvada 3×12','Mountain Climber 4×45s','Burpee 3×10','Prancha 3×45s'] },
-      { day: 'TER', name: 'HIIT Cardio', exercises: ['Corda de Pular 5×2min','Agachamento com Salto 5×20','Box Jump 4×10','Mountain Climber 4×60s','Burpee 4×12','Corrida estacionária 5×1min'] },
+      { day: 'SEG', name: 'Full Body + Metabólico', exercises: ['Agachamento com Salto 4×15','Supino Reto 3×12','Remada Curvada 3×12','Mountain Climber 4×45s','Burpee 3×10','Prancha 3×45s'] },
+      { day: 'TER', name: 'HIIT + Cardio', exercises: ['Corda de Pular 5×2min','Agachamento com Salto 5×20','Box Jump 4×10','Mountain Climber 4×60s','Burpee 4×12','Sprint Estacionário 5×1min'] },
       { day: 'QUA', name: 'Força + Core', exercises: ['Levantamento Terra 3×8','Supino Reto 3×10','Barra Fixa 3×8','Russian Twist 4×30','Prancha Lateral 3×40s','Abdominal Crunch 3×25','Elevação de Pernas 3×20'] },
-      { day: 'QUI', name: 'Pernas + HIIT', exercises: ['Agachamento Sumô 4×15','Hip Thrust 4×15','Extensão de Perna 3×20','Flexão de Perna 3×20','Agachamento com Salto 4×15','Kettlebell Swing 3×20','Corda de Pular 3×2min'] },
-      { day: 'SEX', name: 'Full Body Metabólico', exercises: ['Thruster 4×10','Burpee 4×12','Swing com Kettlebell 4×20','Box Jump 4×10','Mountain Climber 3×60s','Prancha 3×60s'] },
+      { day: 'QUI', name: 'Pernas + Glúteo', exercises: ['Agachamento Sumô 4×15','Hip Thrust 4×15','Cadeira Extensora 3×20','Flexão de Perna 3×20','Agachamento com Salto 4×15','Kettlebell Swing 3×20','Corda de Pular 3×2min'] },
+      { day: 'SEX', name: 'Full Body Metabólico', exercises: ['Thruster com Halteres 4×10','Burpee 4×12','Kettlebell Swing 4×20','Box Jump 4×10','Mountain Climber 3×60s','Prancha 3×60s'] },
     ]
   },
   {
     id: 3,
-    name: 'FORÇA BRUTA',
+    name: 'FORÇA MÁXIMA',
     goal: 'Aumentar Força',
     level: 'Avançado',
     days: 4,
     color: 'linear-gradient(135deg,#1a1505 0%,#2a2008 100%)',
     accentColor: 'var(--accent2)',
-    desc: 'Protocolo baseado nos movimentos fundamentais: agachamento, supino, terra e desenvolvimento. Progressão linear de carga a cada semana. Foco em força máxima.',
+    desc: 'Protocolo baseado nos 4 grandes: agachamento, supino, terra e desenvolvimento. Progressão linear obrigatória. Números na barra, menos volume, mais intensidade.',
     schedule: [
-      { day: 'SEG', name: 'Dia do Agachamento', exercises: ['Agachamento Livre 5×5 (pesado)','Good Morning 3×8','Leg Press 3×8','Extensão de Perna 3×12','Flexão de Perna 3×12','Panturrilha no Leg Press 4×20'] },
-      { day: 'TER', name: 'Dia do Supino', exercises: ['Supino Reto 5×5 (pesado)','Desenvolvimento Militar 4×6','Supino com Halteres 3×8','Tríceps Pulley 3×10','Tríceps Francês 3×10','Rosca Direta 3×10'] },
-      { day: 'QUI', name: 'Dia do Levantamento Terra', exercises: ['Levantamento Terra 5×3–5 (pesado)','Barra Fixa Lastrada 4×5','Remada Curvada 4×6','Hiperextensão 3×10','Rosca Martelo 3×10','Face Pull 3×15'] },
-      { day: 'SEX', name: 'Dia do Desenvolvimento', exercises: ['Desenvolvimento Militar 5×5','Supino Declinado 4×6','Elevação Lateral 4×12','Elevação Frontal 3×12','Desenvolvimento Arnold 3×8','Encolhimento de Ombros 3×15'] },
+      { day: 'SEG', name: 'Agachamento + Pernas', exercises: ['Agachamento Livre 5×5 (pesado)','Good Morning 3×8','Leg Press 3×8','Cadeira Extensora 3×12','Flexão de Perna 3×12','Panturrilha no Smith 4×20'] },
+      { day: 'TER', name: 'Supino + Empurrar', exercises: ['Supino Reto 5×5 (pesado)','Desenvolvimento Militar 4×6','Supino com Halteres 3×8','Tríceps Pulley 3×10','Tríceps Francês 3×10','Rosca Direta 3×10'] },
+      { day: 'QUI', name: 'Levantamento Terra + Costas', exercises: ['Levantamento Terra 5×3–5 (pesado)','Barra Fixa Lastrada 4×5','Remada Curvada 4×6','Hiperextensão 3×10','Rosca Martelo 3×10','Face Pull 3×15'] },
+      { day: 'SEX', name: 'Desenvolvimento + Push', exercises: ['Desenvolvimento Militar 5×5','Supino Declinado 4×6','Elevação Lateral 4×12','Elevação Frontal 3×12','Desenvolvimento Arnold 3×8','Encolhimento de Ombros 3×15'] },
     ]
   },
   {
     id: 4,
-    name: 'TREINO EM CASA',
+    name: 'CALISTENIA — SEM PESO',
     goal: 'Fitness Geral',
     level: 'Iniciante',
     days: 3,
     color: 'linear-gradient(135deg,#0a051a 0%,#120a2a 100%)',
     accentColor: '#7c4dff',
-    desc: 'Treino 3 dias/semana sem equipamentos. Apenas o peso do corpo. Perfeito para quem quer começar ou manter o condicionamento em casa.',
+    desc: 'Treino 100% com o peso do corpo. Sem equipamentos, sem academia. Perfeito para começar, viajar ou treinar em casa. 3 dias por semana, progressão garantida.',
     schedule: [
       { day: 'SEG', name: 'Peito, Tríceps & Core', exercises: ['Flexão de Braço 4×15','Flexão Inclinada 3×12','Mergulho no Banco 3×15','Mountain Climber 3×45s','Prancha 3×45s','Abdominal Crunch 3×25','Russian Twist 3×30'] },
-      { day: 'QUA', name: 'Pernas & Glúteos', exercises: ['Agachamento com Salto 4×20','Passada Reversa 3×12 cada','Glúteo 4 Apoios 3×15 cada','Ponte de Glúteos 4×20','Panturrilha (pé no degrau) 4×25','Step Up 3×12 cada','Agachamento Sumô 3×20'] },
-      { day: 'SEX', name: 'Costas, Bíceps & Ombros', exercises: ['Barra Fixa (se disponível) 3×8','Prancha Lateral 3×30s','Elevação Posterior 3×15','Dead Bug 3×10 cada','Elevação de Pernas 3×15','Bicicleta (Bicycle Crunch) 3×30','Prancha 3×60s'] },
+      { day: 'QUA', name: 'Pernas & Glúteos', exercises: ['Agachamento com Salto 4×20','Avanço Reverso 3×12 cada','Glúteo 4 Apoios 3×15 cada','Ponte de Glúteos 4×20','Panturrilha no Degrau 4×25','Step Up 3×12 cada','Agachamento Sumô 3×20'] },
+      { day: 'SEX', name: 'Costas, Bíceps & Ombros', exercises: ['Barra Fixa (se disponível) 3×8','Prancha Lateral 3×30s','Elevação Posterior 3×15','Dead Bug 3×10 cada','Elevação de Pernas 3×15','Bicicleta Abdominal 3×30','Prancha 3×60s'] },
     ]
   },
   {
     id: 5,
-    name: 'GLÚTEOS & PERNAS',
+    name: 'BUMBUM NA NUCA 🍑',
     goal: 'Tonificação',
     level: 'Iniciante–Interm.',
     days: 3,
     color: 'linear-gradient(135deg,#1a0a10 0%,#2a0a18 100%)',
     accentColor: '#ff4081',
-    desc: 'Foco total em glúteos, coxas e panturrilhas. Protocolo de 3 dias com alta repetição e variação de exercícios para máxima ativação glútea.',
+    desc: 'Foco total em glúteos, coxas e panturrilhas. Hip Thrust pesado como base, variações para ativação máxima. Resultados visíveis em 4–6 semanas com dieta ajustada.',
     schedule: [
-      { day: 'SEG', name: 'Glúteo & Quadríceps', exercises: ['Hip Thrust 5×15','Agachamento Livre 4×12','Agachamento Búlgaro 3×12 cada','Extensão de Perna 3×15','Leg Press 4×15','Glúteo na Polia 3×15 cada'] },
-      { day: 'QUA', name: 'Posterior & Isquiotibiais', exercises: ['Stiff 4×12','Flexão de Perna 4×15','Good Morning 3×12','Cadeira Adutora 4×20','Cadeira Abdutora 4×20','Ponte de Glúteos 4×20','Panturrilha 4×25'] },
-      { day: 'SEX', name: 'Glúteo Completo', exercises: ['Agachamento Sumô 4×15','Hip Thrust Unilateral 3×15 cada','Passada Reversa 3×12 cada','Glúteo 4 Apoios 4×20 cada','Cadeira Adutora 3×20','Step Up 3×15 cada','Prancha Lateral 3×40s cada'] },
+      { day: 'SEG', name: 'Glúteo & Quadríceps', exercises: ['Hip Thrust com Barra 5×12–15','Agachamento Livre 4×12','Agachamento Búlgaro 3×12 cada','Cadeira Extensora 3×15','Leg Press Pés Altos 4×15','Kickback na Polia 3×15 cada'] },
+      { day: 'QUA', name: 'Posterior & Isquiotibiais', exercises: ['Stiff com Halteres 4×12','Flexão de Perna 4×15','Good Morning 3×12','Cadeira Adutora 4×20','Cadeira Abdutora 4×20','Ponte de Glúteos com Peso 4×20','Panturrilha 4×25'] },
+      { day: 'SEX', name: 'Glúteo Completo + HIIT', exercises: ['Hip Thrust Unilateral 3×15 cada','Agachamento Sumô com Halter 4×15','Avanço Reverso com Halteres 3×12 cada','Glúteo 4 Apoios 4×20 cada','Agachamento com Salto 4×15','Cadeira Abdutora 3×20','Prancha Lateral 3×40s cada'] },
     ]
   },
   {
     id: 6,
-    name: 'FUNCIONAL TOTAL',
+    name: 'CROSSFIT STYLE',
     goal: 'Condicionamento',
     level: 'Intermediário',
     days: 4,
     color: 'linear-gradient(135deg,#051010 0%,#0a1a1a 100%)',
     accentColor: '#00bcd4',
-    desc: 'Treino funcional com exercícios compostos e movimentos atléticos. Desenvolve força, resistência, coordenação e agilidade ao mesmo tempo.',
+    desc: 'Treino estilo CrossFit com movimentos compostos e WODs metabólicos. Desenvolve força, resistência, coordenação e agilidade simultaneamente. Alta intensidade.',
     schedule: [
-      { day: 'SEG', name: 'Força + Potência', exercises: ['Levantamento Terra 4×5','Agachamento Livre 4×6','Thruster 4×10','Box Jump 4×8','Kettlebell Swing 4×15','Farmer Walk 3×40m'] },
-      { day: 'TER', name: 'HIIT Metabólico', exercises: ['Burpee 5×10','Mountain Climber 4×60s','Agachamento com Salto 4×15','Corda de Pular 4×2min','Russian Twist 3×30','Prancha 3×60s'] },
-      { day: 'QUI', name: 'Empurrar & Puxar', exercises: ['Supino Reto 4×8','Desenvolvimento Militar 4×8','Barra Fixa 4×8','Remada Curvada 4×10','Tríceps Pulley 3×12','Rosca Direta 3×12'] },
+      { day: 'SEG', name: 'Força + Potência', exercises: ['Levantamento Terra 4×5','Agachamento Livre 4×6','Thruster com Barra 4×10','Box Jump 4×8','Kettlebell Swing 4×15','Farmer Walk 3×40m'] },
+      { day: 'TER', name: 'WOD Metabólico', exercises: ['Burpee 5×10','Mountain Climber 4×60s','Agachamento com Salto 4×15','Corda de Pular 4×2min','Russian Twist 3×30','Prancha 3×60s'] },
+      { day: 'QUI', name: 'Push & Pull', exercises: ['Supino Reto 4×8','Desenvolvimento Militar 4×8','Barra Fixa 4×8','Remada Curvada 4×10','Tríceps Pulley 3×12','Rosca Direta 3×12'] },
       { day: 'SEX', name: 'Core & Mobilidade', exercises: ['Prancha 4×60s','Prancha Lateral 3×45s cada','Dead Bug 3×10 cada','Russian Twist 4×30','Abdominal no Cabo 3×15','Elevação de Pernas 3×20','Good Morning 3×10'] },
     ]
   },
@@ -5148,14 +5557,14 @@ const suggestedPlans = [
     days: 6,
     color: 'linear-gradient(135deg,#0a0a1a 0%,#12122a 100%)',
     accentColor: '#7c4dff',
-    desc: 'A divisão PPL é uma das mais eficientes para hipertrofia. 6 dias por semana, cada grupo muscular treinado 2x. Alta frequência = mais crescimento.',
+    desc: 'PPL — a divisão mais eficiente para hipertrofia. 6 dias, cada músculo 2x por semana. Alta frequência gera mais síntese proteica = mais crescimento.',
     schedule: [
-      { day: 'SEG', name: 'Push — Peito, Ombros & Tríceps', exercises: ['Supino Reto 4×8–12','Supino Inclinado 3×10','Desenvolvimento Militar 4×8','Elevação Lateral 4×15','Crossover no Cabo 3×15','Tríceps Pulley 3×12','Tríceps Francês 3×12'] },
-      { day: 'TER', name: 'Pull — Costas & Bíceps', exercises: ['Barra Fixa 4×8','Remada Curvada 4×10','Puxada Frontal 3×12','Remada Unilateral 3×10 cada','Face Pull 3×15','Rosca Direta 4×10','Rosca Martelo 3×12'] },
-      { day: 'QUA', name: 'Legs — Quadríceps & Isquio', exercises: ['Agachamento Livre 5×5–8','Leg Press 4×12','Extensão de Perna 3×15','Flexão de Perna 3×15','Agachamento Búlgaro 3×10 cada','Panturrilha 4×20'] },
-      { day: 'QUI', name: 'Push 2 — Foco Ombros', exercises: ['Desenvolvimento Arnold 4×10','Elevação Lateral 5×15','Elevação Frontal 3×12','Supino com Halteres 4×10','Peck Deck 3×15','Pushdown com Corda 3×15','Mergulho (Dip) 3×10'] },
-      { day: 'SEX', name: 'Pull 2 — Foco Costas', exercises: ['Levantamento Terra 4×5','Barra Supinada (Chin-up) 4×8','Remada Sentado (Cabo) 4×12','Pullover com Halter 3×12','Puxada Neutra (Triângulo) 3×12','Rosca Scott 3×12','Rosca no Cabo 3×15'] },
-      { day: 'SAB', name: 'Legs 2 — Glúteos & Posterior', exercises: ['Stiff 4×10','Hip Thrust 5×12','Agachamento Sumô 4×15','Cadeira Adutora 3×20','Cadeira Abdutora 3×20','Glúteo na Polia 3×15 cada','Panturrilha no Leg Press 4×20'] },
+      { day: 'SEG', name: 'PUSH — Peito, Ombros & Tríceps', exercises: ['Supino Reto 4×8–12','Supino Inclinado com Halteres 3×10','Desenvolvimento Militar 4×8','Elevação Lateral 5×15','Crossover no Cabo 3×15','Tríceps Pulley com Corda 4×12','Tríceps Francês 3×10'] },
+      { day: 'TER', name: 'PULL — Costas & Bíceps', exercises: ['Barra Fixa 4×8','Remada Curvada 4×10','Puxada Frontal Neutra 3×12','Remada Unilateral 3×10 cada','Face Pull 3×15','Rosca Direta 4×10','Rosca Martelo 3×12'] },
+      { day: 'QUA', name: 'LEGS — Quadríceps & Isquio', exercises: ['Agachamento Livre 5×5–8','Leg Press 4×12','Cadeira Extensora 3×15','Stiff com Halteres 4×10','Hip Thrust 4×12','Panturrilha no Smith 4×20'] },
+      { day: 'QUI', name: 'PUSH 2 — Foco Ombros', exercises: ['Desenvolvimento Arnold 4×10','Elevação Lateral 5×15','Elevação Frontal 3×12','Supino com Halteres 4×10','Peck Deck 3×15','Tríceps Corda 3×15','Mergulho (Dip) 3×10'] },
+      { day: 'SEX', name: 'PULL 2 — Foco Costas', exercises: ['Levantamento Terra Romeno 4×8','Barra Supinada (Chin-up) 4×8','Remada no Cabo 4×12','Pullover com Halter 3×12','Puxada Triângulo 3×12','Rosca Scott 3×12','Rosca no Cabo 3×15'] },
+      { day: 'SAB', name: 'LEGS 2 — Glúteos & Posterior', exercises: ['Stiff Romeno 4×10','Hip Thrust 5×12','Agachamento Sumô 4×15','Cadeira Adutora 3×20','Cadeira Abdutora 3×20','Kickback na Polia 3×15 cada','Panturrilha Leg Press 4×20'] },
     ]
   },
   {
@@ -5166,79 +5575,128 @@ const suggestedPlans = [
     days: 4,
     color: 'linear-gradient(135deg,#0a100a 0%,#102010 100%)',
     accentColor: '#00e676',
-    desc: 'Divisão superior/inferior 4 dias. Cada segmento treinado 2x por semana com variação de volume e intensidade. Excelente para progressão de força e hipertrofia.',
+    desc: 'Upper/Lower 4 dias. Superior e inferior 2x cada por semana. Alterna foco em força (baixas reps) e hipertrofia (volume). Ótimo custo-benefício de resultados.',
     schedule: [
-      { day: 'SEG', name: 'Upper A — Foco Força', exercises: ['Supino Reto 4×5','Remada Curvada 4×5','Desenvolvimento Militar 3×6','Barra Fixa Lastrada 3×6','Rosca Direta 3×10','Tríceps Pulley 3×10'] },
-      { day: 'TER', name: 'Lower A — Foco Força', exercises: ['Agachamento Livre 5×5','Stiff 3×6','Leg Press 3×8','Flexão de Perna 3×10','Extensão de Perna 3×12','Panturrilha 4×15'] },
-      { day: 'QUI', name: 'Upper B — Foco Volume', exercises: ['Supino Inclinado 4×10','Puxada Frontal 4×12','Elevação Lateral 4×15','Remada Unilateral 3×12 cada','Crossover no Cabo 3×15','Rosca Alternada 3×12','Tríceps Francês 3×12'] },
-      { day: 'SEX', name: 'Lower B — Foco Volume', exercises: ['Hip Thrust 5×12','Agachamento Búlgaro 3×12 cada','Extensão de Perna 4×15','Flexão de Perna 4×15','Cadeira Adutora 3×20','Cadeira Abdutora 3×20','Panturrilha no Leg Press 4×20'] },
+      { day: 'SEG', name: 'UPPER A — Força', exercises: ['Supino Reto 4×5','Remada Curvada 4×5','Desenvolvimento Militar 3×6','Barra Fixa Lastrada 3×6','Rosca Direta 3×10','Tríceps Pulley 3×10'] },
+      { day: 'TER', name: 'LOWER A — Força', exercises: ['Agachamento Livre 5×5','Stiff com Halteres 3×6','Leg Press 3×8','Flexão de Perna 3×10','Cadeira Extensora 3×12','Panturrilha 4×15'] },
+      { day: 'QUI', name: 'UPPER B — Volume', exercises: ['Supino Inclinado 4×10','Puxada Frontal 4×12','Elevação Lateral 4×15','Remada Unilateral 3×12 cada','Crossover no Cabo 3×15','Rosca Alternada 3×12','Tríceps Francês 3×12'] },
+      { day: 'SEX', name: 'LOWER B — Volume', exercises: ['Hip Thrust 5×12','Agachamento Búlgaro 3×12 cada','Cadeira Extensora 4×15','Flexão de Perna 4×15','Cadeira Adutora 3×20','Cadeira Abdutora 3×20','Panturrilha Leg Press 4×20'] },
     ]
   },
   {
     id: 9,
+    name: 'STRONGLIFTS 5×5',
+    goal: 'Força Máxima',
+    level: 'Iniciante–Interm.',
+    days: 3,
+    color: 'linear-gradient(135deg,#150505 0%,#200a0a 100%)',
+    accentColor: '#ff6e40',
+    desc: 'O programa mais testado do mundo. Apenas 5 exercícios compostos, progressão de 2,5kg por treino. Simples, brutalmente eficiente. Construiu mais força do que qualquer outro programa.',
+    schedule: [
+      { day: 'SEG', name: 'Treino A', exercises: ['Agachamento Livre 5×5 (+2,5kg/treino)','Supino Reto 5×5 (+2,5kg/treino)','Remada Curvada 5×5 (+2,5kg/treino)'] },
+      { day: 'QUA', name: 'Treino B', exercises: ['Agachamento Livre 5×5 (+2,5kg/treino)','Desenvolvimento Militar 5×5 (+2,5kg/treino)','Levantamento Terra 1×5 (+5kg/treino)'] },
+      { day: 'SEX', name: 'Treino A (repetição)', exercises: ['Agachamento Livre 5×5','Supino Reto 5×5','Remada Curvada 5×5','⚡ Alterne A e B a cada semana'] },
+    ]
+  },
+  {
+    id: 10,
     name: 'INICIANTE TOTAL',
     goal: 'Condicionamento Geral',
     level: 'Iniciante',
     days: 3,
     color: 'linear-gradient(135deg,#1a1005 0%,#2a1a08 100%)',
     accentColor: '#ffb300',
-    desc: 'O programa ideal para quem está começando. Full body 3 dias por semana com exercícios fundamentais e progressão simples de carga. Sem complicação.',
+    desc: 'O ponto de partida ideal. Full body 3 dias por semana, exercícios fundamentais, progressão simples. Em 3 meses você vai se reconhecer. Sem complicação.',
     schedule: [
-      { day: 'SEG', name: 'Full Body A', exercises: ['Agachamento Livre 3×10','Supino Reto 3×10','Remada Curvada 3×10','Desenvolvimento 3×10','Rosca Direta 2×12','Tríceps Pulley 2×12','Prancha 3×30s'] },
+      { day: 'SEG', name: 'Full Body A', exercises: ['Agachamento Livre 3×10','Supino Reto 3×10','Remada Curvada 3×10','Desenvolvimento Militar 3×10','Rosca Direta 2×12','Tríceps Pulley 2×12','Prancha 3×30s'] },
       { day: 'QUA', name: 'Full Body B', exercises: ['Leg Press 3×12','Supino Inclinado 3×10','Puxada Frontal 3×12','Elevação Lateral 3×12','Rosca Martelo 2×12','Pushdown 2×12','Abdominal Crunch 3×20'] },
-      { day: 'SEX', name: 'Full Body C', exercises: ['Agachamento Sumô 3×12','Stiff 3×10','Crucifixo 3×12','Remada Unilateral 3×10 cada','Rosca Scott 2×12','Tríceps Francês 2×12','Prancha Lateral 3×30s cada'] },
-    ]
-  },
-  {
-    id: 10,
-    name: '5x5 STRONGLIFTS',
-    goal: 'Força Máxima',
-    level: 'Iniciante–Interm.',
-    days: 3,
-    color: 'linear-gradient(135deg,#150505 0%,#200a0a 100%)',
-    accentColor: '#ff6e40',
-    desc: 'O clássico Stronglifts 5×5. Apenas 5 exercícios compostos, progressão de 2,5kg por treino. O programa mais testado e comprovado para ganho de força bruta.',
-    schedule: [
-      { day: 'SEG', name: 'Treino A', exercises: ['Agachamento Livre 5×5 (+ 2,5kg/treino)','Supino Reto 5×5 (+ 2,5kg/treino)','Remada Curvada 5×5 (+ 2,5kg/treino)'] },
-      { day: 'QUA', name: 'Treino B', exercises: ['Agachamento Livre 5×5 (+ 2,5kg/treino)','Desenvolvimento Militar 5×5 (+ 2,5kg/treino)','Levantamento Terra 1×5 (+ 5kg/treino)'] },
-      { day: 'SEX', name: 'Treino A (repetir)', exercises: ['Agachamento Livre 5×5','Supino Reto 5×5','Remada Curvada 5×5','Obs: alterne A e B a cada semana'] },
+      { day: 'SEX', name: 'Full Body C', exercises: ['Agachamento Sumô 3×12','Stiff com Halteres 3×10','Crucifixo 3×12','Remada Unilateral 3×10 cada','Rosca Scott 2×12','Tríceps Francês 2×12','Prancha Lateral 3×30s cada'] },
     ]
   },
   {
     id: 11,
-    name: 'DEFINIÇÃO TOTAL',
+    name: 'SHRED — SECA TOTAL',
     goal: 'Definição Muscular',
     level: 'Intermediário',
     days: 5,
     color: 'linear-gradient(135deg,#0a0a15 0%,#10101f 100%)',
     accentColor: '#40c4ff',
-    desc: 'Protocolo de 5 dias para definição máxima. Altas repetições, pouco descanso e superseries estratégicas. Ideal para quem quer manter massa e queimar gordura.',
+    desc: 'Protocolo de 5 dias para definição máxima com superseries estratégicas. Alto volume, baixo descanso, máximo gasto calórico mantendo a massa muscular.',
     schedule: [
-      { day: 'SEG', name: 'Peito + Tríceps (superseries)', exercises: ['SS: Supino Reto 4×15 + Crossover 4×20','SS: Supino Inclinado 3×15 + Peck Deck 3×20','SS: Tríceps Pulley 4×20 + Tríceps Francês 4×15','Prancha 3×45s'] },
-      { day: 'TER', name: 'Costas + Bíceps (superseries)', exercises: ['SS: Puxada Frontal 4×15 + Remada Cabo 4×15','SS: Remada Unilateral 3×15 + Face Pull 3×20','SS: Rosca Direta 4×20 + Rosca Martelo 4×15','SS: Rosca Scott 3×15 + Rosca no Cabo 3×20'] },
-      { day: 'QUA', name: 'Pernas + Core', exercises: ['Agachamento com Salto 4×20','Leg Press 4×20','Extensão de Perna 4×20','Flexão de Perna 4×20','Russian Twist 3×30','Elevação de Pernas 3×20','Bicicleta (Bicycle Crunch) 3×30'] },
-      { day: 'QUI', name: 'Ombros + Pescoço', exercises: ['SS: Desenvolvimento 4×15 + Elevação Lateral 4×20','SS: Elevação Frontal 3×15 + Elevação Posterior 3×20','SS: Desenvolvimento Arnold 3×15 + Elevação Lateral Cabo 3×20','Encolhimento de Ombros 4×20'] },
-      { day: 'SEX', name: 'Glúteos + HIIT', exercises: ['Hip Thrust 5×20','Agachamento Búlgaro 4×15 cada','Cadeira Abdutora 4×25','Glúteo 4 Apoios 4×20 cada','Burpee 4×15','Mountain Climber 4×45s','Corda de Pular 3×2min'] },
+      { day: 'SEG', name: 'Peito + Tríceps (Superseries)', exercises: ['SS: Supino Reto 4×15 + Crossover 4×20','SS: Supino Inclinado 3×15 + Peck Deck 3×20','SS: Tríceps Pulley 4×20 + Tríceps Francês 4×15','Prancha 3×45s'] },
+      { day: 'TER', name: 'Costas + Bíceps (Superseries)', exercises: ['SS: Puxada Frontal 4×15 + Remada Cabo 4×15','SS: Remada Unilateral 3×15 + Face Pull 3×20','SS: Rosca Direta 4×20 + Rosca Martelo 4×15','SS: Rosca Scott 3×15 + Rosca no Cabo 3×20'] },
+      { day: 'QUA', name: 'Pernas + Core', exercises: ['Agachamento com Salto 4×20','Leg Press 4×20','Cadeira Extensora 4×20','Flexão de Perna 4×20','Russian Twist 3×30','Elevação de Pernas 3×20','Bicicleta Abdominal 3×30'] },
+      { day: 'QUI', name: 'Ombros + Trapézio', exercises: ['SS: Desenvolvimento 4×15 + Elevação Lateral 4×20','SS: Elevação Frontal 3×15 + Elevação Posterior 3×20','SS: Arnold 3×15 + Elevação Lateral no Cabo 3×20','Encolhimento de Ombros 4×20'] },
+      { day: 'SEX', name: 'Glúteos + HIIT', exercises: ['Hip Thrust 5×20','Agachamento Búlgaro 4×15 cada','Cadeira Abdutora 4×25','Kickback 4×20 cada','Burpee 4×15','Mountain Climber 4×45s','Corda de Pular 3×2min'] },
     ]
   },
   {
     id: 12,
-    name: 'CORRIDA + MUSCULAÇÃO',
-    goal: 'Condicionamento & Saúde',
+    name: 'CORRIDA + FERRO',
+    goal: 'Saúde & Condicionamento',
     level: 'Iniciante',
     days: 5,
     color: 'linear-gradient(135deg,#051515 0%,#0a2020 100%)',
     accentColor: '#00bcd4',
-    desc: 'Combina musculação com treino aeróbico. Perfeito para quem quer saúde cardiovascular e corpo definido ao mesmo tempo. 5 dias variados.',
+    desc: 'Combina musculação com aeróbico. Saúde cardiovascular + corpo definido. Perfeito para quem quer saúde completa, não só estética. 5 dias variados.',
     schedule: [
-      { day: 'SEG', name: 'Musculação — Peito & Costas', exercises: ['Supino Reto 3×12','Puxada Frontal 3×12','Supino Inclinado 3×10','Remada Sentado 3×12','Crossover 3×15','Face Pull 3×15'] },
-      { day: 'TER', name: 'Corrida intervalada 35min', exercises: ['Aquecimento 5min caminhada','10× (1min corrida forte + 1min caminhada)','Descanso ativo 5min ao final','Estique: panturrilha, quadríceps, isquio'] },
-      { day: 'QUA', name: 'Musculação — Pernas & Core', exercises: ['Agachamento Livre 3×12','Leg Press 3×15','Stiff 3×12','Hip Thrust 3×15','Prancha 3×45s','Russian Twist 3×25'] },
-      { day: 'QUI', name: 'Corrida longa 40–50min', exercises: ['Ritmo confortável (conversa fácil)','Objetivo: completar sem parar','Fique dentro de 65–75% da FC máx','Hidrate a cada 15min'] },
-      { day: 'SEX', name: 'Musculação — Braços & Ombros', exercises: ['Desenvolvimento 3×12','Elevação Lateral 4×15','Rosca Direta 3×12','Tríceps Pulley 3×12','Rosca Martelo 3×12','Tríceps Francês 3×12'] },
+      { day: 'SEG', name: 'Musculação — Peito & Costas', exercises: ['Supino Reto 3×12','Puxada Frontal 3×12','Supino Inclinado 3×10','Remada no Cabo 3×12','Crossover 3×15','Face Pull 3×15'] },
+      { day: 'TER', name: 'Corrida Intervalada 35min', exercises: ['Aquecimento 5min caminhada','10× (1min corrida forte + 1min caminhada)','Descanso ativo 5min','Alongamento: panturrilha, quad, isquio'] },
+      { day: 'QUA', name: 'Musculação — Pernas & Core', exercises: ['Agachamento Livre 3×12','Leg Press 3×15','Stiff com Halteres 3×12','Hip Thrust 3×15','Prancha 3×45s','Russian Twist 3×25'] },
+      { day: 'QUI', name: 'Corrida Longa 40–50min', exercises: ['Ritmo confortável (dá pra conversar)','Objetivo: completar sem parar','65–75% da FC máxima','Hidrate a cada 15min'] },
+      { day: 'SEX', name: 'Musculação — Braços & Ombros', exercises: ['Desenvolvimento Militar 3×12','Elevação Lateral 4×15','Rosca Direta 3×12','Tríceps Pulley 3×12','Rosca Martelo 3×12','Tríceps Francês 3×12'] },
     ]
-  }
+  },
+  {
+    id: 13,
+    name: 'ABC CLÁSSICO',
+    goal: 'Ganhar Massa',
+    level: 'Intermediário',
+    days: 3,
+    color: 'linear-gradient(135deg,#150a1a 0%,#200a2a 100%)',
+    accentColor: '#ce93d8',
+    desc: 'A divisão ABC tradicional das academias brasileiras. 3 dias, cada grupo muscular uma vez por semana com volume alto. Clássico que nunca falha.',
+    schedule: [
+      { day: 'SEG', name: 'A — Peito & Bíceps', exercises: ['Supino Reto 4×8–12','Supino Inclinado com Halteres 3×10','Crossover no Cabo 3×15','Peck Deck 3×12','Rosca Direta na Barra 4×10','Rosca Martelo 3×12','Rosca Scott 3×12'] },
+      { day: 'QUA', name: 'B — Costas & Tríceps', exercises: ['Barra Fixa 4×6–10','Remada Curvada 4×10','Puxada Frontal 3×12','Remada Unilateral 3×10 cada','Tríceps Pulley 4×12','Tríceps Francês 3×10','Mergulho (Dip) 3×10'] },
+      { day: 'SEX', name: 'C — Pernas & Ombros', exercises: ['Agachamento Livre 4×8–12','Leg Press 4×12','Stiff com Halteres 3×12','Hip Thrust 4×12','Desenvolvimento Militar 4×10','Elevação Lateral 4×15','Face Pull 3×15'] },
+    ]
+  },
+  {
+    id: 14,
+    name: 'ABCDE COMPLETO',
+    goal: 'Ganhar Massa',
+    level: 'Avançado',
+    days: 5,
+    color: 'linear-gradient(135deg,#0a1520 0%,#102030 100%)',
+    accentColor: '#29b6f6',
+    desc: 'Divisão de 5 dias para avançados. Alto volume por grupo muscular, foco em isolamento e detalhamento. Cada músculo com treino dedicado e exclusivo.',
+    schedule: [
+      { day: 'SEG', name: 'A — Peito Completo', exercises: ['Supino Reto 5×6–10','Supino Inclinado 4×10','Supino Declinado 3×10','Crucifixo 4×12','Peck Deck 4×15','Crossover no Cabo 3×15','Pullover 3×12'] },
+      { day: 'TER', name: 'B — Costas Completa', exercises: ['Levantamento Terra 4×5','Barra Fixa 4×8','Remada Curvada 4×8','Remada Unilateral 3×10 cada','Puxada Frontal 3×12','Remada no Cabo 3×12','Pullover com Halter 3×12'] },
+      { day: 'QUA', name: 'C — Pernas Completo', exercises: ['Agachamento Livre 5×5–8','Leg Press 4×12','Agachamento Búlgaro 3×10 cada','Cadeira Extensora 4×15','Stiff 4×10','Flexão de Perna 4×15','Hip Thrust 4×12','Panturrilha 4×20'] },
+      { day: 'QUI', name: 'D — Ombros Completo', exercises: ['Desenvolvimento Militar 5×6–8','Desenvolvimento Arnold 4×10','Elevação Lateral 5×15','Elevação Frontal 3×12','Elevação Posterior 4×15','Face Pull 4×15','Encolhimento de Ombros 4×15'] },
+      { day: 'SEX', name: 'E — Braços Completo', exercises: ['Rosca Direta na Barra 4×10','Rosca Martelo 3×12','Rosca Scott 3×12','Rosca no Cabo 3×15','Tríceps Pulley com Corda 4×12','Tríceps Francês 4×10','Tríceps Coice 3×12','Mergulho (Dip) 3×10'] },
+    ]
+  },
+  {
+    id: 15,
+    name: 'HIIT GUERREIRO',
+    goal: 'Emagrecimento Rápido',
+    level: 'Intermediário',
+    days: 4,
+    color: 'linear-gradient(135deg,#1a0505 0%,#1a1005 100%)',
+    accentColor: '#ff5722',
+    desc: 'Protocolo de alta intensidade puro. 4 sessões curtas (30–40min) de máxima queima calórica. EPOC elevado = queima por horas depois do treino. Resultados em 3 semanas.',
+    schedule: [
+      { day: 'SEG', name: 'HIIT Upper Body', exercises: ['Flexão de Braço 5×15 (30s descanso)','Burpee 5×10 (30s descanso)','Mountain Climber 5×45s (20s descanso)','Mergulho no Banco 4×15 (30s descanso)','Prancha 4×45s (20s descanso)'] },
+      { day: 'TER', name: 'HIIT Lower Body', exercises: ['Agachamento com Salto 5×20 (30s)','Avanço Alternado 5×24 (30s)','Glúteo 4 Apoios 4×20 cada (20s)','Agachamento Sumô com Salto 4×15 (30s)','Ponte de Glúteos 4×25 (20s)'] },
+      { day: 'QUI', name: 'HIIT Full Body', exercises: ['Burpee 6×10 (30s)','Thruster com Halteres 5×12 (30s)','Kettlebell Swing 5×20 (20s)','Box Jump 4×10 (30s)','Corda de Pular 4×2min (30s)'] },
+      { day: 'SEX', name: 'HIIT Tabata Core', exercises: ['4 rounds Tabata: 20s on / 10s off','Exercícios: Prancha, Mountain Climber','Russian Twist, Elevação de Pernas','Bicicleta Abdominal, Burpee','Total: 32min intensos'] },
+    ]
+  },
 ];
+
 
 function renderSuggestedPlans() {
   document.getElementById('plan-grid').innerHTML = suggestedPlans.map(p => `
@@ -6185,9 +6643,826 @@ function renderSavedWorkouts() {
     </div>`).join('');
 }
 
+
 // ============================================================
-// MOBILE responsive additions
+
 // ============================================================
+// FORJA IA — Motor offline completo (sem API, sem internet)
+// Lê treinos, histórico e progresso do usuário em tempo real
+// ============================================================
+
+let aiHistory   = [];
+let aiIsOpen    = false;
+let aiIsLoading = false;
+let aiUserCtx   = {};  // contexto carregado ao abrir o chat
+
+// ── Carrega contexto do usuário ────────────────────────────
+function aiLoadContext() {
+  if (!currentUser) return {};
+  const workouts  = JSON.parse(localStorage.getItem(getUserKey('workouts'))  || '[]');
+  const history   = JSON.parse(localStorage.getItem(getUserKey('history'))   || '[]');
+  const progress  = JSON.parse(localStorage.getItem(getUserKey('progress'))  || '{}');
+  const profile   = JSON.parse(localStorage.getItem(getUserKey('profile'))   || '{}');
+
+  // Monta resumo de cargas
+  const loads = Object.entries(progress).map(([id, logs]) => {
+    const ex   = exercises.find(e => String(e.id) === String(id));
+    const last = logs[0];
+    return ex && last ? { name: ex.name, muscle: ex.muscle, weight: last.weight, reps: last.reps, date: last.date } : null;
+  }).filter(Boolean);
+
+  // Estatísticas de histórico
+  const totalTreinos = history.length;
+  const ultimoTreino = history[0];
+  const ultimoNome   = ultimoTreino?.name || null;
+  const ultimaData   = ultimoTreino?.date || null;
+
+  // Dias da semana mais treinados
+  const diasCount = {};
+  history.forEach(h => {
+    const d = new Date(h.date).getDay();
+    diasCount[d] = (diasCount[d] || 0) + 1;
+  });
+
+  return {
+    name:        currentUser.name,
+    username:    currentUser.username,
+    workouts,
+    history,
+    loads,
+    totalTreinos,
+    ultimoNome,
+    ultimaData,
+    profile,
+    diasCount,
+  };
+}
+
+// ── UI ─────────────────────────────────────────────────────
+function toggleAIChat() { if (aiIsOpen) closeAIChat(); else openAIChat(); }
+
+function openAIChat() {
+  aiIsOpen   = true;
+  aiUserCtx  = aiLoadContext();
+  document.getElementById('ai-overlay').classList.add('open');
+  document.getElementById('ai-fab-badge').classList.remove('visible');
+  if (aiHistory.length === 0) aiWelcome();
+  setTimeout(() => document.getElementById('ai-input')?.focus(), 300);
+}
+
+function closeAIChat() {
+  aiIsOpen = false;
+  document.getElementById('ai-overlay').classList.remove('open');
+}
+
+function clearAIChat() {
+  if (!confirm('Limpar toda a conversa?')) return;
+  aiHistory = [];
+  aiUserCtx = aiLoadContext();
+  document.getElementById('ai-messages').innerHTML = '';
+  aiWelcome();
+}
+
+// ── Boas-vindas contextuais ────────────────────────────────
+function aiWelcome() {
+  const ctx  = aiUserCtx;
+  const nome = ctx.name?.split(' ')[0] || 'atleta';
+  const h    = new Date().getHours();
+  const g    = h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite';
+
+  let intro = g + ', **' + nome + '**! 💪\n\nSou a **FORJA IA** — seu personal trainer virtual.\n\n';
+
+  // Mensagem contextual baseada no histórico
+  if (ctx.totalTreinos === 0) {
+    intro += '🚀 Parece que você está começando. Ótimo momento para montar seu treino ideal!\n\n';
+  } else {
+    intro += '📊 Você tem **' + ctx.totalTreinos + ' treinos** registrados.';
+    if (ctx.ultimoNome) {
+      intro += ' Último: **' + ctx.ultimoNome + '**';
+      if (ctx.ultimaData) {
+        const dias = Math.round((Date.now() - new Date(ctx.ultimaData)) / 86400000);
+        if (dias === 0)      intro += ' (hoje! 🔥)';
+        else if (dias === 1) intro += ' (ontem)';
+        else                 intro += ' (há ' + dias + ' dias)';
+      }
+    }
+    intro += '\n\n';
+  }
+
+  intro += 'Como posso te ajudar hoje?';
+
+  const chips = [
+    { label: '💪 Montar treino',       action: 'monte_treino' },
+    { label: '🥗 Plano alimentar',     action: 'monte_dieta' },
+    { label: '📈 Analisar progresso',  action: 'ver_progresso' },
+    { label: '🗂️ Meus treinos',        action: 'ver_treinos' },
+  ];
+  if (ctx.loads.length > 0) chips.push({ label: '⚖️ Sugerir cargas',   action: 'sugerir_carga' });
+
+  aiAddMessage('bot', intro, chips);
+}
+
+// ── Quick Actions ──────────────────────────────────────────
+function aiQuick(action) {
+  const ctx = aiUserCtx = aiLoadContext();
+
+  if (action === 'monte_treino') {
+    aiAddMessage('user', 'Quero montar um treino');
+    aiThink('monte_treino', ctx);
+    return;
+  }
+  if (action === 'monte_dieta') {
+    aiAddMessage('user', 'Quero um plano alimentar');
+    aiThink('monte_dieta', ctx);
+    return;
+  }
+  if (action === 'ver_progresso') {
+    aiAddMessage('user', 'Analise meu progresso');
+    aiThink('ver_progresso', ctx);
+    return;
+  }
+  if (action === 'ver_treinos') {
+    aiAddMessage('user', 'Mostre meus treinos salvos');
+    aiThink('ver_treinos', ctx);
+    return;
+  }
+  if (action === 'sugerir_carga') {
+    aiAddMessage('user', 'Sugira ajuste de cargas');
+    aiThink('sugerir_carga', ctx);
+    return;
+  }
+  if (action === 'tecnica') {
+    aiAddMessage('user', 'Dicas de técnica dos compostos');
+    aiThink('tecnica', ctx);
+    return;
+  }
+  if (action === 'suplementos') {
+    aiAddMessage('user', 'O que tomar de suplemento?');
+    aiThink('suplementos', ctx);
+    return;
+  }
+  if (action === 'descanso') {
+    aiAddMessage('user', 'Como melhorar minha recuperação?');
+    aiThink('descanso', ctx);
+    return;
+  }
+  if (action === 'ver_historico') {
+    aiAddMessage('user', 'Mostre meu histórico de treinos');
+    aiThink('ver_historico', ctx);
+    return;
+  }
+}
+
+// ── Input do usuário ───────────────────────────────────────
+function aiSend() {
+  const el = document.getElementById('ai-input');
+  const t  = el.value.trim();
+  if (!t || aiIsLoading) return;
+  el.value = '';
+  aiInputResize(el);
+  sendAIMessage(t);
+}
+
+function sendAIMessage(text) {
+  if (aiIsLoading) return;
+  aiUserCtx = aiLoadContext();
+  aiAddMessage('user', text);
+  aiHistory.push({ role: 'user', content: text });
+  const ctx = aiUserCtx;
+
+  // Simula digitação e responde
+  const tid = aiShowTyping();
+  aiIsLoading = true;
+  document.getElementById('ai-send-btn').disabled = true;
+
+  setTimeout(() => {
+    aiHideTyping(tid);
+    const intent  = aiDetectIntent(text.toLowerCase(), ctx);
+    const reply   = aiGenerate(intent, text, ctx);
+    aiHistory.push({ role: 'assistant', content: reply.text });
+    if (aiHistory.length > 30) aiHistory = aiHistory.slice(-30);
+    aiAddMessage('bot', reply.text, reply.chips || []);
+    aiIsLoading = false;
+    document.getElementById('ai-send-btn').disabled = false;
+    document.getElementById('ai-input')?.focus();
+  }, 600 + Math.random() * 400);
+}
+
+// Versão sem adicionar mensagem do usuário (chamada pelos quick actions)
+function aiThink(intent, ctx) {
+  const tid = aiShowTyping();
+  aiIsLoading = true;
+  document.getElementById('ai-send-btn').disabled = true;
+  setTimeout(() => {
+    aiHideTyping(tid);
+    const reply = aiGenerate(intent, '', ctx);
+    aiHistory.push({ role: 'assistant', content: reply.text });
+    if (aiHistory.length > 30) aiHistory = aiHistory.slice(-30);
+    aiAddMessage('bot', reply.text, reply.chips || []);
+    aiIsLoading = false;
+    document.getElementById('ai-send-btn').disabled = false;
+    document.getElementById('ai-input')?.focus();
+  }, 700 + Math.random() * 500);
+}
+
+// ── Detecção de intenção ───────────────────────────────────
+function aiDetectIntent(text, ctx) {
+  // Treino
+  if (/treino|muscula|academia|exerc[ií]cio|malhar|peito|costas|perna|bra[çc]o|ombro|abdômen|abd[oô]men|glúteo|gluteo/i.test(text))
+    return 'monte_treino';
+  // Progresso
+  if (/progresso|carga|evolu|aumentar|stagna|platô|plato|meu hist|registros?/i.test(text))
+    return 'ver_progresso';
+  // Treinos salvos
+  if (/meus treinos|salvos?|customiz|criados?|builder/i.test(text))
+    return 'ver_treinos';
+  // Dieta / alimentação
+  if (/dieta|alimenta|comida|comer|calorias?|prote[íi]na|macros?|refei[çc][ãa]|nutrição|nutricao|emagrecer|massa/i.test(text))
+    return 'monte_dieta';
+  // Suplementos
+  if (/suplemento|whey|creatina|bcaa|pr[eé]-treino|pre.treino|vitamina|c[aá]psulas?|powder/i.test(text))
+    return 'suplementos';
+  // Técnica
+  if (/t[eé]cnica|execu[çc][ãa]|forma|postura|agachamento|supino|terra|deadlift|squat|bench/i.test(text))
+    return 'tecnica';
+  // Descanso / recuperação
+  if (/descanso|recupera|sono|dormir|deload|overtraining|dor muscular|doms/i.test(text))
+    return 'descanso';
+  // Carga
+  if (/quanto.*peso|qual.*carga|sugerir.*carga|ajust.*carga|aumentar.*peso/i.test(text))
+    return 'sugerir_carga';
+  // Histórico
+  if (/hist[oó]rico|quantos treinos|frequência|assiduidade|quant.*treinei/i.test(text))
+    return 'ver_historico';
+  // Saudação
+  if (/^(oi|ol[áa]|e a[íi]|bom dia|boa tarde|boa noite|hey|opa)[\s!.?]*$/.test(text.trim()))
+    return 'saudacao';
+  // Fallback
+  return 'fallback';
+}
+
+// ── Gerador de respostas ───────────────────────────────────
+function aiGenerate(intent, rawText, ctx) {
+  const nome = ctx.name?.split(' ')[0] || 'atleta';
+
+  // ── SAUDAÇÃO ──
+  if (intent === 'saudacao') {
+    return {
+      text: 'Oi, **' + nome + '**! 😄 Tudo pronto pra treinar?\n\nO que você precisa hoje?',
+      chips: [
+        { label: '💪 Montar treino',      action: 'monte_treino' },
+        { label: '📈 Ver progresso',      action: 'ver_progresso' },
+        { label: '🥗 Plano alimentar',    action: 'monte_dieta' },
+      ]
+    };
+  }
+
+  // ── VER TREINOS SALVOS ──
+  if (intent === 'ver_treinos') {
+    if (!ctx.workouts || ctx.workouts.length === 0) {
+      return {
+        text: '**' + nome + '**, você ainda não tem treinos salvos no builder.\n\n' +
+              'Quer que eu **monte um treino completo** para você? Me diz:\n\n' +
+              '1. Seu objetivo (massa, força, definição, emagrecimento)\n' +
+              '2. Quantos dias por semana pode treinar\n' +
+              '3. Nível (iniciante, intermediário, avançado)',
+        chips: [{ label: '💪 Montar meu treino', action: 'monte_treino' }]
+      };
+    }
+    let resp = '🗂️ **Seus treinos salvos (' + ctx.workouts.length + '):**\n\n';
+    ctx.workouts.forEach((w, i) => {
+      resp += '**' + (i+1) + '. ' + w.name + '**\n';
+      if (w.exercises && w.exercises.length > 0) {
+        resp += w.exercises.slice(0, 4).map(e => '- ' + (e.name || e)).join('\n');
+        if (w.exercises.length > 4) resp += '\n_...e mais ' + (w.exercises.length - 4) + ' exercícios_';
+      }
+      resp += '\n\n';
+    });
+    return {
+      text: resp + 'Posso analisar algum desses treinos para você!',
+      chips: [{ label: '📈 Analisar progresso', action: 'ver_progresso' }]
+    };
+  }
+
+  // ── VER PROGRESSO ──
+  if (intent === 'ver_progresso') {
+    if (ctx.totalTreinos === 0) {
+      return {
+        text: '**' + nome + '**, você ainda não tem treinos registrados no histórico.\n\n' +
+              'Use o modo de **Treino Ativo** para registrar seus treinos — assim eu consigo analisar sua evolução de carga! 💪',
+        chips: [{ label: '💪 Montar treino agora', action: 'monte_treino' }]
+      };
+    }
+
+    let resp = '📊 **Análise do seu progresso, ' + nome + ':**\n\n';
+    resp += '🏋️ **' + ctx.totalTreinos + ' treinos realizados** no total\n';
+
+    if (ctx.ultimoNome) {
+      const dias = Math.round((Date.now() - new Date(ctx.ultimaData)) / 86400000);
+      resp += '📅 Último treino: **' + ctx.ultimoNome + '**';
+      if (dias === 0)      resp += ' (hoje! 🔥)\n';
+      else if (dias === 1) resp += ' (ontem)\n';
+      else if (dias <= 3)  resp += ' (há ' + dias + ' dias — mantenha o ritmo!)\n';
+      else if (dias <= 7)  resp += ' (há ' + dias + ' dias — hora de voltar!)\n';
+      else                 resp += ' (há ' + dias + ' dias — já faz um tempo... 😅)\n';
+    }
+
+    if (ctx.loads.length > 0) {
+      resp += '\n⚖️ **Cargas registradas:**\n';
+      ctx.loads.slice(0, 6).forEach(l => {
+        resp += '- **' + l.name + '**: ' + l.weight + 'kg × ' + l.reps + ' reps\n';
+      });
+
+      // Sugestão de aumento de carga (progressão simples)
+      resp += '\n💡 **Sugestão de progressão:**\n';
+      ctx.loads.slice(0, 3).forEach(l => {
+        const novoKg  = (parseFloat(l.weight) + 2.5).toFixed(1);
+        resp += '- ' + l.name + ': tente **' + novoKg + 'kg** no próximo treino\n';
+      });
+    } else {
+      resp += '\n_Nenhuma carga registrada ainda. Use o tracker de progresso para registrar seus pesos!_\n';
+    }
+
+    if (ctx.totalTreinos >= 3) {
+      resp += '\n🏆 **Avaliação:**\n';
+      if (ctx.totalTreinos >= 20) resp += 'Consistência excelente! Você está no caminho certo. 🔥';
+      else if (ctx.totalTreinos >= 10) resp += 'Boa frequência! Continue assim e os resultados virão.';
+      else resp += 'Bom começo! Foque em criar o hábito de treinar.';
+    }
+
+    return { text: resp, chips: [{ label: '⚖️ Sugerir cargas', action: 'sugerir_carga' }] };
+  }
+
+  // ── HISTÓRICO ──
+  if (intent === 'ver_historico') {
+    if (ctx.totalTreinos === 0) {
+      return { text: 'Você ainda não tem treinos no histórico, **' + nome + '**. Comece a usar o modo **Treino Ativo** para registrar!', chips: [] };
+    }
+    let resp = '📅 **Histórico de treinos:**\n\n';
+    ctx.history.slice(0, 8).forEach((h, i) => {
+      resp += (i+1) + '. **' + h.name + '** — ' + h.date + '\n';
+    });
+    if (ctx.history.length > 8) resp += '\n_...e mais ' + (ctx.history.length - 8) + ' treinos anteriores_';
+    resp += '\n\n**Total:** ' + ctx.totalTreinos + ' treinos realizados 💪';
+    return { text: resp, chips: [{ label: '📈 Analisar progresso', action: 'ver_progresso' }] };
+  }
+
+  // ── SUGERIR CARGA ──
+  if (intent === 'sugerir_carga') {
+    if (ctx.loads.length === 0) {
+      return {
+        text: '**' + nome + '**, não encontrei cargas registradas ainda.\n\nUse o **Tracker de Progresso** para registrar seus pesos — assim consigo analisar e sugerir aumentos! 📊',
+        chips: []
+      };
+    }
+    let resp = '⚖️ **Sugestão de cargas para o próximo treino:**\n\n';
+    resp += '_Regra geral: aumente 2,5kg quando conseguir todas as reps das últimas 2 sessões_\n\n';
+    ctx.loads.forEach(l => {
+      const curr   = parseFloat(l.weight) || 0;
+      const novoKg = (curr + 2.5).toFixed(1);
+      resp += '**' + l.name + '**\n';
+      resp += '- Atual: ' + curr + 'kg × ' + l.reps + ' reps\n';
+      resp += '- 🎯 Tente: **' + novoKg + 'kg** × ' + l.reps + ' reps\n\n';
+    });
+    resp += '💡 Se ainda não consegue completar todas as reps com a carga atual, mantenha o peso e foque na execução.';
+    return { text: resp, chips: [] };
+  }
+
+  // ── MONTE TREINO ──
+  if (intent === 'monte_treino') {
+    const lower = rawText.toLowerCase();
+
+    // Detecta tipo de treino na mensagem
+    const isIniciante    = /iniciante|começ|primeiro|nunca treinei/i.test(rawText);
+    const isAvancado     = /avan[çc]ado|experiente|anos de academia/i.test(rawText);
+    const isPPL          = /ppl|push pull|push\/pull/i.test(rawText);
+    const isAB           = /\ba\/b\b|ab split|ab treino/i.test(rawText);
+    const isFB           = /full.?body|corpo (inteiro|todo)/i.test(rawText);
+    const isGluteo       = /glúteo|gluteo|posterior|bumbum/i.test(rawText);
+    const isDias3        = /3 dias|três dias/i.test(rawText);
+    const isDias4        = /4 dias|quatro dias/i.test(rawText);
+    const isDias5        = /5 dias|cinco dias/i.test(rawText);
+    const isDias6        = /6 dias|seis dias/i.test(rawText);
+
+    if (isPPL || isDias6) return aiTreinoPPL();
+    if (isAB  || isDias4) return aiTreinoAB();
+    if (isFB  || isDias3 || isIniciante) return aiTreinoFullBody(isIniciante);
+    if (isGluteo) return aiTreinoGluteos();
+
+    // Sem info suficiente — pede dados
+    return {
+      text: '💪 Vou montar um treino personalizado para você, **' + nome + '**!\n\n' +
+            'Me responda:\n\n' +
+            '1️⃣ **Objetivo:** massa muscular, emagrecimento, força, definição ou condicionamento?\n' +
+            '2️⃣ **Dias por semana:** 3, 4, 5 ou 6 dias?\n' +
+            '3️⃣ **Nível:** iniciante (< 1 ano), intermediário (1–3 anos) ou avançado (3+ anos)?\n' +
+            '4️⃣ **Equipamentos:** academia completa, halteres em casa ou sem equipamento?',
+      chips: [
+        { label: '3 dias — Full Body',    action: 'monte_treino_fb3'  },
+        { label: '4 dias — A/B Split',    action: 'monte_treino_ab4'  },
+        { label: '6 dias — PPL',          action: 'monte_treino_ppl6' },
+        { label: '🍑 Foco Glúteos',       action: 'monte_treino_gl'   },
+      ]
+    };
+  }
+
+  // ── MONTE DIETA ──
+  if (intent === 'monte_dieta') {
+    const lower = rawText.toLowerCase();
+    const isEmagrecimento = /emagre|perder|déficit|deficit|secar|gordura/i.test(rawText);
+    const isMassa         = /massa|ganhar|bulk|calórico|hipercalórico/i.test(rawText);
+    const isManutencao    = /manter|manutenção|manutencao|equilibrio/i.test(rawText);
+
+    if (isEmagrecimento) return aiDietaEmagrecimento();
+    if (isMassa)         return aiDietaMassa();
+    if (isManutencao)    return aiDietaManutencao();
+
+    return {
+      text: '🥗 Vou criar um plano alimentar para você, **' + nome + '**!\n\n' +
+            'Me diga:\n\n' +
+            '1️⃣ **Objetivo:** emagrecer, ganhar massa ou manutenção?\n' +
+            '2️⃣ **Peso atual** (kg) e **altura** (cm)?\n' +
+            '3️⃣ **Nível de atividade:** sedentário, leve, moderado ou intenso?\n' +
+            '4️⃣ **Alguma restrição alimentar?** (lactose, glúten, vegetariano, etc)',
+      chips: [
+        { label: '🔥 Emagrecer',      action: 'dieta_emagrecimento' },
+        { label: '💪 Ganhar massa',   action: 'dieta_massa' },
+        { label: '⚖️ Manutenção',     action: 'dieta_manutencao' },
+      ]
+    };
+  }
+
+  // ── SUPLEMENTOS ──
+  if (intent === 'suplementos') {
+    return {
+      text: '💊 **Guia de Suplementação — Baseado em Evidências:**\n\n' +
+            '### 🟢 ESSENCIAIS (funcionam de verdade)\n\n' +
+            '**Creatina Monohidratada**\n' +
+            '- Dose: 3–5g/dia (não precisa fase de carga)\n' +
+            '- Quando: qualquer horário — consistência é o que importa\n' +
+            '- Benefício: +5–10% de força, melhor recuperação\n\n' +
+            '**Whey Protein**\n' +
+            '- Dose: 25–40g por dose\n' +
+            '- Quando: pós-treino ou para complementar proteína do dia\n' +
+            '- Benefício: praticidade para atingir meta proteica\n\n' +
+            '**Cafeína**\n' +
+            '- Dose: 3–6mg/kg de peso (ex: 70kg = 210–420mg)\n' +
+            '- Quando: 30–60min antes do treino\n' +
+            '- Benefício: performance, força e foco\n\n' +
+            '### 🟡 OPCIONAIS (auxiliam em contextos específicos)\n\n' +
+            '- **Ômega-3**: 2–3g/dia — anti-inflamatório, saúde geral\n' +
+            '- **Vitamina D3**: 2.000–4.000 UI/dia — especialmente em quem não se expõe ao sol\n' +
+            '- **Magnésio**: 300–400mg antes de dormir — qualidade do sono e recuperação\n' +
+            '- **Beta-Alanina**: 3,2g/dia — resistência em exercícios de 1–4 min\n\n' +
+            '### 🔴 NÃO VALEM O DINHEIRO\n' +
+            '- BCAA (se consome whey e proteína suficiente)\n' +
+            '- Termogênicos exóticos\n' +
+            '- "Complexos" com 20 ingredientes\n\n' +
+            '💡 **Prioridade real:** sono, dieta e consistência valem mais que qualquer suplemento.',
+      chips: []
+    };
+  }
+
+  // ── TÉCNICA ──
+  if (intent === 'tecnica') {
+    return {
+      text: '🎯 **Técnica dos 3 Levantamentos Fundamentais:**\n\n' +
+            '### 🦵 AGACHAMENTO LIVRE\n' +
+            '- Pés na largura dos ombros ou um pouco mais abertos, pontas levemente viradas para fora\n' +
+            '- **Barra no trapézio** (não no pescoço), cotovelos abaixo da barra\n' +
+            '- Desça como se fosse sentar numa cadeira — **joelhos seguem os pés**\n' +
+            '- Parallelo ou abaixo (coxa paralela ao chão é o mínimo)\n' +
+            '- **Nunca** deixe o tronco cair muito para frente — peito para cima\n\n' +
+            '### 🏋️ SUPINO RETO\n' +
+            '- **Retração escapular** antes de pegar a barra — ombros pra trás e pra baixo\n' +
+            '- Arco leve nas costas (natural, não exagerado)\n' +
+            '- Desça a barra até o **esterno inferior** (não o pescoço)\n' +
+            '- Cotovelos a **45–75°** do tronco — nunca 90°\n' +
+            '- Pés firmes no chão, não na banca\n\n' +
+            '### ⛏️ LEVANTAMENTO TERRA\n' +
+            '- Barra sobre o **meio do pé**, a ~3cm da canela\n' +
+            '- Quadril desce, peito sobre a barra, **coluna NEUTRA** (não arredondada)\n' +
+            '- Puxe folgando a barra antes de levantar (remove o slack)\n' +
+            '- Empurre o chão com os pés — não puxe a barra com as costas\n' +
+            '- Barra **raspa a canela** em todo o trajeto\n\n' +
+            '⚠️ **Regra de ouro:** nunca aumente carga com técnica ruim. Ego lifting é o caminho para lesão.',
+      chips: []
+    };
+  }
+
+  // ── DESCANSO ──
+  if (intent === 'descanso') {
+    return {
+      text: '😴 **Recuperação: o lado que mais negligenciamos**\n\n' +
+            '### 🌙 SONO — o suplemento mais poderoso\n' +
+            '- **7–9 horas** por noite — onde 90% do crescimento muscular acontece\n' +
+            '- Horário regular (deitar e acordar no mesmo horário)\n' +
+            '- Sem tela 30–60min antes de dormir (azul inibe melatonina)\n' +
+            '- Quarto frio (18–20°C) e escuro\n\n' +
+            '### 📆 DELOAD — necessário, não fraqueza\n' +
+            '- A cada **6–8 semanas**, reduza volume e carga em 40–50%\n' +
+            '- Sinais de que precisa: força estagnada ou caindo, sono ruim, motivação zero, dores persistentes\n' +
+            '- Durante o deload: mesmos exercícios, menos séries e peso\n\n' +
+            '### 🔄 ENTRE TREINOS\n' +
+            '- Mesmo músculo precisa de **48–72h** para recuperar\n' +
+            '- DOMS (dor tardia) é normal nos primeiros dias, mas não deve ser guia\n' +
+            '- Priorize: **proteína** (1,8–2,2g/kg/dia), **hidratação** (35ml/kg/dia)\n\n' +
+            '### 🚨 SINAIS DE OVERTRAINING\n' +
+            '- Performance caindo há 2+ semanas\n' +
+            '- FC de repouso elevada\n' +
+            '- Irritabilidade, insônia e perda de apetite\n' +
+            '- Se isso acontece: **descanse pelo menos 1 semana inteira**',
+      chips: []
+    };
+  }
+
+  // ── FALLBACK ──
+  return {
+    text: '🤔 Entendi! Posso te ajudar com:\n\n' +
+          '- **Treinos personalizados** (PPL, A/B, Full Body, glúteos...)\n' +
+          '- **Análise do seu progresso** e cargas\n' +
+          '- **Planos alimentares** para seu objetivo\n' +
+          '- **Técnica** de execução\n' +
+          '- **Suplementação** baseada em evidências\n' +
+          '- **Recuperação** e deload\n\n' +
+          'O que você quer saber?',
+    chips: [
+      { label: '💪 Montar treino',    action: 'monte_treino' },
+      { label: '📈 Meu progresso',   action: 'ver_progresso' },
+      { label: '🥗 Plano alimentar', action: 'monte_dieta' },
+    ]
+  };
+}
+
+// ── Geradores de treino ────────────────────────────────────
+function aiTreinoFullBody(isIniciante) {
+  return {
+    text: '💪 **Treino Full Body — 3 dias/semana**\n' +
+          (isIniciante ? '_Ideal para iniciantes — cada músculo treinado 3x por semana_\n\n' : '_Frequência alta, volume controlado_\n\n') +
+          '**📅 SEGUNDA — Full Body A**\n' +
+          '- **Agachamento Livre** — 3×10 (90s)\n' +
+          '- **Supino Reto** — 3×10 (90s)\n' +
+          '- **Remada Curvada** — 3×10 (90s)\n' +
+          '- **Desenvolvimento Militar** — 3×10 (75s)\n' +
+          '- **Rosca Direta** — 2×12 (60s)\n' +
+          '- **Tríceps Pulley** — 2×12 (60s)\n' +
+          '- **Prancha** — 3×40s\n\n' +
+          '**📅 QUARTA — Full Body B**\n' +
+          '- **Leg Press** — 3×12 (90s)\n' +
+          '- **Supino Inclinado** — 3×10 (90s)\n' +
+          '- **Puxada Frontal** — 3×12 (90s)\n' +
+          '- **Elevação Lateral** — 3×15 (60s)\n' +
+          '- **Rosca Martelo** — 2×12 (60s)\n' +
+          '- **Pushdown** — 2×12 (60s)\n' +
+          '- **Abdominal Crunch** — 3×20\n\n' +
+          '**📅 SEXTA — Full Body C**\n' +
+          '- **Agachamento Sumô** — 3×12 (90s)\n' +
+          '- **Crucifixo** — 3×12 (60s)\n' +
+          '- **Remada Unilateral** — 3×10/lado (75s)\n' +
+          '- **Desenvolvimento Arnold** — 3×10 (75s)\n' +
+          '- **Rosca Scott** — 2×12 (60s)\n' +
+          '- **Tríceps Francês** — 2×12 (60s)\n' +
+          '- **Elevação de Pernas** — 3×15\n\n' +
+          '📈 **Progressão:** aumente 2,5kg quando conseguir todas as reps nas últimas 2 sessões.',
+    chips: [{ label: '📈 Registrar progresso', action: 'ver_progresso' }]
+  };
+}
+
+function aiTreinoAB() {
+  return {
+    text: '💪 **Treino A/B Split — 4 dias/semana**\n' +
+          '_Divisão clássica, ideal para intermediários_\n\n' +
+          '**📅 SEGUNDA — Treino A (Peito + Ombros + Tríceps)**\n' +
+          '- **Supino Reto** — 4×8–12 (90s)\n' +
+          '- **Supino Inclinado com Halteres** — 3×10 (75s)\n' +
+          '- **Crossover no Cabo** — 3×15 (60s)\n' +
+          '- **Desenvolvimento Militar** — 4×8–10 (90s)\n' +
+          '- **Elevação Lateral** — 4×15 (60s)\n' +
+          '- **Tríceps Pulley com Corda** — 3×12 (60s)\n' +
+          '- **Tríceps Francês** — 3×10 (60s)\n\n' +
+          '**📅 TERÇA — Treino B (Costas + Bíceps)**\n' +
+          '- **Barra Fixa** — 4×6–10 (120s)\n' +
+          '- **Remada Curvada com Barra** — 4×10 (90s)\n' +
+          '- **Remada Unilateral** — 3×10/lado (75s)\n' +
+          '- **Puxada Frontal** — 3×12 (75s)\n' +
+          '- **Rosca Direta na Barra** — 4×10 (75s)\n' +
+          '- **Rosca Martelo com Halteres** — 3×12 (60s)\n' +
+          '- **Rosca Scott** — 3×12 (60s)\n\n' +
+          '**📅 QUINTA — Treino A (repetir)**\n\n' +
+          '**📅 SEXTA — Treino B (Pernas)**\n' +
+          '- **Agachamento Livre** — 5×5–8 (120s)\n' +
+          '- **Leg Press** — 4×10–12 (90s)\n' +
+          '- **Cadeira Extensora** — 3×15 (60s)\n' +
+          '- **Flexão de Perna** — 3×15 (60s)\n' +
+          '- **Stiff com Halteres** — 3×10 (75s)\n' +
+          '- **Hip Thrust** — 4×12 (75s)\n' +
+          '- **Panturrilha no Smith** — 4×20 (45s)\n\n' +
+          '📈 **Progressão:** +2,5kg por semana nos compostos enquanto a técnica permitir.',
+    chips: [{ label: '📈 Ver meu progresso', action: 'ver_progresso' }]
+  };
+}
+
+function aiTreinoPPL() {
+  return {
+    text: '💪 **Push / Pull / Legs (PPL) — 6 dias/semana**\n' +
+          '_A divisão mais eficiente para hipertrofia avançada — cada músculo 2x/semana_\n\n' +
+          '**📅 SEG — PUSH (Peito, Ombros, Tríceps)**\n' +
+          '- **Supino Reto** — 4×8–12\n' +
+          '- **Supino Inclinado com Halteres** — 3×10\n' +
+          '- **Desenvolvimento Militar** — 4×8\n' +
+          '- **Elevação Lateral** — 5×15\n' +
+          '- **Crossover no Cabo** — 3×15\n' +
+          '- **Tríceps Pulley com Corda** — 4×12\n\n' +
+          '**📅 TER — PULL (Costas, Bíceps)**\n' +
+          '- **Barra Fixa** — 4×8\n' +
+          '- **Remada Curvada** — 4×10\n' +
+          '- **Puxada Frontal Neutra** — 3×12\n' +
+          '- **Remada Unilateral** — 3×10/lado\n' +
+          '- **Rosca Direta** — 4×10\n' +
+          '- **Rosca Martelo** — 3×12\n\n' +
+          '**📅 QUA — LEGS (Quadríceps, Isquio, Glúteo)**\n' +
+          '- **Agachamento Livre** — 5×5–8\n' +
+          '- **Leg Press** — 4×12\n' +
+          '- **Cadeira Extensora** — 3×15\n' +
+          '- **Stiff** — 4×10\n' +
+          '- **Hip Thrust** — 4×12\n' +
+          '- **Panturrilha** — 4×20\n\n' +
+          '**📅 QUI/SEX/SAB — Repete Push/Pull/Legs** (com variações de exercícios)\n\n' +
+          '📈 **Progressão:** aumente carga ou volume a cada semana. Registre tudo no tracker!',
+    chips: [{ label: '📈 Ver meu progresso', action: 'ver_progresso' }]
+  };
+}
+
+function aiTreinoGluteos() {
+  return {
+    text: '🍑 **Treino Foco em Glúteos — 3 dias/semana**\n\n' +
+          '**📅 SEGUNDA — Glúteo + Quadríceps**\n' +
+          '- **Hip Thrust com Barra** — 5×12–15 (75s)\n' +
+          '- **Agachamento Livre** — 4×10–12 (90s)\n' +
+          '- **Agachamento Búlgaro** — 3×12/lado (90s)\n' +
+          '- **Leg Press com Pés Altos** — 4×15 (75s)\n' +
+          '- **Cadeira Extensora** — 3×20 (60s)\n' +
+          '- **Glúteo na Polia (Kickback)** — 3×15/lado (60s)\n\n' +
+          '**📅 QUARTA — Posterior + Isquiotibiais**\n' +
+          '- **Stiff com Halteres** — 4×12 (90s)\n' +
+          '- **Flexão de Perna na Máquina** — 4×15 (75s)\n' +
+          '- **Good Morning** — 3×12 (75s)\n' +
+          '- **Cadeira Adutora** — 4×20 (60s)\n' +
+          '- **Cadeira Abdutora** — 4×20 (60s)\n' +
+          '- **Ponte de Glúteos com Peso** — 4×20 (60s)\n' +
+          '- **Panturrilha** — 4×25 (45s)\n\n' +
+          '**📅 SEXTA — Glúteo Completo + HIIT**\n' +
+          '- **Hip Thrust Unilateral** — 4×15/lado (75s)\n' +
+          '- **Agachamento Sumô com Haltere** — 4×15 (75s)\n' +
+          '- **Step Up com Halteres** — 3×12/lado (75s)\n' +
+          '- **Agachamento com Salto** — 4×15 (60s)\n' +
+          '- **Glúteo 4 Apoios (quadrupedia)** — 3×20/lado\n' +
+          '- **Prancha Lateral** — 3×40s/lado\n\n' +
+          '🍑 **Dica chave:** no Hip Thrust, contraia o glúteo no topo por 2 segundos. Aumento de carga progressivo toda semana.',
+    chips: [{ label: '📈 Registrar progresso', action: 'ver_progresso' }]
+  };
+}
+
+// ── Geradores de dieta ─────────────────────────────────────
+function aiDietaEmagrecimento() {
+  return {
+    text: '🔥 **Plano Alimentar para Emagrecimento**\n' +
+          '_Déficit calórico de ~500kcal — Perda gradual e sustentável_\n\n' +
+          '**Exemplo para ~80kg, sedentário moderado (~2.000kcal/dia)**\n\n' +
+          '**🌅 Café da manhã (~400kcal)**\n' +
+          '- 3 ovos mexidos no azeite\n' +
+          '- 2 fatias de pão integral\n' +
+          '- 1 fruta (banana, maçã ou laranja)\n' +
+          '- Café sem açúcar\n\n' +
+          '**🥗 Almoço (~550kcal)**\n' +
+          '- 150g de frango grelhado ou peixe\n' +
+          '- 4 colheres de arroz integral\n' +
+          '- 1 concha de feijão\n' +
+          '- Salada verde à vontade (alface, rúcula, tomate)\n' +
+          '- 1 fio de azeite\n\n' +
+          '**🍎 Lanche (~200kcal)**\n' +
+          '- 1 iogurte grego sem açúcar\n' +
+          '- 1 punhado de castanhas (10–15 unidades)\n\n' +
+          '**🌙 Jantar (~450kcal)**\n' +
+          '- 150g de carne magra (patinho, alcatra, tilápia)\n' +
+          '- Legumes refogados (abobrinha, brócolis, cenoura)\n' +
+          '- 3 colheres de arroz ou batata-doce\n\n' +
+          '**Macros estimados:** ~150g proteína | ~200g carbs | ~60g gordura\n\n' +
+          '💡 **Regra de ouro:** proteína alta (1,8–2g/kg) preserva músculo no déficit.',
+    chips: []
+  };
+}
+
+function aiDietaMassa() {
+  return {
+    text: '💪 **Plano Alimentar para Ganho de Massa**\n' +
+          '_Superávit calórico de ~300–500kcal — Bulking limpo_\n\n' +
+          '**Exemplo para ~70kg, treina 4x/semana (~2.800kcal/dia)**\n\n' +
+          '**🌅 Café da manhã (~600kcal)**\n' +
+          '- 4 ovos mexidos com 2 claras extra\n' +
+          '- 3 fatias de pão integral\n' +
+          '- 1 banana + 1 colher de pasta de amendoim\n' +
+          '- 200ml de leite\n\n' +
+          '**🥗 Almoço (~750kcal)**\n' +
+          '- 180g de frango grelhado ou carne bovina magra\n' +
+          '- 5 colheres de arroz branco\n' +
+          '- 1 concha grande de feijão\n' +
+          '- Salada com azeite\n' +
+          '- 1 fruta\n\n' +
+          '**🍌 Pré-treino — 1h antes (~350kcal)**\n' +
+          '- 1 banana + pasta de amendoim\n' +
+          '- Shake de whey com leite (35g de proteína)\n\n' +
+          '**🥛 Pós-treino (~300kcal)**\n' +
+          '- Whey protein com água + 1 fruta\n' +
+          '- Ou: iogurte grego + frutas + granola\n\n' +
+          '**🌙 Jantar (~600kcal)**\n' +
+          '- 180g de carne ou frango\n' +
+          '- Batata-doce (200g)\n' +
+          '- Legumes à vontade\n\n' +
+          '**Macros estimados:** ~180g proteína | ~310g carbs | ~80g gordura\n\n' +
+          '💡 **Progresso esperado:** 0,5–1kg/mês de músculo com treino consistente é ótimo!',
+    chips: []
+  };
+}
+
+function aiDietaManutencao() {
+  return {
+    text: '⚖️ **Plano Alimentar para Manutenção**\n' +
+          '_Calorias na medida certa — sem ganhar nem perder_\n\n' +
+          '**Exemplo para ~75kg, moderadamente ativo (~2.400kcal/dia)**\n\n' +
+          '**🌅 Café da manhã (~500kcal)**\n' +
+          '- 3 ovos + 1 fatia de presunto\n' +
+          '- 2 torradas integrais com ricota\n' +
+          '- 1 fruta\n' +
+          '- Café ou chá\n\n' +
+          '**🥗 Almoço (~650kcal)**\n' +
+          '- 150g de proteína magra\n' +
+          '- 4 colheres de arroz integral\n' +
+          '- Feijão ou lentilha\n' +
+          '- Salada à vontade\n\n' +
+          '**🍎 Lanche (~250kcal)**\n' +
+          '- Iogurte grego + frutas + 1 punhado de castanhas\n\n' +
+          '**🌙 Jantar (~550kcal)**\n' +
+          '- 150g proteína\n' +
+          '- Arroz ou batata-doce\n' +
+          '- Legumes refogados\n\n' +
+          '**Macros:** ~160g proteína | ~250g carbs | ~70g gordura\n\n' +
+          '💡 **Dica:** pese-se uma vez por semana, mesmo horário. Se subir >1kg/mês, reduza um pouco os carboidratos.',
+    chips: []
+  };
+}
+
+// ── Render ─────────────────────────────────────────────────
+function aiAddMessage(role, text, chips=[]) {
+  const c=document.getElementById('ai-messages'), div=document.createElement('div');
+  div.className='ai-msg '+role;
+  const init = role==='user' ? (currentUser?.name?.[0]||'U').toUpperCase() : 'IA';
+  const ch = chips.length
+    ? '<div class="ai-action-chips">' +
+      chips.map(x=>'<button type="button" class="ai-chip" onclick="aiQuick(\''+x.action+'\')">'+x.label+'</button>').join('') +
+      '</div>'
+    : '';
+  div.innerHTML='<div class="ai-msg-avatar">'+init+'</div><div class="ai-msg-bubble">'+aiMd(text)+ch+'</div>';
+  c.appendChild(div); aiScrollBottom();
+}
+
+function aiMd(t) {
+  return t
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/`(.*?)`/g,'<code>$1</code>')
+    .replace(/^#{1,3} (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^- (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[\s\S]*?<\/li>)/g,'<ul>$1</ul>')
+    .replace(/^(\d+)\. (.+)$/gm,'<li>$2</li>')
+    .replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>').replace(/---/g,'<hr>');
+}
+
+function aiShowTyping() {
+  const c=document.getElementById('ai-messages'), id='t'+Date.now(), d=document.createElement('div');
+  d.id=id; d.className='ai-msg bot';
+  d.innerHTML='<div class="ai-msg-avatar">IA</div><div class="ai-typing"><span></span><span></span><span></span></div>';
+  c.appendChild(d); aiScrollBottom(); return id;
+}
+
+function aiHideTyping(id) { document.getElementById(id)?.remove(); }
+function aiScrollBottom() { const el=document.getElementById('ai-messages'); if(el) setTimeout(()=>{el.scrollTop=el.scrollHeight;},50); }
+function aiInputKeydown(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();aiSend();} }
+function aiInputResize(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; }
+
+function showAIFab() { document.getElementById('ai-fab').classList.add('visible'); }
+
+const _origLS2 = loginSuccess;
+loginSuccess = function(u) { _origLS2(u); showAIFab(); };
+
+const _origLogout2 = doLogout;
+doLogout = function() {
+  _origLogout2();
+  document.getElementById('ai-fab').classList.remove('visible');
+  document.getElementById('ai-overlay').classList.remove('open');
+  aiHistory=[]; aiIsOpen=false;
+};
 // progress-log-form responsive
 const mediaQ = window.matchMedia('(max-width:768px)');
 function handleMobileProgressForm(e) {
